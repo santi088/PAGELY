@@ -7,7 +7,7 @@
     xmlns:vm="clr-namespace:PAGELY.ViewModels"
     x:DataType="vm:ReaderViewModel"
     Title="{Binding Header}"
-    BackgroundColor="{StaticResource Paper}">
+    BackgroundColor="{DynamicResource Paper}">
 
     <Grid RowDefinitions="Auto,*,Auto">
 
@@ -19,8 +19,8 @@
             be pushed around while pages scroll past.
         -->
         <Border
-            BackgroundColor="{StaticResource Surface}"
-            Stroke="{StaticResource Divider}"
+            BackgroundColor="{DynamicResource Surface}"
+            Stroke="{DynamicResource Divider}"
             StrokeShape="RoundRectangle 0,0,20,20"
             StrokeThickness="1">
             <Grid
@@ -32,8 +32,8 @@
                     Clicked="OnBackClicked"
                     Padding="0"
                     CornerRadius="21"
-                    BackgroundColor="{StaticResource SurfaceAlt}"
-                    BorderColor="{StaticResource Divider}"
+                    BackgroundColor="{DynamicResource SurfaceAlt}"
+                    BorderColor="{DynamicResource Divider}"
                     BorderWidth="1"
                     HeightRequest="42"
                     WidthRequest="42"
@@ -51,7 +51,7 @@
                         LineBreakMode="TailTruncation"
                         MaxLines="1"
                         Text="{Binding Header}"
-                        TextColor="{StaticResource Ink}" />
+                        TextColor="{DynamicResource Ink}" />
                     <Label MaxLines="1" Style="{StaticResource CardMeta}" Text="{Binding ProgressLabel}" />
                 </VerticalStackLayout>
                 <Border
@@ -64,7 +64,7 @@
                         BackgroundColor="Transparent"
                         HeightRequest="5"
                         Progress="{Binding Book.ProgressPercent, Converter={StaticResource PercentToProgress}}"
-                        ProgressColor="{StaticResource Primary}" />
+                        ProgressColor="{DynamicResource Primary}" />
                 </Border>
             </Grid>
         </Border>
@@ -80,7 +80,7 @@
                 VerticalOptions="Fill" />
             <controls:PdfViewer
                 x:Name="PdfReaderView"
-                BackgroundColor="{StaticResource PageBackdrop}"
+                BackgroundColor="{DynamicResource PageBackdrop}"
                 CurrentPageIndex="{Binding CurrentPdfPage}"
                 HorizontalOptions="Fill"
                 IsVisible="{Binding IsPdfMode}"
@@ -94,9 +94,9 @@
         <!-- Chapter navigation. PDFs scroll natively, so they need no bar. -->
         <Border
             Grid.Row="2"
-            BackgroundColor="{StaticResource Surface}"
+            BackgroundColor="{DynamicResource Surface}"
             IsVisible="{Binding IsPdfMode, Converter={StaticResource InverseBool}}"
-            Stroke="{StaticResource Divider}"
+            Stroke="{DynamicResource Divider}"
             StrokeShape="RoundRectangle 20,20,0,0"
             StrokeThickness="1">
             <Grid

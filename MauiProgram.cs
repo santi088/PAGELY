@@ -49,6 +49,7 @@ public static class MauiProgram
                 sp.GetRequiredService<BookContentService>(),
                 sp.GetRequiredService<IPdfRendererService>()));
         builder.Services.AddTransient<StatsViewModel>();
+        builder.Services.AddTransient<SettingsViewModel>();
 
         builder.Services.AddTransient<LibraryPage>();
         builder.Services.AddTransient<SearchPage>();
@@ -56,6 +57,7 @@ public static class MauiProgram
         builder.Services.AddTransient<BookDetailPage>();
         builder.Services.AddTransient<ReaderPage>();
         builder.Services.AddTransient<StatsPage>();
+        builder.Services.AddTransient<SettingsPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

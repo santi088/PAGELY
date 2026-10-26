@@ -9,7 +9,7 @@
     x:DataType="vm:SearchViewModel"
     Title="Search"
     Shell.NavBarIsVisible="False"
-    BackgroundColor="{StaticResource Paper}">
+    BackgroundColor="{DynamicResource Paper}">
 
     <Grid RowDefinitions="Auto,Auto,*">
 
@@ -24,13 +24,13 @@
             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                 <Border Style="{StaticResource FieldBorder}">
                     <SearchBar
-                        CancelButtonColor="{StaticResource Primary}"
+                        CancelButtonColor="{DynamicResource Primary}"
                         FontFamily="OpenSansRegular"
                         HeightRequest="46"
                         Placeholder="Title, author, genre, or status"
-                        PlaceholderColor="{StaticResource Muted}"
+                        PlaceholderColor="{DynamicResource Muted}"
                         Text="{Binding Query}"
-                        TextColor="{StaticResource Ink}" />
+                        TextColor="{DynamicResource Ink}" />
                 </Border>
                 <Button
                     Grid.Column="1"
@@ -55,9 +55,9 @@
                                 HeightRequest="46"
                                 ItemsSource="{Binding StatusFilters}"
                                 SelectedItem="{Binding SelectedStatus}"
-                                TextColor="{StaticResource Ink}"
+                                TextColor="{DynamicResource Ink}"
                                 Title="Status"
-                                TitleColor="{StaticResource Muted}" />
+                                TitleColor="{DynamicResource Muted}" />
                         </Border>
                         <Border Grid.Column="1" Style="{StaticResource FieldBorder}">
                             <Picker
@@ -65,9 +65,9 @@
                                 HeightRequest="46"
                                 ItemsSource="{Binding Genres}"
                                 SelectedItem="{Binding SelectedGenre}"
-                                TextColor="{StaticResource Ink}"
+                                TextColor="{DynamicResource Ink}"
                                 Title="Genre"
-                                TitleColor="{StaticResource Muted}" />
+                                TitleColor="{DynamicResource Muted}" />
                         </Border>
                     </Grid>
                     <Border Style="{StaticResource FieldBorder}">
@@ -76,9 +76,9 @@
                             HeightRequest="46"
                             ItemsSource="{Binding SortOptions}"
                             SelectedItem="{Binding SelectedSort}"
-                            TextColor="{StaticResource Ink}"
+                            TextColor="{DynamicResource Ink}"
                             Title="Sort by"
-                            TitleColor="{StaticResource Muted}" />
+                            TitleColor="{DynamicResource Muted}" />
                     </Border>
                 </VerticalStackLayout>
             </Border>
@@ -103,7 +103,7 @@
                             </Border.GestureRecognizers>
                             <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
                                 <Border
-                                    BackgroundColor="{StaticResource Spine}"
+                                    BackgroundColor="{DynamicResource Spine}"
                                     HeightRequest="76"
                                     StrokeShape="RoundRectangle 10"
                                     StrokeThickness="0"
@@ -120,7 +120,7 @@
                                             HorizontalOptions="Center"
                                             IsVisible="{Binding CoverPath, Converter={StaticResource InverseHasValue}}"
                                             Text="{Binding Initial}"
-                                            TextColor="{StaticResource Surface}"
+                                            TextColor="{DynamicResource Surface}"
                                             VerticalOptions="Center" />
                                     </Grid>
                                 </Border>
@@ -151,7 +151,7 @@
                                             BackgroundColor="Transparent"
                                             HeightRequest="5"
                                             Progress="{Binding ProgressPercent, Converter={StaticResource PercentToProgress}}"
-                                            ProgressColor="{StaticResource Primary}" />
+                                            ProgressColor="{DynamicResource Primary}" />
                                     </Border>
                                 </VerticalStackLayout>
                             </Grid>
@@ -173,7 +173,7 @@
                 FontSize="19"
                 HorizontalTextAlignment="Center"
                 Text="No books found"
-                TextColor="{StaticResource Ink}" />
+                TextColor="{DynamicResource Ink}" />
             <Label
                 HorizontalTextAlignment="Center"
                 MaximumWidthRequest="290"

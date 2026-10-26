@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PAGELY.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:PAGELY.ViewModels"
+    x:DataType="vm:SettingsViewModel"
+    Title="Settings"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{DynamicResource Paper}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Border
+            BackgroundColor="{DynamicResource Surface}"
+            Padding="24,28,20,20"
+            StrokeShape="RoundRectangle 0,0,28,28"
+            StrokeThickness="0">
+            <VerticalStackLayout Spacing="4">
+                <Label FontSize="30" Style="{StaticResource PageTitle}" Text="Settings" />
+                <Label Style="{StaticResource PageSubtitle}" Text="Make reading comfortable for you" />
+            </VerticalStackLayout>
+        </Border>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20,16,20,32" Spacing="14">
+
+                <!-- Live preview of the text settings. -->
+                <Border Style="{StaticResource CardBorder}" Padding="16">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource CardTitle}" Text="Preview" />
+                        <Label
+                            FontSize="{Binding FontSize}"
+                            LineHeight="{Binding LineSpacing}"
+                            Text="The quick brown fox jumps over the lazy dog. This is how your book will look while you read."
+                            TextColor="{DynamicResource Ink}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource CardBorder}" Padding="16">
+                    <VerticalStackLayout Spacing="6">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Style="{StaticResource CardTitle}" Text="Text size" />
+                            <Label
+                                Grid.Column="1"
+                                Style="{StaticResource PageSubtitle}"
+                                Text="{Binding FontSizeLabel}" />
+                        </Grid>
+                        <Slider
+                            Minimum="14"
+                            Maximum="28"
+                            MinimumTrackColor="{DynamicResource Primary}"
+                            ThumbColor="{DynamicResource Primary}"
+                            Value="{Binding FontSize}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource CardBorder}" Padding="16">
+                    <VerticalStackLayout Spacing="6">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Style="{StaticResource CardTitle}" Text="Line spacing" />
+                            <Label
+                                Grid.Column="1"
+                                Style="{StaticResource PageSubtitle}"
+                                Text="{Binding LineSpacingLabel}" />
+                        </Grid>
+                        <Slider
+                            Minimum="1.4"
+                            Maximum="2.2"
+                            MinimumTrackColor="{DynamicResource Primary}"
+                            ThumbColor="{DynamicResource Primary}"
+                            Value="{Binding LineSpacing}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource CardBorder}" Padding="16">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Style="{StaticResource CardTitle}" Text="Reading theme" />
+                        <Picker
+                            ItemsSource="{Binding Themes}"
+                            SelectedItem="{Binding Theme}"
+                            TextColor="{DynamicResource Ink}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource CardBorder}" Padding="16">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Style="{StaticResource CardTitle}" Text="Font" />
+                        <Picker
+                            ItemsSource="{Binding Fonts}"
+                            SelectedItem="{Binding FontFamily}"
+                            TextColor="{DynamicResource Ink}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Button
+                    Command="{Binding ResetCommand}"
+                    HeightRequest="48"
+                    Margin="0,6,0,0"
+                    Style="{StaticResource ButtonPrimary}"
+                    Text="Reset to defaults" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

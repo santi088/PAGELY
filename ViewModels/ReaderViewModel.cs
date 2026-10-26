@@ -84,10 +84,19 @@ public partial class ReaderViewModel : ObservableObject, IDisposable
             }
 
             _chapters = await _content.LoadChaptersAsync(Book);
-            Book.TotalChapters = Math.Max(1, _chapters.Count);
-            if (Book.CurrentChapterIndex >= _chapters.Count)
+
+            var isPdf = string.Equals(Book.FileType, "pdf", StringComparison.OrdinalIgnoreCase);
+
+            // A PDF's _chapters list only holds one placeholder item, so its saved page
+            // must not be checked against it: doing so reset every PDF to page 1 each
+            // time it was opened. PDFs get their real page count further down.
+            if (!isPdf)
             {
-                Book.CurrentChapterIndex = Math.Max(0, _chapters.Count - 1);
+                Book.TotalChapters = Math.Max(1, _chapters.Count);
+                if (Book.CurrentChapterIndex >= _chapters.Count)
+                {
+                    Book.CurrentChapterIndex = Math.Max(0, _chapters.Count - 1);
+                }
             }
 
             if (Book.ReadingStatus == ReadingStatus.ToBeRead)
@@ -95,7 +104,6 @@ public partial class ReaderViewModel : ObservableObject, IDisposable
                 Book.ReadingStatus = ReadingStatus.CurrentlyReading;
             }
 
-            var isPdf = string.Equals(Book.FileType, "pdf", StringComparison.OrdinalIgnoreCase);
             if (isPdf)
             {
                 IsPdfMode = true;
@@ -256,8 +264,6 @@ public partial class ReaderViewModel : ObservableObject, IDisposable
         return PdfPageFiles.CountRendered(pagesDirectory);
     }
 
-
-
     [RelayCommand]
     public async Task NextAsync()
     {
@@ -326,7 +332,7 @@ public partial class ReaderViewModel : ObservableObject, IDisposable
         if (Book is null || !IsPdfMode || PdfPagePaths.Count == 0) return;
 
         var clamped = Math.Clamp(pageIndex, 0, PdfPagePaths.Count - 1);
-        if (clamped == CurrentPdfPage && ProgressLabel.Length > 0)
+        if (clamped == Book.CurrentChapterIndex && ProgressLabel.Length > 0)
         {
             // Nothing about the visible page has changed: skip the recalculation so
             // repeated or redundant scroll reports never touch the toolbar.
@@ -404,4 +410,3 @@ public partial class ReaderViewModel : ObservableObject, IDisposable
         Dispose(false);
     }
 }
-
