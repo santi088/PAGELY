@@ -17,10 +17,16 @@
     Title="PAGELY">
 
     <TabBar x:Name="MainTabBar">
-        <Tab Title="Library" Icon="tab_library.svg">
+        <Tab Title="My Library" Icon="tab_library.svg">
             <ShellContent
                 ContentTemplate="{DataTemplate views:LibraryPage}"
                 Route="library"
+                Shell.NavBarIsVisible="False" />
+        </Tab>
+        <Tab Title="Discover" Icon="tab_discover.svg">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:DiscoverPage}"
+                Route="discover"
                 Shell.NavBarIsVisible="False" />
         </Tab>
         <Tab Title="Search" Icon="tab_search.svg">

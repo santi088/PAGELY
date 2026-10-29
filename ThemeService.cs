@@ -44,6 +44,45 @@ public static class ThemeService
         ["Gray950"] = "#2A1C10"
     };
 
+    // White backgrounds, with the same brown buttons and cream accents as the other themes.
+    private static readonly Dictionary<string, string> WhiteTheme = new()
+    {
+        ["Primary"] = "#7A6244",
+        ["PrimaryDark"] = "#5C4A34",
+        ["PrimaryLight"] = "#A78F66",
+        ["Secondary"] = "#F4EDE0",
+        ["SecondaryAlt"] = "#EBE1D1",
+        ["Surface"] = "#FFFFFF",
+        ["SurfaceAlt"] = "#F3ECE0",
+        ["Paper"] = "#FFFFFF",
+        ["Card"] = "#FFFFFF",
+        ["PageBackdrop"] = "#EDEAE4",
+        ["Ink"] = "#222222",
+        ["InkSoft"] = "#4A4A4A",
+        ["Muted"] = "#6F6A62",
+        ["Divider"] = "#E8E2D6",
+        ["Shadow"] = "#000000",
+        ["Spine"] = "#8A7351",
+        ["Accent"] = "#A98654",
+        ["Success"] = "#6C8A6E",
+        ["Danger"] = "#A2544A",
+        ["StatusTbr"] = "#7C93A3",
+        ["StatusReading"] = "#A98654",
+        ["StatusCompleted"] = "#6C8A6E",
+        ["StatusDropped"] = "#A5766A",
+        ["Highlight"] = "#E9D7A4",
+        ["HighlightSoft"] = "#F2E7C9",
+        ["WarmAccent"] = "#C79A5B",
+        ["Gray100"] = "#F5F3EE",
+        ["Gray200"] = "#E8E2D6",
+        ["Gray300"] = "#D6CFC0",
+        ["Gray400"] = "#A29A8A",
+        ["Gray500"] = "#6F6A62",
+        ["Gray600"] = "#4A4A4A",
+        ["Gray900"] = "#222222",
+        ["Gray950"] = "#111111"
+    };
+
     private static readonly Dictionary<string, string> SepiaTheme = new()
     {
         ["Primary"] = "#7A5A2E",
@@ -130,6 +169,7 @@ public static class ThemeService
 
         var palette = theme switch
         {
+            "White" => WhiteTheme,
             "Sepia" => SepiaTheme,
             "Dark" => DarkTheme,
             _ => PaperTheme

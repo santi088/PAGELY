@@ -52,14 +52,17 @@ public class BookContentService
 
     /// <summary>
     /// Wraps book HTML in the reader's stylesheet. The colors, text size, line
-    /// spacing and font come from the choices saved in the Settings page.
+    /// spacing and font come from the Settings page. <paramref name="initJson"/>
+    /// carries the chapter's saved marks and the position to open at, so the page
+    /// draws its own highlights as it loads.
     /// </summary>
-    public static string WrapHtml(string body)
+    public static string WrapHtml(string body, string? initJson = null)
     {
         var p = ReaderSettings.GetPalette();
         var size = ReaderSettings.FontSize.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture);
         var spacing = ReaderSettings.LineSpacing.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture);
         var font = ReaderSettings.FontStack;
+        var init = string.IsNullOrWhiteSpace(initJson) ? "null" : initJson;
 
         return $$"""
         <!DOCTYPE html>
@@ -67,6 +70,7 @@ public class BookContentService
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <style>
+            * { -webkit-tap-highlight-color: transparent; }
             html, body {
               margin: 0;
               padding: 0;
@@ -115,9 +119,461 @@ public class BookContentService
             code, kbd, samp { font-family: Menlo, Consolas, monospace; font-size: 0.9em; }
             table { width: 100%; border-collapse: collapse; margin: 1.2em 0; }
             th, td { padding: 6px 8px; border-bottom: 1px solid {{p.Rule}}; text-align: left; }
+
+            mark.pm { color: inherit; padding: 0; }
+            span.pm-pin { cursor: pointer; font-size: 0.8em; margin: 0 2px; }
+            @keyframes pmflash {
+              0% { outline: 3px solid rgba(255, 140, 0, 0.95); outline-offset: 2px; }
+              100% { outline: 3px solid rgba(255, 140, 0, 0); outline-offset: 2px; }
+            }
+            mark.pm-flash { animation: pmflash 1.8s ease-out 1; }
+
+            .pagely-tb {
+              position: fixed;
+              left: 50%;
+              bottom: 96px;
+              transform: translateX(-50%);
+              display: none;
+              flex-direction: column;
+              align-items: center;
+              gap: 8px;
+              padding: 10px 14px;
+              border-radius: 22px;
+              background: {{p.Text}};
+              color: {{p.Background}};
+              font-family: Roboto, Arial, sans-serif;
+              font-size: 13px;
+              line-height: 1.2;
+              box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+              z-index: 9999;
+              -webkit-user-select: none;
+              user-select: none;
+            }
+            .pagely-row { display: flex; align-items: center; gap: 8px; }
+            .pagely-tb button {
+              background: transparent;
+              border: 0;
+              color: inherit;
+              font-size: 13px;
+              padding: 6px 10px;
+              border-radius: 14px;
+            }
+            .pagely-tb button.on { background: rgba(127, 127, 127, 0.4); }
+            .pagely-tb button.pagely-dot {
+              width: 26px;
+              height: 26px;
+              padding: 0;
+              border-radius: 13px;
+              border: 2px solid rgba(255, 255, 255, 0.8);
+            }
           </style>
         </head>
-        <body>{{body}}</body>
+        <body>{{body}}
+          <script>
+            (function () {
+              var INIT = {{init}};
+              var HL = { Yellow: 'rgba(255,212,59,0.5)', Green: 'rgba(81,207,102,0.45)', Pink: 'rgba(247,131,172,0.5)', Blue: 'rgba(77,171,247,0.45)', Orange: 'rgba(255,169,77,0.5)' };
+              var UL = { Yellow: '#F59F00', Green: '#2F9E44', Pink: '#D6336C', Blue: '#1C7ED6', Orange: '#E8590C' };
+              var SOLID = { Yellow: '#FFD43B', Green: '#51CF66', Pink: '#F783AC', Blue: '#4DABF7', Orange: '#FFA94D' };
+              var NAMES = ['Yellow', 'Green', 'Pink', 'Blue', 'Orange'];
+
+              function isSkipped(node) {
+                var p = node.parentNode;
+                while (p && p !== document.body) {
+                  var n = p.nodeName;
+                  if (n === 'SCRIPT' || n === 'STYLE') { return true; }
+                  if (p.classList && (p.classList.contains('pagely-tb') || p.classList.contains('pm-pin'))) { return true; }
+                  p = p.parentNode;
+                }
+                return false;
+              }
+
+              // Every visible character of the page with spaces collapsed, and where each one lives.
+              function buildIndex() {
+                var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+                var nodes = [];
+                var text = '';
+                var map = [];
+                var lastSpace = true;
+                var n;
+                while ((n = walker.nextNode())) {
+                  if (isSkipped(n)) { continue; }
+                  var ni = nodes.length;
+                  nodes.push(n);
+                  var s = n.nodeValue;
+                  for (var j = 0; j < s.length; j++) {
+                    var c = s.charAt(j);
+                    if (/\s/.test(c)) {
+                      if (lastSpace) { continue; }
+                      c = ' ';
+                      lastSpace = true;
+                    } else {
+                      lastSpace = false;
+                    }
+                    text += c;
+                    map.push([ni, j]);
+                  }
+                }
+                return { nodes: nodes, text: text, map: map };
+              }
+
+              function posFromRange(idx, node, off) {
+                var ni = idx.nodes.indexOf(node);
+                if (ni < 0) { return -1; }
+                for (var p = 0; p < idx.map.length; p++) {
+                  var m = idx.map[p];
+                  if (m[0] > ni || (m[0] === ni && m[1] >= off)) { return p; }
+                }
+                return -1;
+              }
+
+              function rangeOfNode(node) {
+                var rg = document.createRange();
+                rg.selectNodeContents(node);
+                return rg;
+              }
+
+              function styleMark(m, kind, color) {
+                m.className = 'pm';
+                if (kind === 'Underline') {
+                  m.style.backgroundColor = 'transparent';
+                  m.style.textDecoration = 'underline';
+                  m.style.textDecorationColor = UL[color] || '#E8590C';
+                  m.style.textDecorationThickness = '2px';
+                  m.style.textUnderlineOffset = '3px';
+                } else if (kind === 'Note') {
+                  m.style.backgroundColor = 'transparent';
+                  m.style.textDecoration = 'underline dotted';
+                  m.style.textDecorationColor = '#A98654';
+                  m.style.textDecorationThickness = '2px';
+                  m.style.textUnderlineOffset = '3px';
+                } else {
+                  m.style.backgroundColor = HL[color] || HL.Yellow;
+                  m.style.borderRadius = '2px';
+                }
+              }
+
+              function markRange(idx, start, length, kind, color, id) {
+                var first = idx.map[start];
+                var last = idx.map[start + length - 1];
+                if (!first || !last) { return false; }
+                for (var ni = first[0]; ni <= last[0]; ni++) {
+                  var node = idx.nodes[ni];
+                  var s = (ni === first[0]) ? first[1] : 0;
+                  var e = (ni === last[0]) ? last[1] + 1 : node.nodeValue.length;
+                  if (e <= s) { continue; }
+                  var rg = document.createRange();
+                  rg.setStart(node, s);
+                  rg.setEnd(node, e);
+                  var m = document.createElement('mark');
+                  m.setAttribute('data-id', id);
+                  styleMark(m, kind, color);
+                  rg.surroundContents(m);
+                }
+                return true;
+              }
+
+              function applyOne(a) {
+                if (!a || !a.text) { return false; }
+                if (document.querySelector('mark[data-id="' + a.id + '"]')) { return true; }
+                var q = String(a.text).replace(/\u2026$/, '');
+                if (!q) { return false; }
+                var idx = buildIndex();
+                var pos = -1;
+                if (typeof a.offset === 'number' && a.offset >= 0 && idx.text.substr(a.offset, q.length) === q) {
+                  pos = a.offset;
+                }
+                if (pos < 0) { pos = idx.text.indexOf(q); }
+                if (pos < 0) { return false; }
+                return markRange(idx, pos, q.length, a.kind, a.color, a.id);
+              }
+
+              function pinChar(type) {
+                return type === 'bookmark' ? '\uD83D\uDD16' : '\uD83D\uDCDD';
+              }
+
+              function addPin(p) {
+                if (!p) { return false; }
+                var key = p.type + '-' + p.id;
+                if (document.querySelector('span.pm-pin[data-key="' + key + '"]')) { return true; }
+                var idx = buildIndex();
+                if (p.offset < 0 || p.offset >= idx.map.length) { return false; }
+                var m = idx.map[p.offset];
+                var node = idx.nodes[m[0]];
+                var after = node.splitText(m[1]);
+                var span = document.createElement('span');
+                span.className = 'pm-pin';
+                span.setAttribute('data-key', key);
+                span.textContent = pinChar(p.type);
+                node.parentNode.insertBefore(span, after);
+                return true;
+              }
+
+              window.pagelyApply = function (list) {
+                var count = 0;
+                if (!list) { return count; }
+                for (var i = 0; i < list.length; i++) {
+                  try { if (applyOne(list[i])) { count++; } } catch (err) { }
+                }
+                return count;
+              };
+
+              window.pagelyAddPins = function (list) {
+                var count = 0;
+                if (!list) { return count; }
+                for (var i = 0; i < list.length; i++) {
+                  try { if (addPin(list[i])) { count++; } } catch (err) { }
+                }
+                return count;
+              };
+
+              window.pagelyRemove = function (id) {
+                var ms = document.querySelectorAll('mark[data-id="' + id + '"]');
+                for (var i = 0; i < ms.length; i++) {
+                  var m = ms[i];
+                  var parent = m.parentNode;
+                  while (m.firstChild) { parent.insertBefore(m.firstChild, m); }
+                  parent.removeChild(m);
+                  parent.normalize();
+                }
+              };
+
+              window.pagelyRemovePin = function (key) {
+                var ps = document.querySelectorAll('span.pm-pin[data-key="' + key + '"]');
+                for (var i = 0; i < ps.length; i++) {
+                  var parent = ps[i].parentNode;
+                  parent.removeChild(ps[i]);
+                  parent.normalize();
+                }
+              };
+
+              window.pagelyFocus = function (id, quiet) {
+                var ms = document.querySelectorAll('mark[data-id="' + id + '"]');
+                if (!ms.length) { return false; }
+                ms[0].scrollIntoView({ block: 'center' });
+                if (!quiet) {
+                  for (var i = 0; i < ms.length; i++) { ms[i].classList.add('pm-flash'); }
+                  setTimeout(function () {
+                    for (var k = 0; k < ms.length; k++) { ms[k].classList.remove('pm-flash'); }
+                  }, 2000);
+                }
+                return true;
+              };
+
+              window.pagelyGoto = function (off) {
+                var idx = buildIndex();
+                if (off < 0 || off >= idx.map.length) { return false; }
+                var m = idx.map[off];
+                var node = idx.nodes[m[0]];
+                var rg = document.createRange();
+                rg.setStart(node, Math.min(m[1], node.nodeValue.length));
+                rg.setEnd(node, Math.min(m[1] + 1, node.nodeValue.length));
+                var rect = rg.getBoundingClientRect();
+                window.scrollTo(0, Math.max(0, rect.top + window.scrollY - 24));
+                return true;
+              };
+
+              // Where the screen starts: used by bookmarks and notes.
+              window.pagelyTop = function () {
+                var idx = buildIndex();
+                var pos = -1;
+                var r = document.caretRangeFromPoint
+                  ? document.caretRangeFromPoint(Math.floor(window.innerWidth / 2), 28)
+                  : null;
+                if (r && r.startContainer && r.startContainer.nodeType === 3) {
+                  pos = posFromRange(idx, r.startContainer, r.startOffset);
+                }
+                if (pos < 0) {
+                  for (var i = 0; i < idx.nodes.length; i++) {
+                    var rect = rangeOfNode(idx.nodes[i]).getBoundingClientRect();
+                    if (rect.height > 0 && rect.bottom > 8) {
+                      pos = posFromRange(idx, idx.nodes[i], 0);
+                      break;
+                    }
+                  }
+                }
+                if (pos < 0) { return { o: -1, t: '' }; }
+                return { o: pos, t: idx.text.substr(pos, 90) };
+              };
+
+              // ---- Selection toolbar ----
+              var mode = 'Highlight';
+              var lastSel = null;
+              var tbActive = false;
+              var hadSel = false;
+              var selTimer = null;
+              var hideTimer = null;
+
+              var tb = document.createElement('div');
+              tb.className = 'pagely-tb';
+              var row1 = document.createElement('div');
+              row1.className = 'pagely-row';
+              var row2 = document.createElement('div');
+              row2.className = 'pagely-row';
+
+              function makeButton(label) {
+                var b = document.createElement('button');
+                b.type = 'button';
+                b.textContent = label;
+                return b;
+              }
+
+              var bH = makeButton('Highlight');
+              var bU = makeButton('Underline');
+              var bN = makeButton('Note');
+              bH.className = 'on';
+
+              function setMode(m) {
+                mode = m;
+                bH.className = (m === 'Highlight') ? 'on' : '';
+                bU.className = (m === 'Underline') ? 'on' : '';
+              }
+
+              function commit(kind, color) {
+                if (!lastSel) { return; }
+                var q = lastSel.text;
+                var off = lastSel.offset;
+                lastSel = null;
+                tbActive = false;
+                hadSel = false;
+                tb.style.display = 'none';
+                var s = window.getSelection();
+                if (s) { s.removeAllRanges(); }
+                window.location.href = 'pagely://save?kind=' + kind + '&color=' + (color || '') + '&offset=' + off + '&text=' + encodeURIComponent(q);
+              }
+
+              bH.addEventListener('click', function (e) { e.stopPropagation(); setMode('Highlight'); });
+              bU.addEventListener('click', function (e) { e.stopPropagation(); setMode('Underline'); });
+              bN.addEventListener('click', function (e) { e.stopPropagation(); commit('Note', ''); });
+
+              row1.appendChild(bH);
+              row1.appendChild(bU);
+              row1.appendChild(bN);
+
+              for (var k = 0; k < NAMES.length; k++) {
+                (function (name) {
+                  var d = document.createElement('button');
+                  d.type = 'button';
+                  d.className = 'pagely-dot';
+                  d.style.background = SOLID[name];
+                  d.setAttribute('aria-label', name);
+                  d.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    commit(mode, name);
+                  });
+                  row2.appendChild(d);
+                })(NAMES[k]);
+              }
+
+              tb.appendChild(row1);
+              tb.appendChild(row2);
+              document.body.appendChild(tb);
+
+              tb.addEventListener('touchstart', function () {
+                tbActive = true;
+                if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+                setTimeout(function () { tbActive = false; }, 1500);
+              }, true);
+
+              function scheduleHide() {
+                if (hideTimer) { clearTimeout(hideTimer); }
+                hideTimer = setTimeout(function () {
+                  if (!tbActive) {
+                    tb.style.display = 'none';
+                    lastSel = null;
+                  }
+                }, 500);
+              }
+
+              function readSelection() {
+                var sel = window.getSelection();
+                var raw = sel ? sel.toString() : '';
+                if (!sel || sel.rangeCount === 0 || !raw || !/\S/.test(raw)) {
+                  if (!tbActive) { scheduleHide(); }
+                  return;
+                }
+                var idx = buildIndex();
+                var rg = sel.getRangeAt(0);
+                var s = posFromRange(idx, rg.startContainer, rg.startOffset);
+                var e = posFromRange(idx, rg.endContainer, rg.endOffset);
+                var q = '';
+                var off = -1;
+                if (s >= 0 && e > s) {
+                  q = idx.text.substring(s, e);
+                  var lead = q.length - q.replace(/^\s+/, '').length;
+                  s += lead;
+                  q = q.replace(/^\s+|\s+$/g, '');
+                  off = s;
+                }
+                if (!q) {
+                  q = raw.replace(/\s+/g, ' ').replace(/^\s+|\s+$/g, '');
+                  off = -1;
+                }
+                if (q.length > 500) { q = q.substring(0, 500); }
+                lastSel = { text: q, offset: off };
+                if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+                tb.style.display = 'flex';
+              }
+
+              document.addEventListener('selectionchange', function () {
+                if (selTimer) { clearTimeout(selTimer); }
+                selTimer = setTimeout(readSelection, 200);
+              });
+
+              // ---- Taps ----
+              document.addEventListener('touchstart', function () {
+                var t = window.getSelection().toString();
+                hadSel = (t && t.length > 0) || tb.style.display === 'flex';
+              }, true);
+
+              document.addEventListener('click', function (e) {
+                if (e.target && e.target.closest && e.target.closest('.pagely-tb')) { return; }
+                if (hadSel) {
+                  hadSel = false;
+                  tb.style.display = 'none';
+                  lastSel = null;
+                  return;
+                }
+                var t = window.getSelection().toString();
+                if (t && t.length > 0) { return; }
+                if (e.target && e.target.closest) {
+                  if (e.target.closest('a')) { return; }
+                  var pin = e.target.closest('span.pm-pin');
+                  if (pin) {
+                    window.location.href = 'pagely://pin?key=' + pin.getAttribute('data-key');
+                    return;
+                  }
+                  var m = e.target.closest('mark.pm');
+                  if (m) {
+                    window.location.href = 'pagely://mark?id=' + m.getAttribute('data-id');
+                    return;
+                  }
+                }
+                window.location.href = 'pagely://toggle';
+              });
+
+              // ---- Draw saved marks and open at the right place ----
+              if (INIT) {
+                if (INIT.marks) { window.pagelyApply(INIT.marks); }
+                if (INIT.pins) { window.pagelyAddPins(INIT.pins); }
+              }
+
+              function settle(quiet) {
+                if (!INIT) { return; }
+                if (INIT.focus != null && window.pagelyFocus(INIT.focus, quiet)) { return; }
+                if (INIT.gotoOffset != null && INIT.gotoOffset >= 0 && window.pagelyGoto(INIT.gotoOffset)) { return; }
+                if (INIT.scroll > 0) {
+                  window.scrollTo(0, document.body.scrollHeight * (INIT.scroll / 100));
+                }
+              }
+
+              settle(false);
+              window.addEventListener('load', function () {
+                setTimeout(function () { settle(true); }, 80);
+              });
+            })();
+          </script>
+        </body>
         </html>
         """;
     }

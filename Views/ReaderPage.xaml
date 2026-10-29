@@ -4,78 +4,23 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:PAGELY.Controls"
+    xmlns:models="clr-namespace:PAGELY.Models"
     xmlns:vm="clr-namespace:PAGELY.ViewModels"
+    x:Name="Reader"
     x:DataType="vm:ReaderViewModel"
     Title="{Binding Header}"
     BackgroundColor="{DynamicResource Paper}">
 
-    <Grid RowDefinitions="Auto,*,Auto">
+    <Grid>
 
-        <!--
-            Reader toolbar: a fixed row that is never shown, hidden or resized by
-            scrolling or page boundaries - only its label text updates, and only
-            when the visible page actually changes. The single-line title and
-            progress label lock the height, so the reading surface below can never
-            be pushed around while pages scroll past.
-        -->
-        <Border
-            BackgroundColor="{DynamicResource Surface}"
-            Stroke="{DynamicResource Divider}"
-            StrokeShape="RoundRectangle 0,0,20,20"
-            StrokeThickness="1">
-            <Grid
-                ColumnDefinitions="Auto,*"
-                ColumnSpacing="4"
-                Padding="12,10,16,14"
-                RowDefinitions="Auto,Auto">
-                <ImageButton
-                    Clicked="OnBackClicked"
-                    Padding="0"
-                    CornerRadius="21"
-                    BackgroundColor="{DynamicResource SurfaceAlt}"
-                    BorderColor="{DynamicResource Divider}"
-                    BorderWidth="1"
-                    HeightRequest="42"
-                    WidthRequest="42"
-                    Source="ic_back.svg"
-                    Aspect="AspectFit"
-                    SemanticProperties.Description="Back" />
-                <VerticalStackLayout
-                    Grid.Column="1"
-                    Padding="12,0,0,0"
-                    Spacing="2"
-                    VerticalOptions="Center">
-                    <Label
-                        FontFamily="OpenSansSemibold"
-                        FontSize="16"
-                        LineBreakMode="TailTruncation"
-                        MaxLines="1"
-                        Text="{Binding Header}"
-                        TextColor="{DynamicResource Ink}" />
-                    <Label MaxLines="1" Style="{StaticResource CardMeta}" Text="{Binding ProgressLabel}" />
-                </VerticalStackLayout>
-                <Border
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    HeightRequest="5"
-                    Margin="0,10,0,0"
-                    Style="{StaticResource ProgressPill}">
-                    <ProgressBar
-                        BackgroundColor="Transparent"
-                        HeightRequest="5"
-                        Progress="{Binding Book.ProgressPercent, Converter={StaticResource PercentToProgress}}"
-                        ProgressColor="{DynamicResource Primary}" />
-                </Border>
-            </Grid>
-        </Border>
-
-        <!-- Reading surface: text and EPUB through the web view, PDFs page by page. -->
-        <Grid Grid.Row="1">
+        <!-- Reading surface: fills the whole screen. Text and EPUB use the web view, PDFs page by page. -->
+        <Grid>
             <WebView
                 x:Name="ReaderView"
                 HorizontalOptions="Fill"
                 IsVisible="{Binding IsPdfMode, Converter={StaticResource InverseBool}}"
                 Navigated="OnWebViewNavigated"
+                Navigating="OnWebViewNavigating"
                 Source="{Binding PageSource}"
                 VerticalOptions="Fill" />
             <controls:PdfViewer
@@ -91,14 +36,96 @@
                 VerticalOptions="Fill" />
         </Grid>
 
-        <!-- Chapter navigation. PDFs scroll natively, so they need no bar. -->
+        <!-- Top bar: floats over the book and only shows after a tap. -->
         <Border
-            Grid.Row="2"
             BackgroundColor="{DynamicResource Surface}"
-            IsVisible="{Binding IsPdfMode, Converter={StaticResource InverseBool}}"
+            IsVisible="{Binding AreBarsVisible}"
+            Stroke="{DynamicResource Divider}"
+            StrokeShape="RoundRectangle 0,0,20,20"
+            StrokeThickness="1"
+            VerticalOptions="Start">
+            <Grid
+                ColumnDefinitions="Auto,*,Auto"
+                ColumnSpacing="4"
+                Padding="12,10,12,14"
+                RowDefinitions="Auto,Auto">
+                <ImageButton
+                    Clicked="OnBackClicked"
+                    Padding="0"
+                    CornerRadius="21"
+                    BackgroundColor="{DynamicResource SurfaceAlt}"
+                    BorderColor="{DynamicResource Divider}"
+                    BorderWidth="1"
+                    HeightRequest="42"
+                    WidthRequest="42"
+                    Source="ic_back.svg"
+                    Aspect="AspectFit"
+                    SemanticProperties.Description="Back" />
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Padding="12,0,0,0"
+                    Spacing="2"
+                    VerticalOptions="Center">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleBarsCommand}" />
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label
+                        FontFamily="OpenSansSemibold"
+                        FontSize="16"
+                        LineBreakMode="TailTruncation"
+                        MaxLines="1"
+                        Text="{Binding Header}"
+                        TextColor="{DynamicResource Ink}" />
+                    <Label MaxLines="1" Style="{StaticResource CardMeta}" Text="{Binding ProgressLabel}" />
+                </VerticalStackLayout>
+
+                <!-- Hamburger menu button -->
+                <Border
+                    Grid.Column="2"
+                    BackgroundColor="{DynamicResource SurfaceAlt}"
+                    HeightRequest="42"
+                    Stroke="{DynamicResource Divider}"
+                    StrokeShape="RoundRectangle 21"
+                    StrokeThickness="1"
+                    WidthRequest="42"
+                    SemanticProperties.Description="Menu">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenMenuCommand}" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout
+                        HorizontalOptions="Center"
+                        Spacing="4"
+                        VerticalOptions="Center">
+                        <BoxView CornerRadius="1" HeightRequest="2" WidthRequest="18" Color="{DynamicResource Ink}" />
+                        <BoxView CornerRadius="1" HeightRequest="2" WidthRequest="18" Color="{DynamicResource Ink}" />
+                        <BoxView CornerRadius="1" HeightRequest="2" WidthRequest="18" Color="{DynamicResource Ink}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border
+                    Grid.Row="1"
+                    Grid.ColumnSpan="3"
+                    HeightRequest="5"
+                    Margin="0,10,0,0"
+                    Style="{StaticResource ProgressPill}">
+                    <ProgressBar
+                        BackgroundColor="Transparent"
+                        HeightRequest="5"
+                        Progress="{Binding Book.ProgressPercent, Converter={StaticResource PercentToProgress}}"
+                        ProgressColor="{DynamicResource Primary}" />
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Chapter navigation: text books only, and only while the bars are shown. -->
+        <Border
+            BackgroundColor="{DynamicResource Surface}"
+            IsVisible="{Binding ShowChapterBar}"
             Stroke="{DynamicResource Divider}"
             StrokeShape="RoundRectangle 20,20,0,0"
-            StrokeThickness="1">
+            StrokeThickness="1"
+            VerticalOptions="End">
             <Grid
                 ColumnDefinitions="*,*"
                 ColumnSpacing="12"
@@ -118,5 +145,190 @@
                     Text="Next →" />
             </Grid>
         </Border>
+
+        <!-- PDFs: small floating menu button that brings the bars back. -->
+        <Border
+            BackgroundColor="{DynamicResource Surface}"
+            HeightRequest="42"
+            HorizontalOptions="End"
+            IsVisible="{Binding ShowPdfMenuButton}"
+            Margin="0,12,12,0"
+            Opacity="0.92"
+            Stroke="{DynamicResource Divider}"
+            StrokeShape="RoundRectangle 21"
+            StrokeThickness="1"
+            VerticalOptions="Start"
+            WidthRequest="42"
+            SemanticProperties.Description="Show menu">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ToggleBarsCommand}" />
+            </Border.GestureRecognizers>
+            <VerticalStackLayout
+                HorizontalOptions="Center"
+                Spacing="4"
+                VerticalOptions="Center">
+                <BoxView CornerRadius="1" HeightRequest="2" WidthRequest="18" Color="{DynamicResource Ink}" />
+                <BoxView CornerRadius="1" HeightRequest="2" WidthRequest="18" Color="{DynamicResource Ink}" />
+                <BoxView CornerRadius="1" HeightRequest="2" WidthRequest="18" Color="{DynamicResource Ink}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Hamburger menu: slides in from the right with bookmarks, notes and highlights. -->
+        <Grid ColumnDefinitions="*,300" IsVisible="{Binding IsMenuOpen}">
+            <BoxView Grid.ColumnSpan="2" Color="#99000000">
+                <BoxView.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseMenuCommand}" />
+                </BoxView.GestureRecognizers>
+            </BoxView>
+
+            <Border
+                Grid.Column="1"
+                BackgroundColor="{DynamicResource Surface}"
+                Stroke="{DynamicResource Divider}"
+                StrokeShape="RoundRectangle 24,0,0,24"
+                StrokeThickness="1">
+                <Grid
+                    Padding="16,20,16,16"
+                    RowDefinitions="Auto,Auto,*"
+                    RowSpacing="12">
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label
+                            FontSize="18"
+                            Style="{StaticResource CardTitle}"
+                            Text="Bookmarks and notes"
+                            VerticalOptions="Center" />
+                        <Button
+                            Grid.Column="1"
+                            Command="{Binding CloseMenuCommand}"
+                            FontSize="12"
+                            HeightRequest="36"
+                            Padding="14,0"
+                            Style="{StaticResource ButtonSecondary}"
+                            Text="Close" />
+                    </Grid>
+
+                    <Grid
+                        Grid.Row="1"
+                        ColumnDefinitions="*,*"
+                        ColumnSpacing="8">
+                        <Button
+                            Clicked="OnBookmarkClicked"
+                            FontSize="13"
+                            HeightRequest="40"
+                            Padding="8,0"
+                            Style="{StaticResource ButtonPrimary}"
+                            Text="+ Bookmark" />
+                        <Button
+                            Grid.Column="1"
+                            Clicked="OnNoteClicked"
+                            FontSize="13"
+                            HeightRequest="40"
+                            Padding="8,0"
+                            Style="{StaticResource ButtonPrimary}"
+                            Text="+ Note" />
+                    </Grid>
+
+                    <ScrollView Grid.Row="2">
+                        <VerticalStackLayout Spacing="10">
+
+                            <Label Style="{StaticResource CardTitle}" Text="Bookmarks" />
+                            <Label
+                                IsVisible="{Binding HasBookmarks, Converter={StaticResource InverseBool}}"
+                                Style="{StaticResource PageSubtitle}"
+                                Text="No bookmarks yet." />
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Bookmarks}" Spacing="8">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Bookmark">
+                                        <Border Padding="12" Style="{StaticResource CardBorder}">
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding BindingContext.OpenBookmarkCommand, Source={x:Reference Reader}}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Border.GestureRecognizers>
+                                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                                <VerticalStackLayout Spacing="3" VerticalOptions="Center">
+                                                    <Label FontSize="14" Style="{StaticResource CardTitle}" Text="{Binding Label}" />
+                                                    <Label
+                                                        FontAttributes="Italic"
+                                                        FontSize="12"
+                                                        IsVisible="{Binding Snippet, Converter={StaticResource HasValue}}"
+                                                        MaxLines="2"
+                                                        LineBreakMode="TailTruncation"
+                                                        Text="{Binding Snippet, StringFormat='“{0}…”'}"
+                                                        TextColor="{DynamicResource InkSoft}" />
+                                                    <Label Style="{StaticResource CardMeta}" Text="{Binding CreatedLabel}" />
+                                                </VerticalStackLayout>
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Command="{Binding BindingContext.DeleteBookmarkCommand, Source={x:Reference Reader}}"
+                                                    CommandParameter="{Binding .}"
+                                                    FontSize="11"
+                                                    HeightRequest="32"
+                                                    Padding="10,0"
+                                                    Style="{StaticResource ButtonSecondary}"
+                                                    Text="Delete"
+                                                    VerticalOptions="Start" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+
+                            <Label Margin="0,10,0,0" Style="{StaticResource CardTitle}" Text="Notes and highlights" />
+                            <Label
+                                IsVisible="{Binding HasNotes, Converter={StaticResource InverseBool}}"
+                                Style="{StaticResource PageSubtitle}"
+                                Text="Nothing yet. Select text in the book to highlight, underline or add a note." />
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Notes}" Spacing="8">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Annotation">
+                                        <Border Padding="12" Style="{StaticResource CardBorder}">
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding BindingContext.OpenNoteCommand, Source={x:Reference Reader}}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Border.GestureRecognizers>
+                                            <Grid ColumnDefinitions="6,*,Auto" ColumnSpacing="10">
+                                                <BoxView CornerRadius="3" Color="{Binding SwatchColor}" />
+                                                <VerticalStackLayout
+                                                    Grid.Column="1"
+                                                    Spacing="4"
+                                                    VerticalOptions="Center">
+                                                    <Label Style="{StaticResource CardMeta}" Text="{Binding Heading}" />
+                                                    <Label
+                                                        FontAttributes="Italic"
+                                                        FontSize="12"
+                                                        IsVisible="{Binding QuotedText, Converter={StaticResource HasValue}}"
+                                                        MaxLines="4"
+                                                        LineBreakMode="TailTruncation"
+                                                        Text="{Binding QuotedText, StringFormat='“{0}”'}"
+                                                        TextColor="{DynamicResource InkSoft}" />
+                                                    <Label
+                                                        FontSize="14"
+                                                        IsVisible="{Binding HasNoteText}"
+                                                        Text="{Binding NoteText}"
+                                                        TextColor="{DynamicResource Ink}" />
+                                                </VerticalStackLayout>
+                                                <Button
+                                                    Grid.Column="2"
+                                                    Command="{Binding BindingContext.DeleteNoteCommand, Source={x:Reference Reader}}"
+                                                    CommandParameter="{Binding .}"
+                                                    FontSize="11"
+                                                    HeightRequest="32"
+                                                    Padding="10,0"
+                                                    Style="{StaticResource ButtonSecondary}"
+                                                    Text="Delete"
+                                                    VerticalOptions="Start" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </ContentPage>
