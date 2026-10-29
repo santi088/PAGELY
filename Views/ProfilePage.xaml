@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PAGELY.Views.ProfilePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:PAGELY.ViewModels"
+    x:DataType="vm:ProfileViewModel"
+    Title="Profile"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{DynamicResource Paper}">
+
+    <Grid RowDefinitions="Auto,*">
+        <Border
+            BackgroundColor="{DynamicResource Surface}"
+            Padding="24,28,20,20"
+            StrokeShape="RoundRectangle 0,0,28,28"
+            StrokeThickness="0">
+            <VerticalStackLayout Spacing="4">
+                <Label FontSize="30" Style="{StaticResource PageTitle}" Text="Profile" />
+                <Label Style="{StaticResource PageSubtitle}" Text="Your reading identity and account" />
+            </VerticalStackLayout>
+        </Border>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20,16,20,32" Spacing="12">
+
+                <Border Padding="16" Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Style="{StaticResource SectionCaption}" Text="ACCOUNT" />
+                        <Label FontSize="18" Style="{StaticResource CardTitle}" Text="Local reader" />
+                        <Label Style="{StaticResource PageSubtitle}" Text="Sign-in and synced community features will be added later." />
+                        <Button
+                            Margin="0,8,0,0"
+                            Style="{StaticResource ButtonSecondary}"
+                            Text="Sign in (coming soon)"
+                            IsEnabled="False" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Padding="16" Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Style="{StaticResource SectionCaption}" Text="READING ACTIVITY" />
+                        <Button Style="{StaticResource ButtonSecondary}" Text="Reading statistics" Command="{Binding OpenStatsCommand}" />
+                        <Button Style="{StaticResource ButtonSecondary}" Text="Reading history" Command="{Binding OpenHistoryCommand}" />
+                        <Button Style="{StaticResource ButtonSecondary}" Text="Reading list" Command="{Binding OpenReadingListCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Padding="16" Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Style="{StaticResource SectionCaption}" Text="COMMUNITY" />
+                        <Button Style="{StaticResource ButtonSecondary}" Text="My reviews" Command="{Binding OpenReviewsCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Padding="16" Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Style="{StaticResource SectionCaption}" Text="APP" />
+                        <Button Style="{StaticResource ButtonSecondary}" Text="Settings" Command="{Binding OpenSettingsCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

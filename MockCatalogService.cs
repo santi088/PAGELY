@@ -75,4 +75,30 @@ public class MockCatalogService : IOnlineCatalogService
             .OrderBy(g => g)
             .ToList();
     }
+
+    public Task<DiscoverBook?> GetBookAsync(string id, CancellationToken cancellationToken = default)
+    {
+        return Task.FromResult(Books.FirstOrDefault(b => b.Id == id));
+    }
+
+    public async Task<IReadOnlyList<DiscoverBook>> SearchAsync(string query, CancellationToken cancellationToken = default)
+    {
+        await Task.Delay(150, cancellationToken);
+
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return [];
+        }
+
+        var q = query.Trim();
+        return Books
+            .Where(b =>
+                b.Title.Contains(q, StringComparison.OrdinalIgnoreCase) ||
+                b.Author.Contains(q, StringComparison.OrdinalIgnoreCase) ||
+                b.Genre.Contains(q, StringComparison.OrdinalIgnoreCase) ||
+                b.Description.Contains(q, StringComparison.OrdinalIgnoreCase))
+            .OrderByDescending(b => b.Rating)
+            .ThenBy(b => b.Title)
+            .ToList();
+    }
 }

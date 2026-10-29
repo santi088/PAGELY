@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PAGELY.Views.ReadingListPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:PAGELY.Models"
+    xmlns:vm="clr-namespace:PAGELY.ViewModels"
+    x:Name="ReadingList"
+    x:DataType="vm:ReadingListViewModel"
+    Title="Reading list"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{DynamicResource Paper}">
+
+    <Grid RowDefinitions="Auto,*">
+        <Border
+            BackgroundColor="{DynamicResource Surface}"
+            Padding="24,28,20,20"
+            StrokeShape="RoundRectangle 0,0,28,28"
+            StrokeThickness="0">
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <ImageButton
+                    Aspect="AspectFit"
+                    BackgroundColor="{DynamicResource SurfaceAlt}"
+                    BorderColor="{DynamicResource Divider}"
+                    BorderWidth="1"
+                    Clicked="OnBackClicked"
+                    CornerRadius="21"
+                    HeightRequest="42"
+                    Padding="0"
+                    Source="ic_back.svg"
+                    WidthRequest="42" />
+                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                    <Label FontSize="28" Style="{StaticResource PageTitle}" Text="Reading list" />
+                    <Label Style="{StaticResource PageSubtitle}" Text="Books you saved to read later" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <CollectionView
+                IsVisible="{Binding IsEmpty, Converter={StaticResource InverseBool}}"
+                ItemsSource="{Binding Items}"
+                SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:DiscoverBook">
+                        <Grid Padding="20,0">
+                            <Border Padding="12" Style="{StaticResource CardBorder}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding BindingContext.OpenCommand, Source={x:Reference ReadingList}}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="52,*,Auto" ColumnSpacing="12">
+                                    <Border
+                                        BackgroundColor="{Binding CoverColor}"
+                                        HeightRequest="76"
+                                        StrokeShape="RoundRectangle 10"
+                                        StrokeThickness="0"
+                                        VerticalOptions="Start"
+                                        WidthRequest="52">
+                                        <Label
+                                            FontFamily="OpenSansSemibold"
+                                            FontSize="20"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Initial}"
+                                            TextColor="{DynamicResource Surface}"
+                                            VerticalOptions="Center" />
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                        <Label FontSize="15" Style="{StaticResource CardTitle}" Text="{Binding Title}" />
+                                        <Label FontSize="12" Style="{StaticResource CardMeta}" Text="{Binding Author}" />
+                                    </VerticalStackLayout>
+                                    <Button
+                                        Grid.Column="2"
+                                        Command="{Binding BindingContext.RemoveCommand, Source={x:Reference ReadingList}}"
+                                        CommandParameter="{Binding .}"
+                                        FontSize="12"
+                                        HeightRequest="36"
+                                        Padding="12,0"
+                                        Style="{StaticResource ButtonSecondary}"
+                                        Text="Remove" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <VerticalStackLayout
+                HorizontalOptions="Center"
+                IsVisible="{Binding IsEmpty}"
+                Padding="40,0"
+                Spacing="8"
+                VerticalOptions="Center">
+                <Label FontFamily="OpenSansSemibold" FontSize="19" HorizontalTextAlignment="Center" Text="Your reading list is empty" TextColor="{DynamicResource Ink}" />
+                <Label HorizontalTextAlignment="Center" MaximumWidthRequest="290" Style="{StaticResource PageSubtitle}" Text="Save books from Discover to read them later." />
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

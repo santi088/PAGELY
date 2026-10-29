@@ -18,4 +18,8 @@ public interface IOnlineCatalogService
         CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<string>> GetGenresAsync(CancellationToken cancellationToken = default);
+
+    Task<DiscoverBook?> GetBookAsync(string id, CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<DiscoverBook>> SearchAsync(string query, CancellationToken cancellationToken = default);
 }

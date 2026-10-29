@@ -201,16 +201,6 @@ public partial class DiscoverViewModel : ObservableObject
             return;
         }
 
-        var book = item.Book;
-        var message =
-            $"{book.Author} · {book.Year}\n{book.RatingLabel} ({book.RatingCountLabel})\n\n{book.Description}";
-
-        var accept = item.IsSaved ? "Remove from list" : "Add to reading list";
-        var choice = await Shell.Current.DisplayAlert(book.Title, message, accept, "Close");
-
-        if (choice)
-        {
-            await ToggleSaveAsync(item);
-        }
+        await Shell.Current.GoToAsync($"discoverbookdetail?BookId={item.Book.Id}");
     }
 }

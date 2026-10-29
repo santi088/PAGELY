@@ -35,22 +35,10 @@
                 Route="search"
                 Shell.NavBarIsVisible="False" />
         </Tab>
-        <Tab Title="History" Icon="tab_history.svg">
+        <Tab Title="Profile" Icon="tab_profile.svg">
             <ShellContent
-                ContentTemplate="{DataTemplate views:HistoryPage}"
-                Route="history"
-                Shell.NavBarIsVisible="False" />
-        </Tab>
-        <Tab Title="Stats" Icon="tab_stats.svg">
-            <ShellContent
-                ContentTemplate="{DataTemplate views:StatsPage}"
-                Route="stats"
-                Shell.NavBarIsVisible="False" />
-        </Tab>
-        <Tab Title="Settings" Icon="tab_settings.svg">
-            <ShellContent
-                ContentTemplate="{DataTemplate views:SettingsPage}"
-                Route="settings"
+                ContentTemplate="{DataTemplate views:ProfilePage}"
+                Route="profile"
                 Shell.NavBarIsVisible="False" />
         </Tab>
     </TabBar>

@@ -57,6 +57,9 @@ public static class MauiProgram
         builder.Services.AddTransient<SettingsViewModel>();
         builder.Services.AddTransient<SavedItemsViewModel>();
         builder.Services.AddTransient<DiscoverViewModel>();
+        builder.Services.AddTransient<DiscoverBookDetailViewModel>();
+        builder.Services.AddTransient<ProfileViewModel>();
+        builder.Services.AddTransient<ReadingListViewModel>();
 
         builder.Services.AddTransient<LibraryPage>();
         builder.Services.AddTransient<SearchPage>();
@@ -67,6 +70,9 @@ public static class MauiProgram
         builder.Services.AddTransient<SettingsPage>();
         builder.Services.AddTransient<SavedPage>();
         builder.Services.AddTransient<DiscoverPage>();
+        builder.Services.AddTransient<DiscoverBookDetailPage>();
+        builder.Services.AddTransient<ProfilePage>();
+        builder.Services.AddTransient<ReadingListPage>();
 
         // The bookmarks and notes list opens on top of the reader and goes back to it.
         Routing.RegisterRoute("saved", typeof(SavedPage));
@@ -93,4 +99,4 @@ internal sealed class StubPdfRendererService : IPdfRendererService
         int maxWidth,
         CancellationToken cancellationToken = default)
         => Task.FromResult(false);
-}
+}
