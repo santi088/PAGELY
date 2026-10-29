@@ -25,15 +25,42 @@
             <VerticalStackLayout Padding="20,16,20,32" Spacing="12">
 
                 <Border Padding="16" Style="{StaticResource CardBorder}">
-                    <VerticalStackLayout Spacing="6">
+                    <VerticalStackLayout Spacing="8">
                         <Label Style="{StaticResource SectionCaption}" Text="ACCOUNT" />
-                        <Label FontSize="18" Style="{StaticResource CardTitle}" Text="Local reader" />
-                        <Label Style="{StaticResource PageSubtitle}" Text="Sign-in and synced community features will be added later." />
+                        <Label
+                            IsVisible="{Binding IsAuthenticated}"
+                            FontSize="18"
+                            Style="{StaticResource CardTitle}"
+                            Text="{Binding AccountEmail}" />
                         <Button
-                            Margin="0,8,0,0"
+                            IsVisible="{Binding IsAuthenticated}"
                             Style="{StaticResource ButtonSecondary}"
-                            Text="Sign in (coming soon)"
-                            IsEnabled="False" />
+                            Text="Sign out"
+                            Command="{Binding LogoutCommand}" />
+
+                        <VerticalStackLayout IsVisible="{Binding IsAuthenticated, Converter={StaticResource InverseBool}}" Spacing="12">
+                            <Border Padding="12" Style="{StaticResource CardBorder}">
+                                <VerticalStackLayout Spacing="8">
+                                    <Label Style="{StaticResource CardTitle}" Text="Sign in" />
+                                    <Entry Placeholder="Email" Text="{Binding LoginEmail}" Keyboard="Email" />
+                                    <Entry Placeholder="Password" Text="{Binding LoginPassword}" IsPassword="True" />
+                                    <Button Style="{StaticResource ButtonPrimary}" Text="Sign in" Command="{Binding LoginCommand}" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Border Padding="12" Style="{StaticResource CardBorder}">
+                                <VerticalStackLayout Spacing="8">
+                                    <Label Style="{StaticResource CardTitle}" Text="Create account" />
+                                    <Entry Placeholder="Email" Text="{Binding RegisterEmail}" Keyboard="Email" />
+                                    <Entry Placeholder="Password" Text="{Binding RegisterPassword}" IsPassword="True" />
+                                    <Entry Placeholder="First name" Text="{Binding FirstName}" />
+                                    <Entry Placeholder="Last name" Text="{Binding LastName}" />
+                                    <Button Style="{StaticResource ButtonSecondary}" Text="Register" Command="{Binding RegisterCommand}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <Label Style="{StaticResource PageSubtitle}" Text="{Binding StatusMessage}" />
                     </VerticalStackLayout>
                 </Border>
 

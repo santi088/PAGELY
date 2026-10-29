@@ -3,6 +3,7 @@
     x:Class="PAGELY.Views.DiscoverBookDetailPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:PAGELY.Models"
     xmlns:vm="clr-namespace:PAGELY.ViewModels"
     x:DataType="vm:DiscoverBookDetailViewModel"
     Title="Book details"
@@ -84,6 +85,34 @@
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
+
+                <Border Padding="16" Style="{StaticResource CardBorder}">
+                    <VerticalStackLayout Spacing="8">
+                        <Label Style="{StaticResource SectionCaption}" Text="REVIEWS" />
+                        <Label Style="{StaticResource PageSubtitle}" Text="{Binding ReviewStatus}" />
+                        <CollectionView ItemsSource="{Binding Reviews}" SelectionMode="None">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="8" Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Review">
+                                    <Border Padding="10" Style="{StaticResource CardBorder}">
+                                        <VerticalStackLayout Spacing="4">
+                                            <Label FontSize="13" Style="{StaticResource CardTitle}" Text="{Binding UserEmail}" />
+                                            <Label FontSize="12" Style="{StaticResource Caption}" Text="{Binding Rating, StringFormat='Rating: {0}'}" />
+                                            <Label FontSize="14" Text="{Binding ReviewText}" />
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <Label Style="{StaticResource SectionCaption}" Text="WRITE A REVIEW" />
+                        <Entry Placeholder="Rating (1-5)" Keyboard="Numeric" Text="{Binding NewRating}" />
+                        <Editor Placeholder="Review text" Text="{Binding NewReviewText}" HeightRequest="80" />
+                        <Button Style="{StaticResource ButtonSecondary}" Text="Submit review" Command="{Binding SubmitReviewCommand}" />
+                    </VerticalStackLayout>
+                </Border>
             </VerticalStackLayout>
         </ScrollView>
 

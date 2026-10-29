@@ -181,15 +181,35 @@ public partial class DiscoverViewModel : ObservableObject
             return;
         }
 
-        if (item.IsSaved)
+        try
         {
-            await _readingList.RemoveAsync(item.Book.Id);
-            item.IsSaved = false;
+            if (item.IsSaved)
+            {
+                await _readingList.RemoveAsync(item.Book.Id);
+                item.IsSaved = false;
+            }
+            else
+            {
+                await _readingList.AddAsync(item.Book);
+                item.IsSaved = true;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            await _readingList.AddAsync(item.Book);
-            item.IsSaved = true;
+            await Shell.Current.DisplayAlert("Reading list", ex.Message, "OK");
+        }
+    }
+
+    [RelayCommand]
+    private async Task OpenSearchAsync()
+    {
+        try
+        {
+            await Shell.Current.GoToAsync("//search");
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Search", $"Could not open search: {ex.Message}", "OK");
         }
     }
 

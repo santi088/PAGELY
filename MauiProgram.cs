@@ -35,8 +35,10 @@ public static class MauiProgram
 
         // Online features. These two lines are the only places that need to change
         // when the real online database is ready.
-        builder.Services.AddSingleton<IOnlineCatalogService, MockCatalogService>();
-        builder.Services.AddSingleton<IReadingListService, LocalReadingListService>();
+        builder.Services.AddSingleton<IOnlineCatalogService, ApiCatalogService>();
+        builder.Services.AddSingleton<AuthService>();
+        builder.Services.AddSingleton<ReviewsService>();
+        builder.Services.AddSingleton<IReadingListService, ApiReadingListService>();
 
 #if ANDROID
         builder.Services.AddSingleton<IPdfRendererService, Platforms.Android.PdfRendererService>();
@@ -59,6 +61,7 @@ public static class MauiProgram
         builder.Services.AddTransient<DiscoverViewModel>();
         builder.Services.AddTransient<DiscoverBookDetailViewModel>();
         builder.Services.AddTransient<ProfileViewModel>();
+        builder.Services.AddTransient<MyReviewsViewModel>();
         builder.Services.AddTransient<ReadingListViewModel>();
 
         builder.Services.AddTransient<LibraryPage>();
@@ -72,6 +75,7 @@ public static class MauiProgram
         builder.Services.AddTransient<DiscoverPage>();
         builder.Services.AddTransient<DiscoverBookDetailPage>();
         builder.Services.AddTransient<ProfilePage>();
+        builder.Services.AddTransient<MyReviewsPage>();
         builder.Services.AddTransient<ReadingListPage>();
 
         // The bookmarks and notes list opens on top of the reader and goes back to it.
@@ -99,4 +103,4 @@ internal sealed class StubPdfRendererService : IPdfRendererService
         int maxWidth,
         CancellationToken cancellationToken = default)
         => Task.FromResult(false);
-}
+}

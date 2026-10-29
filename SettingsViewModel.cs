@@ -24,6 +24,9 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private string fontFamily = ReaderSettings.FontFamily;
 
+    [ObservableProperty]
+    private string apiBaseUrl = Preferences.Default.Get("api_base_url", "http://192.168.100.166:5242");
+
     public string FontSizeLabel => $"{FontSize:0} px";
 
     public string LineSpacingLabel => $"{LineSpacing:0.00}";
@@ -45,6 +48,14 @@ public partial class SettingsViewModel : ObservableObject
     partial void OnFontFamilyChanged(string value)
     {
         if (!string.IsNullOrEmpty(value)) ReaderSettings.FontFamily = value;
+    }
+
+    partial void OnApiBaseUrlChanged(string value)
+    {
+        if (!string.IsNullOrWhiteSpace(value))
+        {
+            Preferences.Default.Set("api_base_url", value.Trim());
+        }
     }
 
     [RelayCommand]

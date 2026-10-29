@@ -21,6 +21,7 @@ public partial class SearchPage : ContentPage
     {
         base.OnAppearing();
         await _viewModel.LoadCommand.ExecuteAsync(null);
+        SearchBar.Focus();
     }
 
     private void OnFilterToggleClicked(object? sender, EventArgs e)

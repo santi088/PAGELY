@@ -93,6 +93,13 @@
                     </VerticalStackLayout>
                 </Border>
 
+                <Border Style="{StaticResource CardBorder}" Padding="16">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Style="{StaticResource CardTitle}" Text="Backend API base URL" />
+                        <Entry Text="{Binding ApiBaseUrl}" Placeholder="http://192.168.x.x:5242" />
+                    </VerticalStackLayout>
+                </Border>
+
                 <Button
                     Command="{Binding ResetCommand}"
                     HeightRequest="48"

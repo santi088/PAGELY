@@ -18,12 +18,20 @@
             Padding="24,28,20,20"
             StrokeShape="RoundRectangle 0,0,28,28"
             StrokeThickness="0">
-            <VerticalStackLayout Spacing="4">
-                <Label FontSize="30" Style="{StaticResource PageTitle}" Text="Discover" />
-                <Label
-                    Style="{StaticResource PageSubtitle}"
-                    Text="Find your next read. Sample catalog for now." />
-            </VerticalStackLayout>
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                <VerticalStackLayout Spacing="4">
+                    <Label FontSize="30" Style="{StaticResource PageTitle}" Text="Discover" />
+                    <Label
+                        Style="{StaticResource PageSubtitle}"
+                        Text="Find your next read. Sample catalog for now." />
+                </VerticalStackLayout>
+                <Button
+                    Grid.Column="1"
+                    Command="{Binding OpenSearchCommand}"
+                    Style="{StaticResource ButtonIcon}"
+                    Text="Search"
+                    VerticalOptions="Center" />
+            </Grid>
         </Border>
 
         <!-- Filters: genre buttons and sort order -->

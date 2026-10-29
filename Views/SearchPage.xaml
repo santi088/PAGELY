@@ -11,7 +11,7 @@
     Shell.NavBarIsVisible="False"
     BackgroundColor="{DynamicResource Paper}">
 
-    <Grid RowDefinitions="Auto,Auto,*">
+    <Grid RowDefinitions="Auto,Auto,Auto,*">
 
         <VerticalStackLayout Padding="20,16,20,12" Spacing="2">
             <Label Style="{StaticResource PageTitle}" Text="Search" />
@@ -49,6 +49,7 @@
             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                 <Border Style="{StaticResource FieldBorder}">
                     <SearchBar
+                        x:Name="SearchBar"
                         CancelButtonColor="{DynamicResource Primary}"
                         FontFamily="OpenSansRegular"
                         HeightRequest="46"
@@ -109,163 +110,143 @@
             </Border>
         </VerticalStackLayout>
 
-        <CollectionView
+        <Label
             Grid.Row="2"
-            IsVisible="{Binding IsCommunityScope, Converter={StaticResource InverseBool}}"
-            ItemsSource="{Binding Books}"
-            SelectionMode="None">
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Book">
-                    <Grid Padding="20,0">
-                        <Border Padding="12" Style="{StaticResource CardBorder}">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding BindingContext.OpenCommand, Source={x:Reference Search}}"
-                                    CommandParameter="{Binding .}" />
-                            </Border.GestureRecognizers>
-                            <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
-                                <Border
-                                    BackgroundColor="{DynamicResource Spine}"
-                                    HeightRequest="76"
-                                    StrokeShape="RoundRectangle 10"
-                                    StrokeThickness="0"
-                                    VerticalOptions="Start"
-                                    WidthRequest="52">
-                                    <Grid>
-                                        <Image
-                                            Aspect="AspectFill"
-                                            IsVisible="{Binding CoverPath, Converter={StaticResource HasValue}}"
-                                            Source="{Binding CoverPath}" />
+            Margin="20,0,20,8"
+            Style="{StaticResource PageSubtitle}"
+            Text="{Binding CommunityMessage}"
+            IsVisible="{Binding IsCommunityScope}" />
+
+        <Grid Grid.Row="3">
+            <CollectionView
+                IsVisible="{Binding IsCommunityScope, Converter={StaticResource InverseBool}}"
+                ItemsSource="{Binding Books}"
+                SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Book">
+                        <Grid Padding="20,0">
+                            <Border Padding="12" Style="{StaticResource CardBorder}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding BindingContext.OpenCommand, Source={x:Reference Search}}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
+                                    <Border
+                                        BackgroundColor="{DynamicResource Spine}"
+                                        HeightRequest="76"
+                                        StrokeShape="RoundRectangle 10"
+                                        StrokeThickness="0"
+                                        VerticalOptions="Start"
+                                        WidthRequest="52">
+                                        <Grid>
+                                            <Image
+                                                Aspect="AspectFill"
+                                                IsVisible="{Binding CoverPath, Converter={StaticResource HasValue}}"
+                                                Source="{Binding CoverPath}" />
+                                            <Label
+                                                FontFamily="OpenSansSemibold"
+                                                FontSize="20"
+                                                HorizontalOptions="Center"
+                                                IsVisible="{Binding CoverPath, Converter={StaticResource InverseHasValue}}"
+                                                Text="{Binding Initial}"
+                                                TextColor="{DynamicResource Surface}"
+                                                VerticalOptions="Center" />
+                                        </Grid>
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                        <Label FontSize="15" Style="{StaticResource CardTitle}" Text="{Binding Title}" />
+                                        <Label FontSize="12" Style="{StaticResource CardMeta}" Text="{Binding Author}" />
+                                        <Label FontSize="11" Style="{StaticResource Caption}" Text="{Binding StatusLabel}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <VerticalStackLayout
+                HorizontalOptions="Center"
+                IsVisible="{Binding IsEmpty}"
+                Padding="40,0"
+                Spacing="10"
+                VerticalOptions="Center">
+                <Label
+                    FontFamily="OpenSansSemibold"
+                    FontSize="19"
+                    HorizontalTextAlignment="Center"
+                    Text="No books found"
+                    TextColor="{DynamicResource Ink}" />
+                <Label
+                    HorizontalTextAlignment="Center"
+                    MaximumWidthRequest="290"
+                    Style="{StaticResource PageSubtitle}"
+                    Text="Nothing matches this search yet. Try another title, author, genre or status." />
+            </VerticalStackLayout>
+
+            <CollectionView
+                IsVisible="{Binding IsCommunityScope}"
+                ItemsSource="{Binding CommunityBooks}"
+                SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:DiscoverBook">
+                        <Grid Padding="20,0">
+                            <Border Padding="12" Style="{StaticResource CardBorder}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding BindingContext.OpenCommunityCommand, Source={x:Reference Search}}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
+                                    <Border
+                                        BackgroundColor="{Binding CoverColor}"
+                                        HeightRequest="76"
+                                        StrokeShape="RoundRectangle 10"
+                                        StrokeThickness="0"
+                                        VerticalOptions="Start"
+                                        WidthRequest="52">
                                         <Label
                                             FontFamily="OpenSansSemibold"
                                             FontSize="20"
                                             HorizontalOptions="Center"
-                                            IsVisible="{Binding CoverPath, Converter={StaticResource InverseHasValue}}"
                                             Text="{Binding Initial}"
                                             TextColor="{DynamicResource Surface}"
                                             VerticalOptions="Center" />
-                                    </Grid>
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                                    <Label
-                                        FontSize="15"
-                                        MaxLines="2"
-                                        Style="{StaticResource CardTitle}"
-                                        Text="{Binding Title}" />
-                                    <HorizontalStackLayout Margin="0,4,0,0" Spacing="8">
-                                        <Border Style="{StaticResource ChipBorder}">
-                                            <Label
-                                                FontFamily="OpenSansSemibold"
-                                                FontSize="11"
-                                                Text="{Binding StatusLabel}"
-                                                TextColor="{Binding StatusLabel, Converter={StaticResource StatusColor}}" />
-                                        </Border>
-                                        <Label
-                                            Style="{StaticResource CardMeta}"
-                                            Text="{Binding Genre}"
-                                            VerticalOptions="Center" />
-                                    </HorizontalStackLayout>
-                                    <Border
-                                        HeightRequest="5"
-                                        Margin="0,4,0,0"
-                                        Style="{StaticResource ProgressPill}">
-                                        <ProgressBar
-                                            BackgroundColor="Transparent"
-                                            HeightRequest="5"
-                                            Progress="{Binding ProgressPercent, Converter={StaticResource PercentToProgress}}"
-                                            ProgressColor="{DynamicResource Primary}" />
                                     </Border>
-                                </VerticalStackLayout>
-                            </Grid>
-                        </Border>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                        <Label FontSize="15" Style="{StaticResource CardTitle}" Text="{Binding Title}" />
+                                        <Label FontSize="12" Style="{StaticResource CardMeta}" Text="{Binding Author}" />
+                                        <Label FontSize="11" Style="{StaticResource Caption}" Text="{Binding RatingLabel}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-        <VerticalStackLayout
-            Grid.Row="2"
-            HorizontalOptions="Center"
-            IsVisible="{Binding IsEmpty}"
-            Padding="40,0"
-            Spacing="10"
-            VerticalOptions="Center">
-            <Label
-                FontFamily="OpenSansSemibold"
-                FontSize="19"
-                HorizontalTextAlignment="Center"
-                Text="No books found"
-                TextColor="{DynamicResource Ink}" />
-            <Label
-                HorizontalTextAlignment="Center"
-                MaximumWidthRequest="290"
-                Style="{StaticResource PageSubtitle}"
-                Text="Nothing matches this search yet. Try another title, author, genre or status." />
-        </VerticalStackLayout>
-
-        <CollectionView
-            Grid.Row="2"
-            IsVisible="{Binding IsCommunityScope}"
-            ItemsSource="{Binding CommunityBooks}"
-            SelectionMode="None">
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:DiscoverBook">
-                    <Grid Padding="20,0">
-                        <Border Padding="12" Style="{StaticResource CardBorder}">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding BindingContext.OpenCommunityCommand, Source={x:Reference Search}}"
-                                    CommandParameter="{Binding .}" />
-                            </Border.GestureRecognizers>
-                            <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
-                                <Border
-                                    BackgroundColor="{Binding CoverColor}"
-                                    HeightRequest="76"
-                                    StrokeShape="RoundRectangle 10"
-                                    StrokeThickness="0"
-                                    VerticalOptions="Start"
-                                    WidthRequest="52">
-                                    <Label
-                                        FontFamily="OpenSansSemibold"
-                                        FontSize="20"
-                                        HorizontalOptions="Center"
-                                        Text="{Binding Initial}"
-                                        TextColor="{DynamicResource Surface}"
-                                        VerticalOptions="Center" />
-                                </Border>
-                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                                    <Label FontSize="15" Style="{StaticResource CardTitle}" Text="{Binding Title}" />
-                                    <Label FontSize="12" Style="{StaticResource CardMeta}" Text="{Binding Author}" />
-                                    <Label FontSize="11" Style="{StaticResource Caption}" Text="{Binding RatingLabel}" />
-                                </VerticalStackLayout>
-                            </Grid>
-                        </Border>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-        <VerticalStackLayout
-            Grid.Row="2"
-            HorizontalOptions="Center"
-            IsVisible="{Binding IsCommunityScope}"
-            VerticalOptions="Center"
-            Padding="40,0"
-            Spacing="8">
-            <ActivityIndicator
-                IsRunning="{Binding IsCommunityBusy}"
-                IsVisible="{Binding IsCommunityBusy}" />
-            <Label
-                HorizontalTextAlignment="Center"
-                IsVisible="{Binding IsCommunityBusy, Converter={StaticResource InverseBool}}"
-                Style="{StaticResource PageSubtitle}"
-                Text="{Binding CommunityMessage}" />
-        </VerticalStackLayout>
+            <VerticalStackLayout
+                HorizontalOptions="Center"
+                IsVisible="{Binding IsCommunityScope}"
+                Padding="40,0"
+                Spacing="8"
+                VerticalOptions="Center">
+                <ActivityIndicator
+                    IsRunning="{Binding IsCommunityBusy}"
+                    IsVisible="{Binding IsCommunityBusy}" />
+                <Label
+                    HorizontalTextAlignment="Center"
+                    IsVisible="{Binding IsCommunityBusy, Converter={StaticResource InverseBool}}"
+                    Style="{StaticResource PageSubtitle}"
+                    Text="{Binding CommunityMessage}" />
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>
