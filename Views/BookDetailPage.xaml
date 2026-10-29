@@ -7,20 +7,20 @@
     x:DataType="vm:BookDetailViewModel"
     Title="Book"
     Shell.NavBarIsVisible="False"
-    BackgroundColor="{StaticResource Paper}">
+    BackgroundColor="{DynamicResource Paper}">
 
     <Grid RowDefinitions="Auto,*">
 
         <Border
-            BackgroundColor="{StaticResource Surface}"
-            Stroke="{StaticResource Divider}"
+            BackgroundColor="{DynamicResource Surface}"
+            Stroke="{DynamicResource Divider}"
             StrokeShape="RoundRectangle 0,0,20,20"
             StrokeThickness="1">
             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="4" Padding="12,10,16,12">
                 <ImageButton
                     Aspect="AspectFit"
-                    BackgroundColor="{StaticResource SurfaceAlt}"
-                    BorderColor="{StaticResource Divider}"
+                    BackgroundColor="{DynamicResource SurfaceAlt}"
+                    BorderColor="{DynamicResource Divider}"
                     BorderWidth="1"
                     Clicked="OnBackClicked"
                     CornerRadius="21"
@@ -35,7 +35,7 @@
                     FontSize="17"
                     Padding="12,0,0,0"
                     Text="Book Details"
-                    TextColor="{StaticResource Ink}"
+                    TextColor="{DynamicResource Ink}"
                     VerticalOptions="Center" />
             </Grid>
         </Border>
@@ -46,7 +46,7 @@
                 <Border Padding="14" Style="{StaticResource CardBorder}">
                     <Grid ColumnDefinitions="84,*" ColumnSpacing="14">
                         <Border
-                            BackgroundColor="{StaticResource Spine}"
+                            BackgroundColor="{DynamicResource Spine}"
                             HeightRequest="118"
                             StrokeShape="RoundRectangle 10"
                             StrokeThickness="0"
@@ -63,7 +63,7 @@
                                     HorizontalOptions="Center"
                                     IsVisible="{Binding Book.CoverPath, Converter={StaticResource InverseHasValue}}"
                                     Text="{Binding Book.Initial}"
-                                    TextColor="{StaticResource Surface}"
+                                    TextColor="{DynamicResource Surface}"
                                     VerticalOptions="Center" />
                             </Grid>
                         </Border>
@@ -104,14 +104,14 @@
                                 FontFamily="OpenSansSemibold"
                                 FontSize="22"
                                 Text="{Binding Book.ProgressLabel}"
-                                TextColor="{StaticResource Ink}" />
+                                TextColor="{DynamicResource Ink}" />
                         </Grid>
                         <Border HeightRequest="8" Style="{StaticResource ProgressPill}">
                             <ProgressBar
                                 BackgroundColor="Transparent"
                                 HeightRequest="8"
                                 Progress="{Binding Book.ProgressPercent, Converter={StaticResource PercentToProgress}}"
-                                ProgressColor="{StaticResource Primary}" />
+                                ProgressColor="{DynamicResource Primary}" />
                         </Border>
                     </VerticalStackLayout>
                 </Border>
@@ -127,7 +127,7 @@
                         HeightRequest="52"
                         Style="{StaticResource ButtonSecondary}"
                         Text="Remove from library"
-                        TextColor="{StaticResource Danger}" />
+                        TextColor="{DynamicResource Danger}" />
                 </VerticalStackLayout>
             </VerticalStackLayout>
         </ScrollView>

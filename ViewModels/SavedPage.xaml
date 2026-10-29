@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PAGELY.Views.SavedPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:PAGELY.Models"
+    xmlns:vm="clr-namespace:PAGELY.ViewModels"
+    x:Name="Saved"
+    x:DataType="vm:SavedItemsViewModel"
+    Title="Bookmarks and notes"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{DynamicResource Paper}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <Border
+            BackgroundColor="{DynamicResource Surface}"
+            Stroke="{DynamicResource Divider}"
+            StrokeShape="RoundRectangle 0,0,28,28"
+            StrokeThickness="1">
+            <Grid
+                ColumnDefinitions="Auto,*"
+                ColumnSpacing="12"
+                Padding="16,16,20,20">
+                <ImageButton
+                    Command="{Binding BackCommand}"
+                    Padding="0"
+                    CornerRadius="21"
+                    BackgroundColor="{DynamicResource SurfaceAlt}"
+                    BorderColor="{DynamicResource Divider}"
+                    BorderWidth="1"
+                    HeightRequest="42"
+                    WidthRequest="42"
+                    Source="ic_back.svg"
+                    Aspect="AspectFit"
+                    SemanticProperties.Description="Back" />
+                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                    <Label Style="{StaticResource PageTitle}" FontSize="24" Text="Bookmarks and notes" />
+                    <Label
+                        LineBreakMode="TailTruncation"
+                        MaxLines="1"
+                        Style="{StaticResource PageSubtitle}"
+                        Text="{Binding BookTitle}" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="20,16,20,32" Spacing="12">
+
+                <!-- Bookmarks -->
+                <Label Style="{StaticResource CardTitle}" Text="Bookmarks" />
+                <Label
+                    IsVisible="{Binding HasBookmarks, Converter={StaticResource InverseBool}}"
+                    Style="{StaticResource PageSubtitle}"
+                    Text="No bookmarks yet. Tap Bookmark in the reader to save a spot." />
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Bookmarks}" Spacing="10">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:Bookmark">
+                            <Border Padding="14" Style="{StaticResource CardBorder}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding BindingContext.OpenBookmarkCommand, Source={x:Reference Saved}}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                    <VerticalStackLayout Spacing="3" VerticalOptions="Center">
+                                        <Label FontSize="15" Style="{StaticResource CardTitle}" Text="{Binding Label}" />
+                                        <Label Style="{StaticResource CardMeta}" Text="{Binding CreatedLabel}" />
+                                    </VerticalStackLayout>
+                                    <Button
+                                        Grid.Column="1"
+                                        Command="{Binding BindingContext.DeleteBookmarkCommand, Source={x:Reference Saved}}"
+                                        CommandParameter="{Binding .}"
+                                        FontSize="12"
+                                        HeightRequest="36"
+                                        Padding="14,0"
+                                        Style="{StaticResource ButtonSecondary}"
+                                        Text="Delete" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <!-- Notes -->
+                <Label Margin="0,12,0,0" Style="{StaticResource CardTitle}" Text="Notes" />
+                <Label
+                    IsVisible="{Binding HasNotes, Converter={StaticResource InverseBool}}"
+                    Style="{StaticResource PageSubtitle}"
+                    Text="No notes yet. Tap Add note in the reader to write one." />
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Notes}" Spacing="10">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:Annotation">
+                            <Border Padding="14" Style="{StaticResource CardBorder}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding BindingContext.OpenNoteCommand, Source={x:Reference Saved}}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                    <VerticalStackLayout Spacing="6" VerticalOptions="Center">
+                                        <Label Style="{StaticResource CardMeta}" Text="{Binding Label}" />
+                                        <Label
+                                            FontAttributes="Italic"
+                                            FontSize="13"
+                                            IsVisible="{Binding QuotedText, Converter={StaticResource HasValue}}"
+                                            Text="{Binding QuotedText, StringFormat='“{0}”'}"
+                                            TextColor="{DynamicResource InkSoft}" />
+                                        <Label
+                                            FontSize="15"
+                                            Text="{Binding NoteText}"
+                                            TextColor="{DynamicResource Ink}" />
+                                        <Label Style="{StaticResource CardMeta}" Text="{Binding CreatedLabel}" />
+                                    </VerticalStackLayout>
+                                    <Button
+                                        Grid.Column="1"
+                                        Command="{Binding BindingContext.DeleteNoteCommand, Source={x:Reference Saved}}"
+                                        CommandParameter="{Binding .}"
+                                        FontSize="12"
+                                        HeightRequest="36"
+                                        Padding="14,0"
+                                        Style="{StaticResource ButtonSecondary}"
+                                        Text="Delete"
+                                        VerticalOptions="Start" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

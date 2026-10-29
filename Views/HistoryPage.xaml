@@ -9,7 +9,7 @@
     x:DataType="vm:HistoryViewModel"
     Title="History"
     Shell.NavBarIsVisible="False"
-    BackgroundColor="{StaticResource Paper}">
+    BackgroundColor="{DynamicResource Paper}">
 
     <ScrollView>
         <VerticalStackLayout Padding="20,16,20,40">
@@ -45,7 +45,7 @@
                                 </Border.GestureRecognizers>
                                 <Grid RowDefinitions="Auto,Auto,*,Auto">
                                     <Border
-                                        BackgroundColor="{StaticResource Spine}"
+                                        BackgroundColor="{DynamicResource Spine}"
                                         HeightRequest="78"
                                         StrokeShape="RoundRectangle 10"
                                         StrokeThickness="0"
@@ -61,7 +61,7 @@
                                                 HorizontalOptions="Center"
                                                 IsVisible="{Binding CoverPath, Converter={StaticResource InverseHasValue}}"
                                                 Text="{Binding Initial}"
-                                                TextColor="{StaticResource Surface}"
+                                                TextColor="{DynamicResource Surface}"
                                                 VerticalOptions="Center" />
                                         </Grid>
                                     </Border>
@@ -73,19 +73,19 @@
                                         Margin="0,10,0,0"
                                         MaxLines="2"
                                         Text="{Binding Title}"
-                                        TextColor="{StaticResource Ink}" />
+                                        TextColor="{DynamicResource Ink}" />
                                     <VerticalStackLayout Grid.Row="3" Spacing="6">
                                         <Label
                                             FontFamily="OpenSansSemibold"
                                             FontSize="12"
                                             Text="{Binding ProgressLabel}"
-                                            TextColor="{StaticResource InkSoft}" />
+                                            TextColor="{DynamicResource InkSoft}" />
                                         <Border HeightRequest="5" Style="{StaticResource ProgressPill}">
                                             <ProgressBar
                                                 BackgroundColor="Transparent"
                                                 HeightRequest="5"
                                                 Progress="{Binding ProgressPercent, Converter={StaticResource PercentToProgress}}"
-                                                ProgressColor="{StaticResource Primary}" />
+                                                ProgressColor="{DynamicResource Primary}" />
                                         </Border>
                                     </VerticalStackLayout>
                                 </Grid>
@@ -120,7 +120,7 @@
                                             FontSize="14"
                                             LineBreakMode="TailTruncation"
                                             Text="{Binding BookTitle}"
-                                            TextColor="{StaticResource Ink}" />
+                                            TextColor="{DynamicResource Ink}" />
                                     </VerticalStackLayout>
                                     <Border
                                         Grid.Column="1"
@@ -130,7 +130,7 @@
                                             FontFamily="OpenSansSemibold"
                                             FontSize="11"
                                             Text="{Binding ReadAt, StringFormat='{0:MMM d}'}"
-                                            TextColor="{StaticResource Muted}" />
+                                            TextColor="{DynamicResource Muted}" />
                                     </Border>
                                 </Grid>
                             </Border>
@@ -145,7 +145,7 @@
                 Padding="20,40"
                 Spacing="12">
                 <Border
-                    BackgroundColor="{StaticResource SurfaceAlt}"
+                    BackgroundColor="{DynamicResource SurfaceAlt}"
                     HeightRequest="64"
                     HorizontalOptions="Center"
                     StrokeShape="RoundRectangle 20"
@@ -156,7 +156,7 @@
                         FontSize="26"
                         HorizontalOptions="Center"
                         Text="P"
-                        TextColor="{StaticResource Primary}"
+                        TextColor="{DynamicResource Primary}"
                         VerticalOptions="Center" />
                 </Border>
                 <Label
@@ -165,7 +165,7 @@
                     HorizontalTextAlignment="Center"
                     Margin="0,2,0,0"
                     Text="Nothing here yet"
-                    TextColor="{StaticResource Ink}" />
+                    TextColor="{DynamicResource Ink}" />
                 <Label
                     HorizontalTextAlignment="Center"
                     MaximumWidthRequest="290"

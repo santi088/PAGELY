@@ -5,22 +5,28 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:PAGELY.Views"
     Shell.FlyoutBehavior="Disabled"
-    Shell.BackgroundColor="{StaticResource Surface}"
-    Shell.TitleColor="{StaticResource Ink}"
-    Shell.ForegroundColor="{StaticResource Primary}"
-    Shell.TabBarBackgroundColor="{StaticResource Surface}"
-    Shell.TabBarTitleColor="{StaticResource Primary}"
-    Shell.TabBarUnselectedColor="{StaticResource Muted}"
+    Shell.BackgroundColor="{DynamicResource Surface}"
+    Shell.TitleColor="{DynamicResource Ink}"
+    Shell.ForegroundColor="{DynamicResource Primary}"
+    Shell.TabBarBackgroundColor="{DynamicResource Surface}"
+    Shell.TabBarTitleColor="{DynamicResource Primary}"
+    Shell.TabBarUnselectedColor="{DynamicResource Muted}"
     Shell.NavBarHasShadow="False"
-    Shell.DisabledColor="{StaticResource PrimaryDark}"
+    Shell.DisabledColor="{DynamicResource PrimaryDark}"
     Shell.TabBarIsVisible="True"
     Title="PAGELY">
 
     <TabBar x:Name="MainTabBar">
-        <Tab Title="Library" Icon="tab_library.svg">
+        <Tab Title="My Library" Icon="tab_library.svg">
             <ShellContent
                 ContentTemplate="{DataTemplate views:LibraryPage}"
                 Route="library"
+                Shell.NavBarIsVisible="False" />
+        </Tab>
+        <Tab Title="Discover" Icon="tab_discover.svg">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:DiscoverPage}"
+                Route="discover"
                 Shell.NavBarIsVisible="False" />
         </Tab>
         <Tab Title="Search" Icon="tab_search.svg">
@@ -39,6 +45,12 @@
             <ShellContent
                 ContentTemplate="{DataTemplate views:StatsPage}"
                 Route="stats"
+                Shell.NavBarIsVisible="False" />
+        </Tab>
+        <Tab Title="Settings" Icon="tab_settings.svg">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:SettingsPage}"
+                Route="settings"
                 Shell.NavBarIsVisible="False" />
         </Tab>
     </TabBar>
