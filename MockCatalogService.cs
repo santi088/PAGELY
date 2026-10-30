@@ -101,4 +101,16 @@ public class MockCatalogService : IOnlineCatalogService
             .ThenBy(b => b.Title)
             .ToList();
     }
+    public Task<IReadOnlyList<DiscoverBook>> GetDiscoveryAsync(string shelf, CancellationToken cancellationToken = default)
+    {
+        var sorted = shelf.ToLowerInvariant() switch
+        {
+            "recent" => Books.OrderByDescending(b => b.Year).ThenBy(b => b.Title),
+            "top-rated" => Books.Where(b => b.RatingCount > 0).OrderByDescending(b => b.Rating).ThenByDescending(b => b.RatingCount),
+            _ => Books.OrderByDescending(b => b.RatingCount).ThenByDescending(b => b.Rating)
+        };
+
+        return Task.FromResult<IReadOnlyList<DiscoverBook>>(sorted.Take(12).ToList());
+    }
+
 }

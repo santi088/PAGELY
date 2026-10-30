@@ -149,6 +149,57 @@
                             </Grid>
                         </Border>
                         <BoxView HeightRequest="4" Color="Transparent" />
+
+                        <Label Style="{StaticResource SectionCaption}" Text="POPULAR" />
+                        <CollectionView ItemsSource="{Binding PopularBooks}" SelectionMode="None" HeightRequest="150">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="10" Orientation="Horizontal" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="vm:DiscoverItem">
+                                    <VerticalStackLayout WidthRequest="96" Spacing="4">
+                                        <Border BackgroundColor="{Binding Book.CoverColor}" HeightRequest="128" StrokeShape="RoundRectangle 12" StrokeThickness="0" WidthRequest="96">
+                                            <Label FontFamily="OpenSansSemibold" FontSize="22" HorizontalOptions="Center" Text="{Binding Book.Initial}" TextColor="White" VerticalOptions="Center" />
+                                        </Border>
+                                        <Label FontSize="12" LineBreakMode="TailTruncation" MaxLines="1" Style="{StaticResource CardTitle}" Text="{Binding Book.Title}" />
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <Label Style="{StaticResource SectionCaption}" Text="HIGHLY RATED" />
+                        <CollectionView ItemsSource="{Binding TopRatedBooks}" SelectionMode="None" HeightRequest="150">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="10" Orientation="Horizontal" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="vm:DiscoverItem">
+                                    <VerticalStackLayout WidthRequest="96" Spacing="4">
+                                        <Border BackgroundColor="{Binding Book.CoverColor}" HeightRequest="128" StrokeShape="RoundRectangle 12" StrokeThickness="0" WidthRequest="96">
+                                            <Label FontFamily="OpenSansSemibold" FontSize="22" HorizontalOptions="Center" Text="{Binding Book.Initial}" TextColor="White" VerticalOptions="Center" />
+                                        </Border>
+                                        <Label FontSize="12" LineBreakMode="TailTruncation" MaxLines="1" Style="{StaticResource CardTitle}" Text="{Binding Book.Title}" />
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                        <Label Style="{StaticResource SectionCaption}" Text="RECENTLY ADDED" />
+                        <CollectionView ItemsSource="{Binding RecentBooks}" SelectionMode="None" HeightRequest="150">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="10" Orientation="Horizontal" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="vm:DiscoverItem">
+                                    <VerticalStackLayout WidthRequest="96" Spacing="4">
+                                        <Border BackgroundColor="{Binding Book.CoverColor}" HeightRequest="128" StrokeShape="RoundRectangle 12" StrokeThickness="0" WidthRequest="96">
+                                            <Label FontFamily="OpenSansSemibold" FontSize="22" HorizontalOptions="Center" Text="{Binding Book.Initial}" TextColor="White" VerticalOptions="Center" />
+                                        </Border>
+                                        <Label FontSize="12" LineBreakMode="TailTruncation" MaxLines="1" Style="{StaticResource CardTitle}" Text="{Binding Book.Title}" />
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
                     </VerticalStackLayout>
                 </CollectionView.Header>
                 <CollectionView.Footer>

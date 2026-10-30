@@ -57,6 +57,9 @@ public partial class DiscoverViewModel : ObservableObject
     public ObservableCollection<GenreChip> Genres { get; } = [];
 
     public ObservableCollection<DiscoverItem> Books { get; } = [];
+    public ObservableCollection<DiscoverItem> PopularBooks { get; } = [];
+    public ObservableCollection<DiscoverItem> TopRatedBooks { get; } = [];
+    public ObservableCollection<DiscoverItem> RecentBooks { get; } = [];
 
     public IReadOnlyList<string> SortOptions { get; } = ["Top rated", "Newest", "A to Z"];
 
@@ -106,9 +109,35 @@ public partial class DiscoverViewModel : ObservableObject
             }
 
             _initialized = true;
+
+            await LoadShelvesAsync();
         }
 
         await RefreshAsync();
+    }
+
+    private async Task LoadShelvesAsync()
+    {
+        try
+        {
+            var popular = await _catalog.GetDiscoveryAsync("popular");
+            var topRated = await _catalog.GetDiscoveryAsync("top-rated");
+            var recent = await _catalog.GetDiscoveryAsync("recent");
+            var savedIds = (await _readingList.GetAsync()).Select(b => b.Id).ToHashSet();
+
+            PopularBooks.Clear();
+            foreach (var book in popular) PopularBooks.Add(new DiscoverItem(book, savedIds.Contains(book.Id)));
+
+            TopRatedBooks.Clear();
+            foreach (var book in topRated) TopRatedBooks.Add(new DiscoverItem(book, savedIds.Contains(book.Id)));
+
+            RecentBooks.Clear();
+            foreach (var book in recent) RecentBooks.Add(new DiscoverItem(book, savedIds.Contains(book.Id)));
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Discover", $"Could not load shelves: {ex.Message}", "OK");
+        }
     }
 
     private async Task RefreshAsync()

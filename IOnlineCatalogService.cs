@@ -22,4 +22,6 @@ public interface IOnlineCatalogService
     Task<DiscoverBook?> GetBookAsync(string id, CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<DiscoverBook>> SearchAsync(string query, CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<DiscoverBook>> GetDiscoveryAsync(string shelf, CancellationToken cancellationToken = default);
 }

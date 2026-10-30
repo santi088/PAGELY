@@ -91,6 +91,13 @@ public sealed class ApiCatalogService : IOnlineCatalogService
         return (result?.Items ?? new()).Select(Map).ToList();
     }
 
+    public async Task<IReadOnlyList<DiscoverBook>> GetDiscoveryAsync(string shelf, CancellationToken cancellationToken = default)
+    {
+        var url = $"api/discovery?shelf={Uri.EscapeDataString(shelf)}&pageSize=12";
+        var result = await CreateClient().GetFromJsonAsync<ApiPagedResult<ApiBookDto>>(url, cancellationToken);
+        return (result?.Items ?? new()).Select(Map).ToList();
+    }
+
     private static DiscoverBook Map(ApiBookDto dto) => new()
     {
         Id = dto.Id.ToString(),
