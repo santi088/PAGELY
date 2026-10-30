@@ -213,6 +213,9 @@
         <Setter Property="StrokeThickness" Value="1" />
         <Setter Property="StrokeShape" Value="RoundRectangle 16" />
         <Setter Property="Padding" Value="14" />
+        <Setter Property="Shadow">
+            <Shadow Brush="#000000" Offset="0,2" Radius="8" Opacity="0.08" />
+        </Setter>
     </Style>
 
     <Style TargetType="Border" x:Key="ChipBorder">

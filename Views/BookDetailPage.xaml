@@ -44,10 +44,10 @@
             <VerticalStackLayout Padding="20,16,20,40" Spacing="14">
 
                 <Border Padding="14" Style="{StaticResource CardBorder}">
-                    <Grid ColumnDefinitions="84,*" ColumnSpacing="14">
+                    <Grid ColumnDefinitions="96,*" ColumnSpacing="16">
                         <Border
                             BackgroundColor="{DynamicResource Spine}"
-                            HeightRequest="118"
+                            HeightRequest="136"
                             StrokeShape="RoundRectangle 10"
                             StrokeThickness="0"
                             VerticalOptions="Start"

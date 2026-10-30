@@ -234,18 +234,13 @@
 
             <VerticalStackLayout
                 HorizontalOptions="Center"
-                IsVisible="{Binding IsCommunityScope}"
+                IsVisible="{Binding IsCommunityBusy}"
                 Padding="40,0"
                 Spacing="8"
                 VerticalOptions="Center">
                 <ActivityIndicator
                     IsRunning="{Binding IsCommunityBusy}"
                     IsVisible="{Binding IsCommunityBusy}" />
-                <Label
-                    HorizontalTextAlignment="Center"
-                    IsVisible="{Binding IsCommunityBusy, Converter={StaticResource InverseBool}}"
-                    Style="{StaticResource PageSubtitle}"
-                    Text="{Binding CommunityMessage}" />
             </VerticalStackLayout>
         </Grid>
     </Grid>

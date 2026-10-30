@@ -96,12 +96,11 @@
                     Style="{StaticResource PageSubtitle}"
                     Text="Sort by"
                     VerticalOptions="Center" />
-                <Picker
+                <Button
                     Grid.Column="1"
-                    FontSize="14"
-                    ItemsSource="{Binding SortOptions}"
-                    SelectedItem="{Binding SelectedSort}"
-                    TextColor="{DynamicResource Ink}" />
+                    Command="{Binding OpenSortCommand}"
+                    Style="{StaticResource ButtonSecondary}"
+                    Text="{Binding SelectedSort}" />
                 <Label
                     Grid.Column="2"
                     Style="{StaticResource CardMeta}"
@@ -120,7 +119,37 @@
                     <LinearItemsLayout ItemSpacing="14" Orientation="Vertical" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.Header>
-                    <BoxView HeightRequest="8" Color="Transparent" />
+                    <VerticalStackLayout Spacing="10">
+                        <Border
+                            IsVisible="{Binding Featured, Converter={StaticResource HasValue}}"
+                            Padding="16"
+                            Style="{StaticResource CardBorder}">
+                            <Grid ColumnDefinitions="72,*" ColumnSpacing="14">
+                                <Border
+                                    BackgroundColor="{Binding Featured.Book.CoverColor}"
+                                    HeightRequest="96"
+                                    StrokeShape="RoundRectangle 12"
+                                    StrokeThickness="0"
+                                    VerticalOptions="Start"
+                                    WidthRequest="72">
+                                    <Label
+                                        FontFamily="OpenSansSemibold"
+                                        FontSize="24"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Featured.Book.Initial}"
+                                        TextColor="White"
+                                        VerticalOptions="Center" />
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                    <Label Style="{StaticResource SectionCaption}" Text="FEATURED" />
+                                    <Label FontSize="16" Style="{StaticResource CardTitle}" Text="{Binding Featured.Book.Title}" />
+                                    <Label FontSize="12" Style="{StaticResource CardMeta}" Text="{Binding Featured.Book.Author}" />
+                                    <Label FontSize="12" Style="{StaticResource Caption}" Text="{Binding Featured.Book.RatingLabel}" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                        <BoxView HeightRequest="4" Color="Transparent" />
+                    </VerticalStackLayout>
                 </CollectionView.Header>
                 <CollectionView.Footer>
                     <BoxView HeightRequest="24" Color="Transparent" />

@@ -72,6 +72,9 @@ public partial class DiscoverViewModel : ObservableObject
     [ObservableProperty]
     private string resultsLabel = string.Empty;
 
+    [ObservableProperty]
+    private DiscoverItem? featured;
+
     partial void OnSelectedSortChanged(string value)
     {
         if (_initialized && !string.IsNullOrEmpty(value))
@@ -143,6 +146,7 @@ public partial class DiscoverViewModel : ObservableObject
 
             IsEmpty = Books.Count == 0;
             ResultsLabel = Books.Count == 1 ? "1 book" : $"{Books.Count} books";
+            Featured = Books.FirstOrDefault();
         }
         catch (Exception ex)
         {
@@ -154,6 +158,16 @@ public partial class DiscoverViewModel : ObservableObject
             {
                 IsBusy = false;
             }
+        }
+    }
+
+    [RelayCommand]
+    private async Task OpenSortAsync()
+    {
+        var choice = await Shell.Current.DisplayActionSheet("Sort by", "Cancel", null, SortOptions.ToArray());
+        if (!string.IsNullOrWhiteSpace(choice) && choice != "Cancel" && SortOptions.Contains(choice))
+        {
+            SelectedSort = choice;
         }
     }
 

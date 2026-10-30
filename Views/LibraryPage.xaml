@@ -44,7 +44,7 @@
                 ItemsSource="{Binding Books}"
                 SelectionMode="None">
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="14" />
+                    <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="10" VerticalItemSpacing="14" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.Header>
                     <BoxView HeightRequest="16" Color="Transparent" />
@@ -54,8 +54,8 @@
                 </CollectionView.Footer>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Book">
-                        <Grid Padding="20,0">
-                            <Border Style="{StaticResource CardBorder}" Padding="14">
+                        <Grid Padding="8,0">
+                            <Border Style="{StaticResource CardBorder}" Padding="12">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer
                                         Command="{Binding BindingContext.OpenCommand, Source={x:Reference Library}}"

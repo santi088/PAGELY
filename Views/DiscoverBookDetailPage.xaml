@@ -40,83 +40,99 @@
             </Grid>
         </Border>
 
-        <ScrollView Grid.Row="1">
-            <VerticalStackLayout Padding="20,16,20,40" Spacing="14" IsVisible="{Binding IsBusy, Converter={StaticResource InverseBool}}">
-                <Border Padding="14" Style="{StaticResource CardBorder}">
-                    <Grid ColumnDefinitions="84,*" ColumnSpacing="14">
-                        <Border
-                            BackgroundColor="{Binding Book.CoverColor}"
-                            HeightRequest="118"
-                            StrokeShape="RoundRectangle 10"
-                            StrokeThickness="0"
-                            VerticalOptions="Start"
-                            WidthRequest="84">
-                            <Label
-                                FontFamily="OpenSansSemibold"
-                                FontSize="28"
-                                HorizontalOptions="Center"
-                                Text="{Binding Book.Initial}"
-                                TextColor="{DynamicResource Surface}"
-                                VerticalOptions="Center" />
-                        </Border>
-                        <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
-                            <Label FontSize="18" Style="{StaticResource CardTitle}" Text="{Binding Book.Title}" />
-                            <Label FontSize="13" Style="{StaticResource CardMeta}" Text="{Binding Book.Author}" />
-                            <Label FontSize="12" Style="{StaticResource Caption}" Text="{Binding Book.Genre}" />
-                            <Label FontSize="12" Style="{StaticResource Caption}" Text="{Binding Book.RatingLabel}" />
+        <CollectionView
+            Grid.Row="1"
+            ItemsSource="{Binding Reviews}"
+            SelectionMode="None">
+            <CollectionView.Header>
+                <VerticalStackLayout Padding="20,16,20,20" Spacing="16">
+                    <Border Padding="14" Style="{StaticResource CardBorder}">
+                        <Grid ColumnDefinitions="96,*" ColumnSpacing="16">
+                            <Border
+                                BackgroundColor="{Binding Book.CoverColor}"
+                                HeightRequest="136"
+                                StrokeShape="RoundRectangle 12"
+                                StrokeThickness="0"
+                                VerticalOptions="Start"
+                                WidthRequest="96">
+                                <Label
+                                    FontFamily="OpenSansSemibold"
+                                    FontSize="32"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding Book.Initial}"
+                                    TextColor="{DynamicResource Surface}"
+                                    VerticalOptions="Center" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
+                                <Label FontSize="20" Style="{StaticResource CardTitle}" Text="{Binding Book.Title}" />
+                                <Label FontSize="14" Style="{StaticResource CardMeta}" Text="{Binding Book.Author}" />
+                                <Label FontSize="12" Style="{StaticResource Caption}" Text="{Binding Book.Genre}" />
+                                <Label FontSize="12" Style="{StaticResource Caption}" Text="{Binding Book.RatingLabel}" />
+                                <Label FontSize="12" Style="{StaticResource Caption}" Text="{Binding Book.RatingCountLabel}" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Border Padding="16" Style="{StaticResource CardBorder}">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Style="{StaticResource SectionCaption}" Text="DESCRIPTION" />
+                            <Label Style="{StaticResource PageSubtitle}" Text="{Binding Book.Description}" />
                         </VerticalStackLayout>
+                    </Border>
+
+                    <Button
+                        Style="{StaticResource ButtonPrimary}"
+                        Text="Add to reading list"
+                        Command="{Binding ToggleSaveCommand}">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding IsSaved}" Value="True">
+                                <Setter Property="Text" Value="Remove from reading list" />
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+
+                    <Border Padding="16" Style="{StaticResource CardBorder}">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Style="{StaticResource SectionCaption}" Text="RATINGS AND REVIEWS" />
+                            <Label Style="{StaticResource PageSubtitle}" Text="{Binding ReviewStatus}" />
+
+                            <Label Style="{StaticResource SectionCaption}" Text="WRITE A REVIEW" />
+                            <Entry Placeholder="Rating (1-5)" Keyboard="Numeric" Text="{Binding NewRating}" />
+                            <Editor Placeholder="Share your thoughts about this book..." Text="{Binding NewReviewText}" HeightRequest="90" />
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                                <Button Style="{StaticResource ButtonSecondary}" Text="Cancel" Command="{Binding CancelReviewCommand}" />
+                                <Button Grid.Column="1" Style="{StaticResource ButtonPrimary}" Text="Submit review" Command="{Binding SubmitReviewCommand}" />
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </CollectionView.Header>
+
+            <CollectionView.EmptyView>
+                <Label HorizontalTextAlignment="Center" Padding="20" Style="{StaticResource PageSubtitle}" Text="No reviews yet. Be the first to write one." />
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Review">
+                    <Grid Padding="0,0,0,0">
+                        <Border Padding="12" Style="{StaticResource CardBorder}">
+                            <VerticalStackLayout Spacing="4">
+                                <Label FontSize="13" Style="{StaticResource CardTitle}" Text="{Binding UserEmail}" />
+                                <Label FontSize="12" Style="{StaticResource Caption}" Text="{Binding Rating, StringFormat='Rating: {0}'}" />
+                                <Label FontSize="14" Text="{Binding ReviewText}" />
+                            </VerticalStackLayout>
+                        </Border>
                     </Grid>
-                </Border>
-
-                <Border Padding="16" Style="{StaticResource CardBorder}">
-                    <VerticalStackLayout Spacing="8">
-                        <Label Style="{StaticResource SectionCaption}" Text="DESCRIPTION" />
-                        <Label Style="{StaticResource PageSubtitle}" Text="{Binding Book.Description}" />
-                    </VerticalStackLayout>
-                </Border>
-
-                <Button
-                    Style="{StaticResource ButtonPrimary}"
-                    Text="Add to reading list"
-                    Command="{Binding ToggleSaveCommand}">
-                    <Button.Triggers>
-                        <DataTrigger TargetType="Button" Binding="{Binding IsSaved}" Value="True">
-                            <Setter Property="Text" Value="Remove from reading list" />
-                        </DataTrigger>
-                    </Button.Triggers>
-                </Button>
-
-                <Border Padding="16" Style="{StaticResource CardBorder}">
-                    <VerticalStackLayout Spacing="8">
-                        <Label Style="{StaticResource SectionCaption}" Text="REVIEWS" />
-                        <Label Style="{StaticResource PageSubtitle}" Text="{Binding ReviewStatus}" />
-                        <CollectionView ItemsSource="{Binding Reviews}" SelectionMode="None">
-                            <CollectionView.ItemsLayout>
-                                <LinearItemsLayout ItemSpacing="8" Orientation="Vertical" />
-                            </CollectionView.ItemsLayout>
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="models:Review">
-                                    <Border Padding="10" Style="{StaticResource CardBorder}">
-                                        <VerticalStackLayout Spacing="4">
-                                            <Label FontSize="13" Style="{StaticResource CardTitle}" Text="{Binding UserEmail}" />
-                                            <Label FontSize="12" Style="{StaticResource Caption}" Text="{Binding Rating, StringFormat='Rating: {0}'}" />
-                                            <Label FontSize="14" Text="{Binding ReviewText}" />
-                                        </VerticalStackLayout>
-                                    </Border>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-
-                        <Label Style="{StaticResource SectionCaption}" Text="WRITE A REVIEW" />
-                        <Entry Placeholder="Rating (1-5)" Keyboard="Numeric" Text="{Binding NewRating}" />
-                        <Editor Placeholder="Review text" Text="{Binding NewReviewText}" HeightRequest="80" />
-                        <Button Style="{StaticResource ButtonSecondary}" Text="Submit review" Command="{Binding SubmitReviewCommand}" />
-                    </VerticalStackLayout>
-                </Border>
-            </VerticalStackLayout>
-        </ScrollView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <ActivityIndicator
+            Grid.Row="1"
             HorizontalOptions="Center"
             IsRunning="{Binding IsBusy}"
             IsVisible="{Binding IsBusy}"

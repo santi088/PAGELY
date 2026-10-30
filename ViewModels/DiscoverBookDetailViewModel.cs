@@ -79,6 +79,14 @@ public partial class DiscoverBookDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void CancelReview()
+    {
+        NewRating = 5;
+        NewReviewText = string.Empty;
+        ReviewStatus = string.Empty;
+    }
+
+    [RelayCommand]
     private async Task SubmitReviewAsync()
     {
         if (Book is null)

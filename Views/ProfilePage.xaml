@@ -15,10 +15,27 @@
             Padding="24,28,20,20"
             StrokeShape="RoundRectangle 0,0,28,28"
             StrokeThickness="0">
-            <VerticalStackLayout Spacing="4">
-                <Label FontSize="30" Style="{StaticResource PageTitle}" Text="Profile" />
-                <Label Style="{StaticResource PageSubtitle}" Text="Your reading identity and account" />
-            </VerticalStackLayout>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+                <Border
+                    BackgroundColor="{DynamicResource Primary}"
+                    HeightRequest="48"
+                    StrokeShape="RoundRectangle 24"
+                    StrokeThickness="0"
+                    VerticalOptions="Center"
+                    WidthRequest="48">
+                    <Label
+                        FontFamily="OpenSansSemibold"
+                        FontSize="20"
+                        HorizontalOptions="Center"
+                        Text="P"
+                        TextColor="{DynamicResource Surface}"
+                        VerticalOptions="Center" />
+                </Border>
+                <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                    <Label FontSize="30" Style="{StaticResource PageTitle}" Text="Profile" />
+                    <Label Style="{StaticResource PageSubtitle}" Text="Your reading identity and account" />
+                </VerticalStackLayout>
+            </Grid>
         </Border>
 
         <ScrollView Grid.Row="1">
