@@ -39,6 +39,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<AuthService>();
         builder.Services.AddSingleton<ReviewsService>();
         builder.Services.AddSingleton<IReadingListService, ApiReadingListService>();
+        builder.Services.AddSingleton<PdfCoverService>();
 
 #if ANDROID
         builder.Services.AddSingleton<IPdfRendererService, Platforms.Android.PdfRendererService>();

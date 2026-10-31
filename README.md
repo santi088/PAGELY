@@ -85,6 +85,34 @@ adb reverse tcp:5242 tcp:5242
 dotnet build -t:Run -f net8.0-android
 ```
 
+## Deploying to a phone (fast deployment)
+
+Fast Deployment keeps the assemblies out of the APK, so do not install the APK
+manually with `adb install`. Use the run target instead:
+
+```sh
+cd ~/Documents/PAGELY
+source ~/.bashrc
+dotnet build -t:Run -f net8.0-android
+```
+
+If the app was previously installed and behaves oddly, uninstall first:
+
+```sh
+adb uninstall com.pagely.reader
+dotnet build -t:Run -f net8.0-android
+```
+
+After launch, reverse the backend port so the phone can reach the dev machine:
+
+```sh
+adb reverse tcp:5242 tcp:5242
+```
+
+Then in the app Settings set **Backend API base URL** to `http://127.0.0.1:5242`.
+
+If install is blocked by MIUI, enable **Install via USB** and disable MIUI optimization, then retry.
+
 ## Troubleshooting
 
 - `XA5300`: set `ANDROID_HOME`/`ANDROID_SDK_ROOT` or pass `-p:AndroidSdkDirectory=...`.

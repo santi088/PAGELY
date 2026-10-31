@@ -8,9 +8,32 @@ public partial class ProfileViewModel : ObservableObject
 {
     private readonly AuthService _auth;
 
-    public ProfileViewModel(AuthService auth)
+    public MyReviewsViewModel MyReviews { get; }
+    public StatsViewModel Stats { get; }
+    public ReadingListViewModel ReadingList { get; }
+    public HistoryViewModel History { get; }
+    public SettingsViewModel Settings { get; }
+
+    public IReadOnlyList<object> Tabs { get; }
+
+    [ObservableProperty]
+    private int selectedTab;
+
+    public ProfileViewModel(
+        AuthService auth,
+        MyReviewsViewModel myReviews,
+        StatsViewModel stats,
+        ReadingListViewModel readingList,
+        HistoryViewModel history,
+        SettingsViewModel settings)
     {
         _auth = auth;
+        MyReviews = myReviews;
+        Stats = stats;
+        ReadingList = readingList;
+        History = history;
+        Settings = settings;
+        Tabs = new object[] { this, readingList, history, settings };
     }
 
     public bool IsAuthenticated => _auth.IsAuthenticated;
@@ -46,8 +69,7 @@ public partial class ProfileViewModel : ObservableObject
     {
         if (_auth.IsAuthenticated)
         {
-            var user = await _auth.GetCurrentUserAsync();
-            AccountEmail = user?.Email ?? _auth.Email ?? string.Empty;
+            AccountEmail = _auth.Email ?? string.Empty;
             StatusMessage = $"Signed in as {AccountEmail}";
         }
         else
@@ -57,6 +79,27 @@ public partial class ProfileViewModel : ObservableObject
         }
 
         OnPropertyChanged(nameof(IsAuthenticated));
+
+        try
+        {
+            await MyReviews.LoadCommand.ExecuteAsync(null);
+        }
+        catch { }
+        try
+        {
+            await Stats.LoadCommand.ExecuteAsync(null);
+        }
+        catch { }
+        try
+        {
+            await ReadingList.LoadCommand.ExecuteAsync(null);
+        }
+        catch { }
+        try
+        {
+            await History.LoadCommand.ExecuteAsync(null);
+        }
+        catch { }
     }
 
     [RelayCommand]

@@ -6,6 +6,10 @@ public partial class ReadingListPage : ContentPage
 {
     private readonly ReadingListViewModel _viewModel;
 
+    public ReadingListPage() : this(MauiProgram.Services.GetRequiredService<ReadingListViewModel>())
+    {
+    }
+
     public ReadingListPage(ReadingListViewModel viewModel)
     {
         InitializeComponent();

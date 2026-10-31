@@ -25,6 +25,9 @@ public partial class DiscoverBookDetailViewModel : ObservableObject
     private bool isBusy;
 
     [ObservableProperty]
+    private bool isSubmitting;
+
+    [ObservableProperty]
     private bool isSaved;
 
     public System.Collections.ObjectModel.ObservableCollection<Models.Review> Reviews { get; } = new();
@@ -89,16 +92,23 @@ public partial class DiscoverBookDetailViewModel : ObservableObject
     [RelayCommand]
     private async Task SubmitReviewAsync()
     {
-        if (Book is null)
+        if (Book is null || IsSubmitting)
         {
+            return;
+        }
+
+        if (NewRating < 1 || NewRating > 5)
+        {
+            ReviewStatus = "Choose a rating from 1 to 5.";
             return;
         }
 
         try
         {
-            IsBusy = true;
+            IsSubmitting = true;
             await _reviews.CreateReviewAsync(Book.Id, NewRating, NewReviewText);
             NewReviewText = string.Empty;
+            NewRating = 5;
             ReviewStatus = "Review submitted.";
             await LoadReviewsAsync();
         }
@@ -108,7 +118,16 @@ public partial class DiscoverBookDetailViewModel : ObservableObject
         }
         finally
         {
-            IsBusy = false;
+            IsSubmitting = false;
+        }
+    }
+
+    [RelayCommand]
+    private void SetRating(string? rating)
+    {
+        if (int.TryParse(rating, out var value) && value >= 1 && value <= 5)
+        {
+            NewRating = value;
         }
     }
 

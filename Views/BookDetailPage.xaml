@@ -47,11 +47,11 @@
                     <Grid ColumnDefinitions="96,*" ColumnSpacing="16">
                         <Border
                             BackgroundColor="{DynamicResource Spine}"
-                            HeightRequest="136"
-                            StrokeShape="RoundRectangle 10"
+                            HeightRequest="144"
+                            StrokeShape="RoundRectangle 12"
                             StrokeThickness="0"
                             VerticalOptions="Start"
-                            WidthRequest="84">
+                            WidthRequest="96">
                             <Grid>
                                 <Image
                                     Aspect="AspectFill"

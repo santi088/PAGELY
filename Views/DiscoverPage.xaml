@@ -121,9 +121,14 @@
                 <CollectionView.Header>
                     <VerticalStackLayout Spacing="10">
                         <Border
-                            IsVisible="{Binding Featured, Converter={StaticResource HasValue}}"
+                            IsVisible="{Binding Featured, Converter={StaticResource HasObject}}"
                             Padding="16"
                             Style="{StaticResource CardBorder}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding OpenCommand}"
+                                    CommandParameter="{Binding Featured}" />
+                            </Border.GestureRecognizers>
                             <Grid ColumnDefinitions="72,*" ColumnSpacing="14">
                                 <Border
                                     BackgroundColor="{Binding Featured.Book.CoverColor}"
@@ -158,6 +163,9 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="vm:DiscoverItem">
                                     <VerticalStackLayout WidthRequest="96" Spacing="4">
+                                        <VerticalStackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.OpenCommand, Source={x:Reference Discover}}" CommandParameter="{Binding .}" />
+                                        </VerticalStackLayout.GestureRecognizers>
                                         <Border BackgroundColor="{Binding Book.CoverColor}" HeightRequest="128" StrokeShape="RoundRectangle 12" StrokeThickness="0" WidthRequest="96">
                                             <Label FontFamily="OpenSansSemibold" FontSize="22" HorizontalOptions="Center" Text="{Binding Book.Initial}" TextColor="White" VerticalOptions="Center" />
                                         </Border>
@@ -175,6 +183,9 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="vm:DiscoverItem">
                                     <VerticalStackLayout WidthRequest="96" Spacing="4">
+                                        <VerticalStackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.OpenCommand, Source={x:Reference Discover}}" CommandParameter="{Binding .}" />
+                                        </VerticalStackLayout.GestureRecognizers>
                                         <Border BackgroundColor="{Binding Book.CoverColor}" HeightRequest="128" StrokeShape="RoundRectangle 12" StrokeThickness="0" WidthRequest="96">
                                             <Label FontFamily="OpenSansSemibold" FontSize="22" HorizontalOptions="Center" Text="{Binding Book.Initial}" TextColor="White" VerticalOptions="Center" />
                                         </Border>
@@ -192,6 +203,9 @@
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="vm:DiscoverItem">
                                     <VerticalStackLayout WidthRequest="96" Spacing="4">
+                                        <VerticalStackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.OpenCommand, Source={x:Reference Discover}}" CommandParameter="{Binding .}" />
+                                        </VerticalStackLayout.GestureRecognizers>
                                         <Border BackgroundColor="{Binding Book.CoverColor}" HeightRequest="128" StrokeShape="RoundRectangle 12" StrokeThickness="0" WidthRequest="96">
                                             <Label FontFamily="OpenSansSemibold" FontSize="22" HorizontalOptions="Center" Text="{Binding Book.Initial}" TextColor="White" VerticalOptions="Center" />
                                         </Border>

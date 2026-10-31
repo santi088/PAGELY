@@ -29,6 +29,57 @@ public class PercentToProgressConverter : IValueConverter
         => throw new NotSupportedException();
 }
 
+public class HasIntValueConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => value is int i && i > 0;
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
+}
+
+public class RatingStarColorConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        if (value is int rating && parameter is string p && int.TryParse(p, out var threshold))
+        {
+            return rating >= threshold ? Color.FromArgb("#C79A5B") : Color.FromArgb("#D6C9B3");
+        }
+        return Color.FromArgb("#D6C9B3");
+    }
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
+}
+
+
+public class HasTextConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => value is string s && !string.IsNullOrWhiteSpace(s);
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
+}
+
+public class HasObjectConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => value is not null;
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
+}
+
+public class HasProgressConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => value is double d && d > 0.01;
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
+}
 file static class ConverterHelpers
 {
     public static bool HasPath(object? value)

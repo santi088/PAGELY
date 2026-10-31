@@ -76,15 +76,22 @@ public sealed class AuthService
             return null;
         }
 
-        using var request = new HttpRequestMessage(HttpMethod.Get, "api/auth/me");
-        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Token);
-        var response = await CreateClient().SendAsync(request, ct);
-        if (!response.IsSuccessStatusCode)
+        try
+        {
+            using var request = new HttpRequestMessage(HttpMethod.Get, "api/auth/me");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Token);
+            var response = await CreateClient().SendAsync(request, ct);
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            return await response.Content.ReadFromJsonAsync<UserDto>(ct);
+        }
+        catch
         {
             return null;
         }
-
-        return await response.Content.ReadFromJsonAsync<UserDto>(ct);
     }
 
     public void Logout()

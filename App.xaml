@@ -15,6 +15,11 @@
             <converters:InverseBoolConverter x:Key="InverseBool" />
             <converters:StatusColorConverter x:Key="StatusColor" />
             <converters:PercentToProgressConverter x:Key="PercentToProgress" />
+            <converters:HasIntValueConverter x:Key="HasIntValue" />
+            <converters:RatingStarColorConverter x:Key="RatingStarColor" />
+            <converters:HasTextConverter x:Key="HasText" />
+            <converters:HasObjectConverter x:Key="HasObject" />
+            <converters:HasProgressConverter x:Key="HasProgress" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
