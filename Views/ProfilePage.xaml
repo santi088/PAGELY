@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PAGELY.Views.ProfilePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:PAGELY.Models"
+    xmlns:vm="clr-namespace:PAGELY.ViewModels"
+    x:Name="Profile"
+    Title="Profile"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{DynamicResource Paper}">
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="ProfileTemplate" x:DataType="vm:ProfileViewModel">
+            <ScrollView>
+                <VerticalStackLayout Padding="20,16,20,32" Spacing="12">
+                    <Border Padding="16" Style="{StaticResource CardBorder}">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Style="{StaticResource SectionCaption}" Text="ACCOUNT" />
+                            <Label FontSize="18" IsVisible="{Binding IsAuthenticated}" Style="{StaticResource CardTitle}" Text="{Binding AccountEmail}" />
+                            <Button Command="{Binding LogoutCommand}" IsVisible="{Binding IsAuthenticated}" Style="{StaticResource ButtonSecondary}" Text="Sign out" />
+                            <VerticalStackLayout IsVisible="{Binding IsAuthenticated, Converter={StaticResource InverseBool}}" Spacing="12">
+                                <Border Padding="12" Style="{StaticResource CardBorder}">
+                                    <VerticalStackLayout Spacing="8">
+                                        <Label Style="{StaticResource CardTitle}" Text="Sign in" />
+                                        <Entry Placeholder="Email" Text="{Binding LoginEmail}" Keyboard="Email" />
+                                        <Entry Placeholder="Password" Text="{Binding LoginPassword}" IsPassword="True" />
+                                        <Button Style="{StaticResource ButtonPrimary}" Text="Sign in" Command="{Binding LoginCommand}" />
+                                    </VerticalStackLayout>
+                                </Border>
+                                <Border Padding="12" Style="{StaticResource CardBorder}">
+                                    <VerticalStackLayout Spacing="8">
+                                        <Label Style="{StaticResource CardTitle}" Text="Create account" />
+                                        <Entry Placeholder="Email" Text="{Binding RegisterEmail}" Keyboard="Email" />
+                                        <Entry Placeholder="Password" Text="{Binding RegisterPassword}" IsPassword="True" />
+                                        <Entry Placeholder="First name" Text="{Binding FirstName}" />
+                                        <Entry Placeholder="Last name" Text="{Binding LastName}" />
+                                        <Button Style="{StaticResource ButtonSecondary}" Text="Register" Command="{Binding RegisterCommand}" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </VerticalStackLayout>
+                            <Label Style="{StaticResource PageSubtitle}" Text="{Binding StatusMessage}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Padding="16" Style="{StaticResource CardBorder}">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Style="{StaticResource SectionCaption}" Text="MY REVIEWS" />
+                            <CollectionView IsVisible="{Binding MyReviews.IsEmpty, Converter={StaticResource InverseBool}}" ItemsSource="{Binding MyReviews.Reviews}" SelectionMode="None">
+                                <CollectionView.ItemsLayout>
+                                    <LinearItemsLayout ItemSpacing="8" Orientation="Vertical" />
+                                </CollectionView.ItemsLayout>
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="models:Review">
+                                        <Border Padding="10" Style="{StaticResource CardBorder}">
+                                            <VerticalStackLayout Spacing="2">
+                                                <Label FontSize="13" Style="{StaticResource CardTitle}" Text="{Binding UserEmail}" />
+                                                <Label FontSize="12" Style="{StaticResource Caption}" Text="{Binding Rating, StringFormat='Rating: {0}'}" />
+                                                <Label FontSize="14" Text="{Binding ReviewText}" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                            <Label IsVisible="{Binding MyReviews.IsEmpty}" Style="{StaticResource PageSubtitle}" Text="{Binding MyReviews.StatusMessage}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Padding="16" Style="{StaticResource CardBorder}">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Style="{StaticResource SectionCaption}" Text="BASIC STATISTICS" />
+                            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                                <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                                    <Label Style="{StaticResource StatValue}" Text="{Binding Stats.Stats.TotalBooks}" />
+                                    <Label Style="{StaticResource Caption}" Text="Books" HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="Center">
+                                    <Label Style="{StaticResource StatValue}" Text="{Binding Stats.Stats.CurrentlyReading}" />
+                                    <Label Style="{StaticResource Caption}" Text="Reading" HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                                <VerticalStackLayout Grid.Column="2" Spacing="2" HorizontalOptions="Center">
+                                    <Label Style="{StaticResource StatValue}" Text="{Binding Stats.Stats.Completed}" />
+                                    <Label Style="{StaticResource Caption}" Text="Completed" HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                            </Grid>
+                            <Label IsVisible="{Binding Stats.IsEmpty}" Style="{StaticResource PageSubtitle}" Text="No reading statistics yet." />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </ScrollView>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ReadingListTemplate" x:DataType="vm:ReadingListViewModel">
+            <Grid x:Name="ReadingListRoot">
+                <CollectionView IsVisible="{Binding IsEmpty, Converter={StaticResource InverseBool}}" ItemsSource="{Binding Items}" SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="12" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:DiscoverBook">
+                            <Grid Padding="20,0">
+                                <Border Padding="12" Style="{StaticResource CardBorder}">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding BindingContext.OpenCommand, Source={x:Reference ReadingListRoot}}" CommandParameter="{Binding .}" />
+                                    </Border.GestureRecognizers>
+                                    <Grid ColumnDefinitions="52,*,Auto" ColumnSpacing="12">
+                                        <Border BackgroundColor="{Binding CoverColor}" HeightRequest="76" StrokeShape="RoundRectangle 10" StrokeThickness="0" VerticalOptions="Start" WidthRequest="52">
+                                            <Label FontFamily="OpenSansSemibold" FontSize="20" HorizontalOptions="Center" Text="{Binding Initial}" TextColor="{DynamicResource Surface}" VerticalOptions="Center" />
+                                        </Border>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                            <Label FontSize="15" Style="{StaticResource CardTitle}" Text="{Binding Title}" />
+                                            <Label FontSize="12" Style="{StaticResource CardMeta}" Text="{Binding Author}" />
+                                        </VerticalStackLayout>
+                                        <Button Grid.Column="2" Command="{Binding BindingContext.RemoveCommand, Source={x:Reference ReadingListRoot}}" CommandParameter="{Binding .}" FontSize="12" HeightRequest="36" Padding="12,0" Style="{StaticResource ButtonSecondary}" Text="Remove" />
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <VerticalStackLayout HorizontalOptions="Center" IsVisible="{Binding IsEmpty}" Padding="40,0" Spacing="8" VerticalOptions="Center">
+                    <Label FontFamily="OpenSansSemibold" FontSize="19" HorizontalTextAlignment="Center" Text="Your reading list is empty" TextColor="{DynamicResource Ink}" />
+                    <Label HorizontalTextAlignment="Center" MaximumWidthRequest="290" Style="{StaticResource PageSubtitle}" Text="Save books from Discover to read them later." />
+                </VerticalStackLayout>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="HistoryTemplate" x:DataType="vm:HistoryViewModel">
+            <ScrollView x:Name="HistoryRoot">
+                <VerticalStackLayout Padding="20,16,20,40">
+                    <Label Style="{StaticResource PageTitle}" Text="History" />
+                    <Label Margin="0,2,0,18" Style="{StaticResource PageSubtitle}" Text="Pick up where you left off" />
+                    <VerticalStackLayout IsVisible="{Binding IsEmpty, Converter={StaticResource InverseBool}}">
+                        <Label Style="{StaticResource SectionCaption}" Text="CONTINUE READING" />
+                        <CollectionView HeightRequest="196" ItemsSource="{Binding ContinueReading}" Margin="0,10,0,0">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="12" Orientation="Horizontal" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.EmptyView>
+                                <Label Margin="0,4" Style="{StaticResource Caption}" Text="Open a book and PAGELY will remember where you stopped." />
+                            </CollectionView.EmptyView>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Book">
+                                    <Border Padding="12" Style="{StaticResource CardBorder}" WidthRequest="150">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.OpenBookCommand, Source={x:Reference HistoryRoot}}" CommandParameter="{Binding .}" />
+                                        </Border.GestureRecognizers>
+                                        <Grid RowDefinitions="Auto,Auto,*,Auto">
+                                            <Border BackgroundColor="{DynamicResource Spine}" HeightRequest="78" StrokeShape="RoundRectangle 10" StrokeThickness="0" VerticalOptions="Start">
+                                                <Grid>
+                                                    <Image Aspect="AspectFill" IsVisible="{Binding CoverPath, Converter={StaticResource HasValue}}" Source="{Binding CoverPath}" />
+                                                    <Label FontFamily="OpenSansSemibold" FontSize="22" HorizontalOptions="Center" IsVisible="{Binding CoverPath, Converter={StaticResource InverseHasValue}}" Text="{Binding Initial}" TextColor="{DynamicResource Surface}" VerticalOptions="Center" />
+                                                </Grid>
+                                            </Border>
+                                            <Label Grid.Row="1" FontFamily="OpenSansSemibold" FontSize="13" LineBreakMode="TailTruncation" Margin="0,10,0,0" MaxLines="2" Text="{Binding Title}" TextColor="{DynamicResource Ink}" />
+                                            <VerticalStackLayout Grid.Row="3" Spacing="6">
+                                                <Label FontFamily="OpenSansSemibold" FontSize="12" Text="{Binding ProgressLabel}" TextColor="{DynamicResource InkSoft}" />
+                                                <Border HeightRequest="5" Style="{StaticResource ProgressPill}">
+                                                    <ProgressBar BackgroundColor="Transparent" HeightRequest="5" Progress="{Binding ProgressPercent, Converter={StaticResource PercentToProgress}}" ProgressColor="{DynamicResource Primary}" />
+                                                </Border>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Label Margin="0,22,0,0" Style="{StaticResource SectionCaption}" Text="RECENT ACTIVITY" />
+                        <CollectionView ItemsSource="{Binding Events}" Margin="0,10,0,0">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.EmptyView>
+                                <Label Margin="0,4" Style="{StaticResource Caption}" Text="No reading activity yet." />
+                            </CollectionView.EmptyView>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:ReadingEvent">
+                                    <Border Padding="14" Style="{StaticResource CardBorder}">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.OpenEventCommand, Source={x:Reference HistoryRoot}}" CommandParameter="{Binding .}" />
+                                        </Border.GestureRecognizers>
+                                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="3">
+                                                <Label FontFamily="OpenSansSemibold" FontSize="14" LineBreakMode="TailTruncation" Text="{Binding BookTitle}" TextColor="{DynamicResource Ink}" />
+                                            </VerticalStackLayout>
+                                            <Border Grid.Column="1" Style="{StaticResource ChipBorder}" VerticalOptions="Center">
+                                                <Label FontFamily="OpenSansSemibold" FontSize="11" Text="{Binding ReadAt, StringFormat='{0:MMM d}'}" TextColor="{DynamicResource Muted}" />
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout HorizontalOptions="Center" IsVisible="{Binding IsEmpty}" Padding="20,40" Spacing="12">
+                        <Label FontFamily="OpenSansSemibold" FontSize="19" HorizontalTextAlignment="Center" Text="Nothing here yet" TextColor="{DynamicResource Ink}" />
+                        <Label HorizontalTextAlignment="Center" MaximumWidthRequest="290" Style="{StaticResource PageSubtitle}" Text="Open a book from your library and your reading activity will show up here." />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SettingsTemplate" x:DataType="vm:SettingsViewModel">
+            <ScrollView>
+                <VerticalStackLayout Padding="20,16,20,32" Spacing="14">
+                    <Border Style="{StaticResource CardBorder}" Padding="16">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Style="{StaticResource CardTitle}" Text="Preview" />
+                            <Label FontSize="{Binding FontSize}" LineHeight="{Binding LineSpacing}" Text="The quick brown fox jumps over the lazy dog." TextColor="{DynamicResource Ink}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource CardBorder}" Padding="16">
+                        <VerticalStackLayout Spacing="6">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Style="{StaticResource CardTitle}" Text="Text size" />
+                                <Label Grid.Column="1" Style="{StaticResource PageSubtitle}" Text="{Binding FontSizeLabel}" />
+                            </Grid>
+                            <Slider Minimum="14" Maximum="28" MinimumTrackColor="{DynamicResource Primary}" ThumbColor="{DynamicResource Primary}" Value="{Binding FontSize}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource CardBorder}" Padding="16">
+                        <VerticalStackLayout Spacing="6">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Style="{StaticResource CardTitle}" Text="Line spacing" />
+                                <Label Grid.Column="1" Style="{StaticResource PageSubtitle}" Text="{Binding LineSpacingLabel}" />
+                            </Grid>
+                            <Slider Minimum="1.4" Maximum="2.2" MinimumTrackColor="{DynamicResource Primary}" ThumbColor="{DynamicResource Primary}" Value="{Binding LineSpacing}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource CardBorder}" Padding="16">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Style="{StaticResource CardTitle}" Text="Reading theme" />
+                            <Picker ItemsSource="{Binding Themes}" SelectedItem="{Binding Theme}" TextColor="{DynamicResource Ink}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource CardBorder}" Padding="16">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Style="{StaticResource CardTitle}" Text="Font" />
+                            <Picker ItemsSource="{Binding Fonts}" SelectedItem="{Binding FontFamily}" TextColor="{DynamicResource Ink}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource CardBorder}" Padding="16">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Style="{StaticResource CardTitle}" Text="Backend API base URL" />
+                            <Entry Text="{Binding ApiBaseUrl}" Placeholder="http://192.168.x.x:5242" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Button Command="{Binding ResetCommand}" HeightRequest="48" Margin="0,6,0,0" Style="{StaticResource ButtonPrimary}" Text="Reset to defaults" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </DataTemplate>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- Tab bar -->
+        <Grid ColumnDefinitions="*,*,*,*" Padding="12,10,12,6" BackgroundColor="{DynamicResource Surface}">
+            <Label Grid.Column="0" Text="Profile" HorizontalTextAlignment="Center" FontFamily="OpenSansSemibold" FontSize="13" Padding="4,6" TextColor="{DynamicResource Muted}">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding SelectedTab}" Value="0">
+                        <Setter Property="TextColor" Value="{DynamicResource Primary}" />
+                    </DataTrigger>
+                </Label.Triggers>
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTabTapped" CommandParameter="0" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Grid.Column="1" Text="Reading List" HorizontalTextAlignment="Center" FontFamily="OpenSansSemibold" FontSize="13" Padding="4,6" TextColor="{DynamicResource Muted}">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding SelectedTab}" Value="1">
+                        <Setter Property="TextColor" Value="{DynamicResource Primary}" />
+                    </DataTrigger>
+                </Label.Triggers>
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTabTapped" CommandParameter="1" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Grid.Column="2" Text="Reading History" HorizontalTextAlignment="Center" FontFamily="OpenSansSemibold" FontSize="13" Padding="4,6" TextColor="{DynamicResource Muted}">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding SelectedTab}" Value="2">
+                        <Setter Property="TextColor" Value="{DynamicResource Primary}" />
+                    </DataTrigger>
+                </Label.Triggers>
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTabTapped" CommandParameter="2" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Grid.Column="3" Text="Settings" HorizontalTextAlignment="Center" FontFamily="OpenSansSemibold" FontSize="13" Padding="4,6" TextColor="{DynamicResource Muted}">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding SelectedTab}" Value="3">
+                        <Setter Property="TextColor" Value="{DynamicResource Primary}" />
+                    </DataTrigger>
+                </Label.Triggers>
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnTabTapped" CommandParameter="3" />
+                </Label.GestureRecognizers>
+            </Label>
+            <BoxView Grid.Column="{Binding SelectedTab}" HeightRequest="3" VerticalOptions="End" Color="{DynamicResource Primary}" HorizontalOptions="Center" WidthRequest="40" />
+        </Grid>
+
+        <CarouselView x:Name="TabsCarousel" Grid.Row="1" ItemsSource="{Binding Tabs}" Position="{Binding SelectedTab, Mode=TwoWay}" Loop="False" />
+    </Grid>
+</ContentPage>

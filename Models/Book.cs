@@ -49,7 +49,7 @@ public class Book
     public string StatusLabel => ReadingStatusDisplay.ToLabel(ReadingStatus);
 
     [Ignore]
-    public string ProgressLabel => $"{ProgressPercent:0}%";
+    public string ProgressLabel => $"{ProgressPercent:0}%"; // progress percent
 
     [Ignore]
     public string ChapterLabel =>

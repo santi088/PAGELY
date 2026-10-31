@@ -33,6 +33,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<BookImportService>();
         builder.Services.AddSingleton<ReadingStatsService>();
 
+        // Online features. These two lines are the only places that need to change
+        // when the real online database is ready.
+        builder.Services.AddSingleton<IOnlineCatalogService, ApiCatalogService>();
+        builder.Services.AddSingleton<AuthService>();
+        builder.Services.AddSingleton<ReviewsService>();
+        builder.Services.AddSingleton<IReadingListService, ApiReadingListService>();
+        builder.Services.AddSingleton<PdfCoverService>();
+
 #if ANDROID
         builder.Services.AddSingleton<IPdfRendererService, Platforms.Android.PdfRendererService>();
 #else
@@ -49,6 +57,13 @@ public static class MauiProgram
                 sp.GetRequiredService<BookContentService>(),
                 sp.GetRequiredService<IPdfRendererService>()));
         builder.Services.AddTransient<StatsViewModel>();
+        builder.Services.AddTransient<SettingsViewModel>();
+        builder.Services.AddTransient<SavedItemsViewModel>();
+        builder.Services.AddTransient<DiscoverViewModel>();
+        builder.Services.AddTransient<DiscoverBookDetailViewModel>();
+        builder.Services.AddTransient<ProfileViewModel>();
+        builder.Services.AddTransient<MyReviewsViewModel>();
+        builder.Services.AddTransient<ReadingListViewModel>();
 
         builder.Services.AddTransient<LibraryPage>();
         builder.Services.AddTransient<SearchPage>();
@@ -56,6 +71,16 @@ public static class MauiProgram
         builder.Services.AddTransient<BookDetailPage>();
         builder.Services.AddTransient<ReaderPage>();
         builder.Services.AddTransient<StatsPage>();
+        builder.Services.AddTransient<SettingsPage>();
+        builder.Services.AddTransient<SavedPage>();
+        builder.Services.AddTransient<DiscoverPage>();
+        builder.Services.AddTransient<DiscoverBookDetailPage>();
+        builder.Services.AddTransient<ProfilePage>();
+        builder.Services.AddTransient<MyReviewsPage>();
+        builder.Services.AddTransient<ReadingListPage>();
+
+        // The bookmarks and notes list opens on top of the reader and goes back to it.
+        Routing.RegisterRoute("saved", typeof(SavedPage));
 
 #if DEBUG
         builder.Logging.AddDebug();

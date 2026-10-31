@@ -9,24 +9,23 @@
     x:DataType="vm:LibraryViewModel"
     Title="Library"
     Shell.NavBarIsVisible="False"
-    BackgroundColor="{StaticResource Paper}">
+    BackgroundColor="{DynamicResource Paper}">
 
     <Grid RowDefinitions="Auto,*">
 
-        <!-- Header: what the screen is, how much is in it, one primary action. -->
-        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" Padding="20,16,20,12">
-            <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
-                <Label Style="{StaticResource PageTitle}" Text="Library" />
-                <Label
-                    Style="{StaticResource PageSubtitle}"
-                    Text="{Binding Books.Count, StringFormat='{0} in your library'}" />
-            </VerticalStackLayout>
-            <Button
-                Grid.Column="1"
-                Command="{Binding ImportCommand}"
-                Style="{StaticResource ButtonIconPrimary}"
-                Text="+" />
-        </Grid>
+        <!-- Header -->
+        <Border
+            BackgroundColor="{DynamicResource Surface}"
+            Padding="24,24,20,16"
+            StrokeShape="RoundRectangle 0,0,28,28"
+            StrokeThickness="0">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
+                    <Label Style="{StaticResource PageTitle}" Text="Library" />
+                    <Label Style="{StaticResource PageSubtitle}" Text="{Binding Books.Count, StringFormat='{0} books'}" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
 
         <Grid Grid.Row="1">
             <CollectionView
@@ -34,121 +33,105 @@
                 ItemsSource="{Binding Books}"
                 SelectionMode="None">
                 <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="12" />
+                    <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="12" VerticalItemSpacing="16" />
                 </CollectionView.ItemsLayout>
+                <CollectionView.Header>
+                    <BoxView HeightRequest="12" Color="Transparent" />
+                </CollectionView.Header>
+                <CollectionView.Footer>
+                    <BoxView HeightRequest="88" Color="Transparent" />
+                </CollectionView.Footer>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Book">
-                        <Grid Padding="20,0">
-                            <Border Style="{StaticResource CardBorder}" Padding="12">
-                                <Border.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        Command="{Binding BindingContext.OpenCommand, Source={x:Reference Library}}"
-                                        CommandParameter="{Binding .}" />
-                                </Border.GestureRecognizers>
-                                <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
-                                    <Border
-                                        BackgroundColor="{StaticResource Spine}"
-                                        HeightRequest="76"
-                                        StrokeShape="RoundRectangle 10"
-                                        StrokeThickness="0"
-                                        VerticalOptions="Start"
-                                        WidthRequest="52">
-                                        <Grid>
-                                            <Image
-                                                Aspect="AspectFill"
-                                                IsVisible="{Binding CoverPath, Converter={StaticResource HasValue}}"
-                                                Source="{Binding CoverPath}" />
-                                            <Label
-                                                FontFamily="OpenSansSemibold"
-                                                FontSize="20"
-                                                HorizontalOptions="Center"
-                                                IsVisible="{Binding CoverPath, Converter={StaticResource InverseHasValue}}"
-                                                Text="{Binding Initial}"
-                                                TextColor="{StaticResource Surface}"
-                                                VerticalOptions="Center" />
-                                        </Grid>
-                                    </Border>
+                        <VerticalStackLayout Spacing="4" Padding="2,0">
+                            <VerticalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding BindingContext.OpenCommand, Source={x:Reference Library}}"
+                                    CommandParameter="{Binding .}" />
+                            </VerticalStackLayout.GestureRecognizers>
 
-                                    <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                                        <Label
-                                            FontSize="15"
-                                            MaxLines="2"
-                                            Style="{StaticResource CardTitle}"
-                                            Text="{Binding Title}" />
-                                        <HorizontalStackLayout Margin="0,4,0,0" Spacing="8">
-                                            <Border Style="{StaticResource ChipBorder}">
-                                                <Label
-                                                    FontFamily="OpenSansSemibold"
-                                                    FontSize="11"
-                                                    Text="{Binding StatusLabel}"
-                                                    TextColor="{Binding StatusLabel, Converter={StaticResource StatusColor}}" />
-                                            </Border>
-                                            <Label
-                                                FontFamily="OpenSansSemibold"
-                                                FontSize="12"
-                                                Text="{Binding ProgressLabel}"
-                                                TextColor="{StaticResource InkSoft}"
-                                                VerticalOptions="Center" />
-                                        </HorizontalStackLayout>
-                                        <Border
-                                            HeightRequest="5"
-                                            Margin="0,4,0,0"
-                                            Style="{StaticResource ProgressPill}">
-                                            <ProgressBar
-                                                BackgroundColor="Transparent"
-                                                HeightRequest="5"
-                                                Progress="{Binding ProgressPercent, Converter={StaticResource PercentToProgress}}"
-                                                ProgressColor="{StaticResource Primary}" />
-                                        </Border>
-                                    </VerticalStackLayout>
+                            <!-- Cover -->
+                            <Border
+                                BackgroundColor="{DynamicResource Spine}"
+                                HeightRequest="180"
+                                StrokeShape="RoundRectangle 10"
+                                StrokeThickness="0"
+                                WidthRequest="120"
+                                HorizontalOptions="Center">
+                                <Grid>
+                                    <Image
+                                        Aspect="AspectFill"
+                                        IsVisible="{Binding CoverPath, Converter={StaticResource HasValue}}"
+                                        Source="{Binding CoverPath}" />
+                                    <Label
+                                        FontFamily="OpenSansSemibold"
+                                        FontSize="28"
+                                        HorizontalOptions="Center"
+                                        IsVisible="{Binding CoverPath, Converter={StaticResource InverseHasValue}}"
+                                        Text="{Binding Initial}"
+                                        TextColor="{DynamicResource Surface}"
+                                        VerticalOptions="Center" />
                                 </Grid>
                             </Border>
-                        </Grid>
+
+                            <!-- Title -->
+                            <Label
+                                FontSize="13"
+                                HorizontalTextAlignment="Center"
+                                LineBreakMode="TailTruncation"
+                                LineHeight="1.2"
+                                MaxLines="2"
+                                MaximumWidthRequest="120"
+                                Style="{StaticResource CardTitle}"
+                                Text="{Binding Title}" />
+
+                            <!-- Author -->
+                            <Label
+                                FontSize="11"
+                                HorizontalTextAlignment="Center"
+                                LineBreakMode="TailTruncation"
+                                MaxLines="1"
+                                MaximumWidthRequest="120"
+                                Style="{StaticResource CardMeta}"
+                                Text="{Binding Author}" />
+
+                        </VerticalStackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
             <VerticalStackLayout
-                IsVisible="{Binding IsEmpty}"
                 HorizontalOptions="Center"
-                VerticalOptions="Center"
+                IsVisible="{Binding IsEmpty}"
                 Padding="40,0"
-                Spacing="12">
+                Spacing="12"
+                VerticalOptions="Center">
                 <Border
-                    BackgroundColor="{StaticResource SurfaceAlt}"
-                    HeightRequest="64"
+                    BackgroundColor="{DynamicResource SurfaceAlt}"
+                    HeightRequest="56"
                     HorizontalOptions="Center"
-                    StrokeShape="RoundRectangle 20"
+                    StrokeShape="RoundRectangle 18"
                     StrokeThickness="0"
-                    WidthRequest="64">
+                    WidthRequest="56">
                     <Label
                         FontFamily="OpenSansSemibold"
-                        FontSize="26"
+                        FontSize="24"
                         HorizontalOptions="Center"
                         Text="P"
-                        TextColor="{StaticResource Primary}"
+                        TextColor="{DynamicResource Primary}"
                         VerticalOptions="Center" />
                 </Border>
                 <Label
                     FontFamily="OpenSansSemibold"
-                    FontSize="19"
+                    FontSize="18"
                     HorizontalTextAlignment="Center"
-                    Margin="0,2,0,0"
                     Text="Your shelves are empty"
-                    TextColor="{StaticResource Ink}" />
+                    TextColor="{DynamicResource Ink}" />
                 <Label
                     HorizontalTextAlignment="Center"
                     MaximumWidthRequest="290"
                     Style="{StaticResource PageSubtitle}"
-                    Text="Import EPUB, PDF or TXT files already on this device. PAGELY works fully offline." />
-                <Button
-                    Command="{Binding ImportCommand}"
-                    HeightRequest="50"
-                    HorizontalOptions="Center"
-                    Margin="0,10,0,0"
-                    Style="{StaticResource ButtonPrimary}"
-                    Text="Import a book"
-                    WidthRequest="190" />
+                    Text="Import EPUB, PDF or TXT files already on this device." />
             </VerticalStackLayout>
 
             <ActivityIndicator
@@ -156,6 +139,17 @@
                 IsRunning="{Binding IsBusy}"
                 IsVisible="{Binding IsBusy}"
                 VerticalOptions="Center" />
+
+            <!-- Floating import button -->
+            <Button
+                Command="{Binding ImportCommand}"
+                HeightRequest="56"
+                HorizontalOptions="End"
+                Style="{StaticResource ButtonIconPrimary}"
+                Text="+"
+                VerticalOptions="End"
+                WidthRequest="56"
+                Margin="0,0,20,24" />
         </Grid>
     </Grid>
 </ContentPage>

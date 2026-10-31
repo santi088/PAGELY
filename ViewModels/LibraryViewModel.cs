@@ -11,12 +11,14 @@ public partial class LibraryViewModel : ObservableObject
 {
     private readonly DatabaseService _database;
     private readonly BookImportService _import;
+    private readonly PdfCoverService _coverService;
     private List<Book> _all = [];
 
-    public LibraryViewModel(DatabaseService database, BookImportService import)
+    public LibraryViewModel(DatabaseService database, BookImportService import, PdfCoverService coverService)
     {
         _database = database;
         _import = import;
+        _coverService = coverService;
     }
 
     public ObservableCollection<Book> Books { get; } = [];
@@ -35,7 +37,23 @@ public partial class LibraryViewModel : ObservableObject
         try
         {
             IsBusy = true;
-            _all = await _database.GetBooksAsync();
+            var books = await _database.GetBooksAsync();
+
+            // Ensure PDFs without an embedded cover get a cached first-page thumbnail.
+            foreach (var book in books)
+            {
+                if (string.IsNullOrWhiteSpace(book.CoverPath) || !File.Exists(book.CoverPath))
+                {
+                    var cover = await _coverService.EnsureCoverAsync(book);
+                    if (!string.IsNullOrWhiteSpace(cover) && book.CoverPath != cover)
+                    {
+                        book.CoverPath = cover;
+                        await _database.SaveBookAsync(book);
+                    }
+                }
+            }
+
+            _all = books;
             Apply();
         }
         catch (Exception ex)

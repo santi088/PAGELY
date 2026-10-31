@@ -27,6 +27,8 @@ public class DatabaseService
         _connection = new SQLiteAsyncConnection(path);
         await _connection.CreateTableAsync<Book>();
         await _connection.CreateTableAsync<ReadingEvent>();
+        await _connection.CreateTableAsync<Bookmark>();
+        await _connection.CreateTableAsync<Annotation>();
 
         // Migration: add RenderedPagesDir if missing
         try
@@ -69,6 +71,8 @@ public class DatabaseService
     {
         var db = await GetConnectionAsync();
         await db.Table<ReadingEvent>().Where(e => e.BookId == book.Id).DeleteAsync();
+        await db.Table<Bookmark>().Where(b => b.BookId == book.Id).DeleteAsync();
+        await db.Table<Annotation>().Where(a => a.BookId == book.Id).DeleteAsync();
         await db.DeleteAsync(book);
         RaiseHistoryChanged();
     }
@@ -104,5 +108,47 @@ public class DatabaseService
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .OrderBy(g => g)
             .ToList();
+    }
+
+    // ---- Bookmarks ----
+
+    public async Task<List<Bookmark>> GetBookmarksAsync(int bookId)
+    {
+        var db = await GetConnectionAsync();
+        var list = await db.Table<Bookmark>().Where(b => b.BookId == bookId).ToListAsync();
+        return list.OrderBy(b => b.ChapterIndex).ThenBy(b => b.ScrollPercent).ToList();
+    }
+
+    public async Task AddBookmarkAsync(Bookmark bookmark)
+    {
+        var db = await GetConnectionAsync();
+        await db.InsertAsync(bookmark);
+    }
+
+    public async Task DeleteBookmarkAsync(Bookmark bookmark)
+    {
+        var db = await GetConnectionAsync();
+        await db.DeleteAsync(bookmark);
+    }
+
+    // ---- Annotations (notes now, highlights and underlines in step 2) ----
+
+    public async Task<List<Annotation>> GetAnnotationsAsync(int bookId)
+    {
+        var db = await GetConnectionAsync();
+        var list = await db.Table<Annotation>().Where(a => a.BookId == bookId).ToListAsync();
+        return list.OrderBy(a => a.ChapterIndex).ThenBy(a => a.ScrollPercent).ToList();
+    }
+
+    public async Task AddAnnotationAsync(Annotation annotation)
+    {
+        var db = await GetConnectionAsync();
+        await db.InsertAsync(annotation);
+    }
+
+    public async Task DeleteAnnotationAsync(Annotation annotation)
+    {
+        var db = await GetConnectionAsync();
+        await db.DeleteAsync(annotation);
     }
 }
