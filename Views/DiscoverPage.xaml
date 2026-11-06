@@ -28,7 +28,9 @@
                 <Button
                     Grid.Column="1"
                     Command="{Binding OpenSearchCommand}"
-                    Style="{StaticResource ButtonIcon}"
+                    HeightRequest="40"
+                    Padding="14,0"
+                    Style="{StaticResource ButtonSecondary}"
                     Text="Search"
                     VerticalOptions="Center" />
             </Grid>
@@ -155,8 +157,8 @@
                         </Border>
                         <BoxView HeightRequest="4" Color="Transparent" />
 
-                        <Label Style="{StaticResource SectionCaption}" Text="POPULAR" />
-                        <CollectionView ItemsSource="{Binding PopularBooks}" SelectionMode="None" HeightRequest="150">
+                        <Label IsVisible="{Binding PopularBooks.Count, Converter={StaticResource HasIntValue}}" Style="{StaticResource SectionCaption}" Text="POPULAR" />
+                        <CollectionView IsVisible="{Binding PopularBooks.Count, Converter={StaticResource HasIntValue}}" ItemsSource="{Binding PopularBooks}" SelectionMode="None" HeightRequest="140">
                             <CollectionView.ItemsLayout>
                                 <LinearItemsLayout ItemSpacing="10" Orientation="Horizontal" />
                             </CollectionView.ItemsLayout>
@@ -175,8 +177,8 @@
                             </CollectionView.ItemTemplate>
                         </CollectionView>
 
-                        <Label Style="{StaticResource SectionCaption}" Text="HIGHLY RATED" />
-                        <CollectionView ItemsSource="{Binding TopRatedBooks}" SelectionMode="None" HeightRequest="150">
+                        <Label IsVisible="{Binding TopRatedBooks.Count, Converter={StaticResource HasIntValue}}" Style="{StaticResource SectionCaption}" Text="HIGHLY RATED" />
+                        <CollectionView IsVisible="{Binding TopRatedBooks.Count, Converter={StaticResource HasIntValue}}" ItemsSource="{Binding TopRatedBooks}" SelectionMode="None" HeightRequest="140">
                             <CollectionView.ItemsLayout>
                                 <LinearItemsLayout ItemSpacing="10" Orientation="Horizontal" />
                             </CollectionView.ItemsLayout>
@@ -195,8 +197,8 @@
                             </CollectionView.ItemTemplate>
                         </CollectionView>
 
-                        <Label Style="{StaticResource SectionCaption}" Text="RECENTLY ADDED" />
-                        <CollectionView ItemsSource="{Binding RecentBooks}" SelectionMode="None" HeightRequest="150">
+                        <Label IsVisible="{Binding RecentBooks.Count, Converter={StaticResource HasIntValue}}" Style="{StaticResource SectionCaption}" Text="RECENTLY ADDED" />
+                        <CollectionView IsVisible="{Binding RecentBooks.Count, Converter={StaticResource HasIntValue}}" ItemsSource="{Binding RecentBooks}" SelectionMode="None" HeightRequest="140">
                             <CollectionView.ItemsLayout>
                                 <LinearItemsLayout ItemSpacing="10" Orientation="Horizontal" />
                             </CollectionView.ItemsLayout>

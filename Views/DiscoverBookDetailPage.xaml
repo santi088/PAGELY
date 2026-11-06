@@ -152,7 +152,8 @@
                                     CommandParameter="1"
                                     FontSize="22"
                                     HeightRequest="36"
-                                    Padding="2,0"
+                                    WidthRequest="36"
+                                    Padding="0"
                                     Text="★"
                                     TextColor="{Binding NewRating, Converter={StaticResource RatingStarColor}, ConverterParameter=1}" />
                                 <Button
@@ -161,7 +162,8 @@
                                     CommandParameter="2"
                                     FontSize="22"
                                     HeightRequest="36"
-                                    Padding="2,0"
+                                    WidthRequest="36"
+                                    Padding="0"
                                     Text="★"
                                     TextColor="{Binding NewRating, Converter={StaticResource RatingStarColor}, ConverterParameter=2}" />
                                 <Button
@@ -170,7 +172,8 @@
                                     CommandParameter="3"
                                     FontSize="22"
                                     HeightRequest="36"
-                                    Padding="2,0"
+                                    WidthRequest="36"
+                                    Padding="0"
                                     Text="★"
                                     TextColor="{Binding NewRating, Converter={StaticResource RatingStarColor}, ConverterParameter=3}" />
                                 <Button
@@ -179,7 +182,8 @@
                                     CommandParameter="4"
                                     FontSize="22"
                                     HeightRequest="36"
-                                    Padding="2,0"
+                                    WidthRequest="36"
+                                    Padding="0"
                                     Text="★"
                                     TextColor="{Binding NewRating, Converter={StaticResource RatingStarColor}, ConverterParameter=4}" />
                                 <Button
@@ -188,7 +192,8 @@
                                     CommandParameter="5"
                                     FontSize="22"
                                     HeightRequest="36"
-                                    Padding="2,0"
+                                    WidthRequest="36"
+                                    Padding="0"
                                     Text="★"
                                     TextColor="{Binding NewRating, Converter={StaticResource RatingStarColor}, ConverterParameter=5}" />
                             </HorizontalStackLayout>
