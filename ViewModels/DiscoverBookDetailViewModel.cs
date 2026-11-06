@@ -152,6 +152,43 @@ public partial class DiscoverBookDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task ReportReviewAsync(Review? review)
+    {
+        if (review is null)
+        {
+            return;
+        }
+
+        if (!_auth.IsAuthenticated)
+        {
+            ReviewStatus = "Sign in to report a review.";
+            return;
+        }
+
+        var reason = await Shell.Current.DisplayActionSheet("Report review", "Cancel", null,
+            "Spam", "Harassment", "Inappropriate content", "Misinformation", "Other");
+        if (string.IsNullOrWhiteSpace(reason) || reason == "Cancel")
+        {
+            return;
+        }
+
+        try
+        {
+            IsSubmitting = true;
+            await _reviews.ReportReviewAsync(review.Id.ToString(), reason);
+            ReviewStatus = "Report submitted.";
+        }
+        catch (Exception ex)
+        {
+            ReviewStatus = $"Could not report review: {ex.Message}";
+        }
+        finally
+        {
+            IsSubmitting = false;
+        }
+    }
+
+    [RelayCommand]
     private void CancelReview()
     {
         NewRating = 5;

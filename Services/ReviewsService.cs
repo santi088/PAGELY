@@ -128,6 +128,24 @@ public sealed class ReviewsService
         response.EnsureSuccessStatusCode();
     }
 
+    public async Task ReportReviewAsync(string reviewId, string reason, string? details = null, CancellationToken ct = default)
+    {
+        if (!_auth.IsAuthenticated || _auth.Token is null)
+        {
+            throw new UnauthorizedAccessException("Sign in to report a review.");
+        }
+        if (!Guid.TryParse(reviewId, out var guid))
+        {
+            throw new InvalidOperationException("Invalid review id.");
+        }
+
+        using var request = new HttpRequestMessage(HttpMethod.Post, $"api/reviews/{guid}/reports");
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _auth.Token);
+        request.Content = JsonContent.Create(new { reason, details });
+        var response = await CreateClient().SendAsync(request, ct);
+        response.EnsureSuccessStatusCode();
+    }
+
     public async Task<IReadOnlyList<Review>> GetMyReviewsAsync(CancellationToken ct = default)
     {
         if (_auth.Token is null)

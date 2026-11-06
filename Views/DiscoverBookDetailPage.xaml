@@ -343,6 +343,15 @@
                                     Padding="0"
                                     Text="Edit"
                                     TextColor="{DynamicResource Primary}" />
+                                <Button
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding BindingContext.ReportReviewCommand, Source={x:Reference DetailRoot}}"
+                                    CommandParameter="{Binding .}"
+                                    FontSize="12"
+                                    HeightRequest="28"
+                                    Padding="0"
+                                    Text="Report"
+                                    TextColor="{DynamicResource Muted}" />
                             </HorizontalStackLayout>
 
                             <BoxView HeightRequest="1" Color="{DynamicResource Divider}" Margin="0,4,0,0" />
