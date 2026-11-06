@@ -15,6 +15,7 @@ public sealed class ApiReviewDto
     [JsonPropertyName("rating")] public int Rating { get; set; }
     [JsonPropertyName("reviewText")] public string? ReviewText { get; set; }
     [JsonPropertyName("likeCount")] public int LikeCount { get; set; }
+    [JsonPropertyName("isLikedByCurrentUser")] public bool IsLikedByCurrentUser { get; set; }
     [JsonPropertyName("createdAt")] public DateTime CreatedAt { get; set; }
 }
 
@@ -89,6 +90,38 @@ public sealed class ReviewsService
         return Map(dto);
     }
 
+    public async Task LikeReviewAsync(string reviewId, CancellationToken ct = default)
+    {
+        if (!_auth.IsAuthenticated || _auth.Token is null)
+        {
+            throw new UnauthorizedAccessException("Sign in to like a review.");
+        }
+        if (!Guid.TryParse(reviewId, out var guid))
+        {
+            throw new InvalidOperationException("Invalid review id.");
+        }
+        using var request = new HttpRequestMessage(HttpMethod.Put, $"api/reviews/{guid}/like");
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _auth.Token);
+        var response = await CreateClient().SendAsync(request, ct);
+        response.EnsureSuccessStatusCode();
+    }
+
+    public async Task UnlikeReviewAsync(string reviewId, CancellationToken ct = default)
+    {
+        if (!_auth.IsAuthenticated || _auth.Token is null)
+        {
+            throw new UnauthorizedAccessException("Sign in to like a review.");
+        }
+        if (!Guid.TryParse(reviewId, out var guid))
+        {
+            throw new InvalidOperationException("Invalid review id.");
+        }
+        using var request = new HttpRequestMessage(HttpMethod.Delete, $"api/reviews/{guid}/like");
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _auth.Token);
+        var response = await CreateClient().SendAsync(request, ct);
+        response.EnsureSuccessStatusCode();
+    }
+
     public async Task<IReadOnlyList<Review>> GetMyReviewsAsync(CancellationToken ct = default)
     {
         if (_auth.Token is null)
@@ -114,6 +147,7 @@ public sealed class ReviewsService
         Rating = dto.Rating,
         ReviewText = dto.ReviewText,
         LikeCount = dto.LikeCount,
+        IsLikedByCurrentUser = dto.IsLikedByCurrentUser,
         CreatedAt = dto.CreatedAt
     };
 }
