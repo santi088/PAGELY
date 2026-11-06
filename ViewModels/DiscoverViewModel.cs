@@ -104,7 +104,8 @@ public partial class DiscoverViewModel : ObservableObject
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Discover", $"Could not load genres: {ex.Message}", "OK");
+                var url = Preferences.Default.Get("api_base_url", "NONE");
+                await Shell.Current.DisplayAlert("Discover", $"Could not load genres [{url}]: {ex.GetType().Name}: {ex.Message}", "OK");
                 return;
             }
 
@@ -136,7 +137,8 @@ public partial class DiscoverViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Discover", $"Could not load shelves: {ex.Message}", "OK");
+            var url = Preferences.Default.Get("api_base_url", "NONE");
+            await Shell.Current.DisplayAlert("Discover", $"Could not load shelves [{url}]: {ex.GetType().Name}: {ex.Message}", "OK");
         }
     }
 
@@ -179,7 +181,8 @@ public partial class DiscoverViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Discover", $"Could not load books: {ex.Message}", "OK");
+            var url = Preferences.Default.Get("api_base_url", "NONE");
+            await Shell.Current.DisplayAlert("Discover", $"Could not load books [{url}]: {ex.GetType().Name}: {ex.Message}", "OK");
         }
         finally
         {
