@@ -113,34 +113,32 @@
                     </Button>
 
                     <!-- Ratings and reviews summary -->
-                    <Border Padding="16" Style="{StaticResource CardBorder}">
-                        <VerticalStackLayout Spacing="6">
-                            <Label Style="{StaticResource SectionCaption}" Text="RATINGS AND REVIEWS" />
-                            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                                <Label
-                                    FontFamily="OpenSansSemibold"
-                                    FontSize="22"
-                                    Text="{Binding Book.Rating, StringFormat='{0:0.0}'}"
-                                    TextColor="{DynamicResource Ink}" />
-                                <Label
-                                    FontFamily="OpenSansSemibold"
-                                    FontSize="16"
-                                    Text="★"
-                                    TextColor="{DynamicResource WarmAccent}" />
-                                <Label
-                                    Style="{StaticResource CardMeta}"
-                                    Text="{Binding Book.RatingCountLabel}"
-                                    VerticalOptions="Center" />
-                            </HorizontalStackLayout>
+                    <VerticalStackLayout Spacing="6">
+                        <Label Style="{StaticResource SectionCaption}" Text="RATINGS AND REVIEWS" />
+                        <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
                             <Label
-                                Style="{StaticResource PageSubtitle}"
-                                Text="{Binding ReviewStatus}"
-                                IsVisible="{Binding ReviewStatus, Converter={StaticResource HasText}}" />
-                        </VerticalStackLayout>
-                    </Border>
+                                FontFamily="OpenSansSemibold"
+                                FontSize="22"
+                                Text="{Binding Book.Rating, StringFormat='{0:0.0}'}"
+                                TextColor="{DynamicResource Ink}" />
+                            <Label
+                                FontFamily="OpenSansSemibold"
+                                FontSize="16"
+                                Text="★"
+                                TextColor="{DynamicResource WarmAccent}" />
+                            <Label
+                                Style="{StaticResource CardMeta}"
+                                Text="{Binding Book.RatingCountLabel}"
+                                VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                        <Label
+                            Style="{StaticResource PageSubtitle}"
+                            Text="{Binding ReviewStatus}"
+                            IsVisible="{Binding ReviewStatus, Converter={StaticResource HasText}}" />
+                    </VerticalStackLayout>
 
                     <!-- Review composer -->
-                    <Border Padding="16" Style="{StaticResource CardBorder}">
+                    <Border Padding="20" Style="{StaticResource CardBorder}">
                         <VerticalStackLayout Spacing="10">
                             <Label Style="{StaticResource SectionCaption}" Text="WRITE A REVIEW" />
 
@@ -216,7 +214,13 @@
                                     Command="{Binding SubmitReviewCommand}"
                                     IsEnabled="{Binding IsSubmitting, Converter={StaticResource InverseBool}}"
                                     Style="{StaticResource ButtonPrimary}"
-                                    Text="Submit review" />
+                                    Text="Submit review">
+                                    <Button.Triggers>
+                                        <DataTrigger TargetType="Button" Binding="{Binding HasExistingReview}" Value="True">
+                                            <Setter Property="Text" Value="Update review" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
                             </Grid>
 
                             <ActivityIndicator
@@ -241,7 +245,7 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Review">
-                    <Border Padding="12" Style="{StaticResource CardBorder}">
+                    <Border Padding="16" Style="{StaticResource CardBorder}">
                         <VerticalStackLayout Spacing="4">
                             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
                                 <Label
