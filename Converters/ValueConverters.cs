@@ -80,6 +80,15 @@ public class HasProgressConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         => throw new NotSupportedException();
 }
+
+public class InverseHasTextConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => !(value is string t && !string.IsNullOrWhiteSpace(t));
+
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+        => throw new NotSupportedException();
+}
 file static class ConverterHelpers
 {
     public static bool HasPath(object? value)
