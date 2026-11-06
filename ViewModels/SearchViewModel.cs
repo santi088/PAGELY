@@ -129,6 +129,12 @@ public partial class SearchViewModel : ObservableObject
     }
 
     [RelayCommand]
+    public async Task SearchCommunity()
+    {
+        await SearchCommunityAsync();
+    }
+
+    [RelayCommand]
     public async Task OpenCommunityAsync(DiscoverBook? book)
     {
         if (book is null)

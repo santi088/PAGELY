@@ -55,6 +55,7 @@
                         HeightRequest="46"
                         Placeholder="Title, author, genre, or status"
                         PlaceholderColor="{DynamicResource Muted}"
+                        SearchCommand="{Binding SearchCommunityCommand}"
                         Text="{Binding Query}"
                         TextColor="{DynamicResource Ink}" />
                 </Border>
