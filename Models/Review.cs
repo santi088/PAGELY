@@ -19,4 +19,7 @@ public class Review
     [System.Text.Json.Serialization.JsonIgnore]
     public string DisplayName =>
         string.IsNullOrWhiteSpace(UserName) ? "Reader" : UserName;
+
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool IsOwnReview { get; set; }
 }

@@ -10,7 +10,7 @@
     Shell.NavBarIsVisible="False"
     BackgroundColor="{DynamicResource Paper}">
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid x:Name="DetailRoot" RowDefinitions="Auto,*">
 
         <!-- Header -->
         <Border
@@ -312,11 +312,21 @@
                                 Text="{Binding ReviewText}" />
 
                             <!-- Interaction row -->
-                            <HorizontalStackLayout Margin="50,4,0,0" Spacing="6" VerticalOptions="Center">
+                            <HorizontalStackLayout Margin="50,4,0,0" Spacing="12" VerticalOptions="Center">
                                 <Label
                                     FontSize="12"
                                     Text="{Binding LikeCount, StringFormat='♥ {0}'}"
                                     TextColor="{DynamicResource Muted}" />
+                                <Button
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding BindingContext.EditReviewCommand, Source={x:Reference DetailRoot}}"
+                                    CommandParameter="{Binding .}"
+                                    FontSize="12"
+                                    HeightRequest="28"
+                                    IsVisible="{Binding IsOwnReview}"
+                                    Padding="0"
+                                    Text="Edit"
+                                    TextColor="{DynamicResource Primary}" />
                             </HorizontalStackLayout>
 
                             <BoxView HeightRequest="1" Color="{DynamicResource Divider}" Margin="0,4,0,0" />
