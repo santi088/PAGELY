@@ -49,7 +49,7 @@ public sealed class ApiCatalogService : IOnlineCatalogService
         };
         var sortOrder = sort == DiscoverSort.TitleAZ ? "asc" : "desc";
 
-        var url = $"api/books?sortBy={Uri.EscapeDataString(sortBy)}&sortOrder={sortOrder}&pageSize=100";
+        var url = $"api/books?sortBy={Uri.EscapeDataString(sortBy)}&sortOrder={sortOrder}&pageSize=1000";
         if (!string.IsNullOrWhiteSpace(genre))
         {
             url += $"&genre={Uri.EscapeDataString(genre)}";
@@ -104,7 +104,7 @@ public sealed class ApiCatalogService : IOnlineCatalogService
             return Array.Empty<DiscoverBook>();
         }
 
-        var url = $"api/books?search={Uri.EscapeDataString(query)}&sortBy=rating&sortOrder=desc&pageSize=100";
+        var url = $"api/books?search={Uri.EscapeDataString(query)}&sortBy=rating&sortOrder=desc&pageSize=1000";
         var client = CreateClient();
         var response = await client.GetAsync(url, cancellationToken);
         if (!response.IsSuccessStatusCode)
