@@ -313,10 +313,26 @@
 
                             <!-- Interaction row -->
                             <HorizontalStackLayout Margin="50,4,0,0" Spacing="12" VerticalOptions="Center">
+                                <ImageButton
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding BindingContext.LikeReviewCommand, Source={x:Reference DetailRoot}}"
+                                    CommandParameter="{Binding .}"
+                                    HeightRequest="24"
+                                    IsEnabled="{Binding IsLiking, Converter={StaticResource InverseBool}}"
+                                    Padding="0"
+                                    Source="heart_outline.svg"
+                                    WidthRequest="24">
+                                    <ImageButton.Triggers>
+                                        <DataTrigger TargetType="ImageButton" Binding="{Binding IsLikedByCurrentUser}" Value="True">
+                                            <Setter Property="Source" Value="heart_filled.svg" />
+                                        </DataTrigger>
+                                    </ImageButton.Triggers>
+                                </ImageButton>
                                 <Label
                                     FontSize="12"
-                                    Text="{Binding LikeCount, StringFormat='♥ {0}'}"
-                                    TextColor="{DynamicResource Muted}" />
+                                    Text="{Binding LikeCount}"
+                                    TextColor="{DynamicResource Muted}"
+                                    VerticalOptions="Center" />
                                 <Button
                                     BackgroundColor="Transparent"
                                     Command="{Binding BindingContext.EditReviewCommand, Source={x:Reference DetailRoot}}"
