@@ -60,13 +60,20 @@
                                 StrokeThickness="0"
                                 VerticalOptions="Start"
                                 WidthRequest="96">
-                                <Label
-                                    FontFamily="OpenSansSemibold"
-                                    FontSize="32"
-                                    HorizontalOptions="Center"
-                                    Text="{Binding Book.Initial}"
-                                    TextColor="{DynamicResource Surface}"
-                                    VerticalOptions="Center" />
+                                <Grid>
+                                    <Image
+                                        Aspect="AspectFill"
+                                        IsVisible="{Binding Book.CoverUrl, Converter={StaticResource HasText}}"
+                                        Source="{Binding Book.CoverUrl}" />
+                                    <Label
+                                        FontFamily="OpenSansSemibold"
+                                        FontSize="32"
+                                        HorizontalOptions="Center"
+                                        IsVisible="{Binding Book.CoverUrl, Converter={StaticResource InverseHasText}}"
+                                        Text="{Binding Book.Initial}"
+                                        TextColor="{DynamicResource Surface}"
+                                        VerticalOptions="Center" />
+                                </Grid>
                             </Border>
                             <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
                                 <Label FontSize="20" Style="{StaticResource CardTitle}" Text="{Binding Book.Title}" />

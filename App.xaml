@@ -19,6 +19,7 @@
             <converters:RatingStarColorConverter x:Key="RatingStarColor" />
             <converters:HasTextConverter x:Key="HasText" />
             <converters:HasObjectConverter x:Key="HasObject" />
+            <converters:InverseHasTextConverter x:Key="InverseHasText" />
             <converters:HasProgressConverter x:Key="HasProgress" />
         </ResourceDictionary>
     </Application.Resources>
