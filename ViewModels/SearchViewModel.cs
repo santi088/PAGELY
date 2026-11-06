@@ -5,6 +5,7 @@ using Microsoft.Maui.Networking;
 using PAGELY.Data;
 using PAGELY.Models;
 using PAGELY.Services;
+using Microsoft.Maui.Storage;
 
 namespace PAGELY.ViewModels;
 
@@ -172,8 +173,9 @@ public partial class SearchViewModel : ObservableObject
             }
 
             IsCommunityEmpty = CommunityBooks.Count == 0;
+            var url = Preferences.Default.Get("api_base_url", "NONE");
             CommunityMessage = IsCommunityEmpty
-                ? "No community results found."
+                ? $"No community results found. ({url})"
                 : (CommunityBooks.Count == 1 ? "1 result" : $"{CommunityBooks.Count} results");
         }
         catch (Exception ex)
