@@ -80,6 +80,7 @@ public partial class DiscoverBookDetailViewModel : ObservableObject
             Reviews.Clear();
             foreach (var review in reviews)
             {
+                review.IsOwnReview = _auth.UserId is not null && review.UserId == _auth.UserId;
                 Reviews.Add(review);
             }
 
@@ -96,6 +97,21 @@ public partial class DiscoverBookDetailViewModel : ObservableObject
         {
             ReviewStatus = $"Could not load reviews: {ex.Message}";
         }
+    }
+
+    [RelayCommand]
+    private void EditReview(Review? review)
+    {
+        if (review is null)
+        {
+            return;
+        }
+
+        NewRating = review.Rating;
+        NewReviewText = review.ReviewText ?? string.Empty;
+        ExistingReviewId = review.Id.ToString();
+        HasExistingReview = true;
+        ReviewStatus = "Editing your review.";
     }
 
     [RelayCommand]
