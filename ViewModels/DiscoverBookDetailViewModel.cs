@@ -115,6 +115,43 @@ public partial class DiscoverBookDetailViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task LikeReviewAsync(Review? review)
+    {
+        if (review is null || review.IsLiking)
+        {
+            return;
+        }
+
+        review.IsLiking = true;
+        try
+        {
+            if (review.IsLikedByCurrentUser)
+            {
+                await _reviews.UnlikeReviewAsync(review.Id.ToString());
+                review.IsLikedByCurrentUser = false;
+                if (review.LikeCount > 0)
+                {
+                    review.LikeCount--;
+                }
+            }
+            else
+            {
+                await _reviews.LikeReviewAsync(review.Id.ToString());
+                review.IsLikedByCurrentUser = true;
+                review.LikeCount++;
+            }
+        }
+        catch (Exception ex)
+        {
+            ReviewStatus = $"Could not update like: {ex.Message}";
+        }
+        finally
+        {
+            review.IsLiking = false;
+        }
+    }
+
+    [RelayCommand]
     private void CancelReview()
     {
         NewRating = 5;

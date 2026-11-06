@@ -10,6 +10,10 @@ public class Review
     public int Rating { get; set; }
     public string? ReviewText { get; set; }
     public int LikeCount { get; set; }
+    public bool IsLikedByCurrentUser { get; set; }
+
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool IsLiking { get; set; }
     public DateTime CreatedAt { get; set; }
 
     [System.Text.Json.Serialization.JsonIgnore]
