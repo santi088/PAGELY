@@ -1,6 +1,8 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace PAGELY.Models;
 
-public class Review
+public partial class Review : ObservableObject
 {
     public Guid Id { get; set; }
     public Guid BookId { get; set; }
@@ -9,11 +11,15 @@ public class Review
     public string UserName { get; set; } = string.Empty;
     public int Rating { get; set; }
     public string? ReviewText { get; set; }
-    public int LikeCount { get; set; }
-    public bool IsLikedByCurrentUser { get; set; }
+    [ObservableProperty]
+    private int likeCount;
+
+    [ObservableProperty]
+    private bool isLikedByCurrentUser;
 
     [System.Text.Json.Serialization.JsonIgnore]
-    public bool IsLiking { get; set; }
+    [ObservableProperty]
+    private bool isLiking;
     public DateTime CreatedAt { get; set; }
 
     [System.Text.Json.Serialization.JsonIgnore]
