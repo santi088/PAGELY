@@ -10,6 +10,7 @@ public sealed class ApiReviewDto
     [JsonPropertyName("id")] public Guid Id { get; set; }
     [JsonPropertyName("userId")] public string UserId { get; set; } = string.Empty;
     [JsonPropertyName("userEmail")] public string UserEmail { get; set; } = string.Empty;
+    [JsonPropertyName("userName")] public string UserName { get; set; } = string.Empty;
     [JsonPropertyName("bookId")] public Guid BookId { get; set; }
     [JsonPropertyName("rating")] public int Rating { get; set; }
     [JsonPropertyName("reviewText")] public string? ReviewText { get; set; }
@@ -109,6 +110,7 @@ public sealed class ReviewsService
         BookId = dto.BookId,
         UserId = dto.UserId,
         UserEmail = dto.UserEmail,
+        UserName = string.IsNullOrWhiteSpace(dto.UserName) ? "Reader" : dto.UserName,
         Rating = dto.Rating,
         ReviewText = dto.ReviewText,
         LikeCount = dto.LikeCount,
