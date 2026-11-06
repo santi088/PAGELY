@@ -26,7 +26,7 @@ public static class ApiConfiguration
     /// </summary>
     public static string DefaultBaseUrl =>
         DeviceInfo.Platform == DevicePlatform.Android
-            ? AndroidEmulatorUrl
+            ? PhysicalDeviceUrl
             : DeviceInfo.Platform == DevicePlatform.iOS
                 ? IosSimulatorUrl
                 : PhysicalDeviceUrl;
