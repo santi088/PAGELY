@@ -66,6 +66,28 @@ public sealed class ReviewsService
         return Map(dto);
     }
 
+    public async Task<Review> UpdateReviewAsync(string reviewId, int rating, string? text, CancellationToken ct = default)
+    {
+        if (!_auth.IsAuthenticated || _auth.Token is null)
+        {
+            throw new UnauthorizedAccessException("Sign in to update a review.");
+        }
+
+        if (!Guid.TryParse(reviewId, out var guid))
+        {
+            throw new InvalidOperationException("Invalid review id.");
+        }
+
+        using var request = new HttpRequestMessage(HttpMethod.Put, $"api/reviews/{guid}");
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _auth.Token);
+        request.Content = JsonContent.Create(new { rating, reviewText = text });
+        var response = await CreateClient().SendAsync(request, ct);
+        response.EnsureSuccessStatusCode();
+        var dto = await response.Content.ReadFromJsonAsync<ApiReviewDto>(ct)
+            ?? throw new InvalidOperationException("Empty review response.");
+        return Map(dto);
+    }
+
     public async Task<IReadOnlyList<Review>> GetMyReviewsAsync(CancellationToken ct = default)
     {
         if (_auth.Token is null)

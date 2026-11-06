@@ -10,12 +10,14 @@ public partial class DiscoverBookDetailViewModel : ObservableObject
     private readonly IOnlineCatalogService _catalog;
     private readonly IReadingListService _readingList;
     private readonly ReviewsService _reviews;
+    private readonly AuthService _auth;
 
-    public DiscoverBookDetailViewModel(IOnlineCatalogService catalog, IReadingListService readingList, ReviewsService reviews)
+    public DiscoverBookDetailViewModel(IOnlineCatalogService catalog, IReadingListService readingList, ReviewsService reviews, AuthService auth)
     {
         _catalog = catalog;
         _readingList = readingList;
         _reviews = reviews;
+        _auth = auth;
     }
 
     [ObservableProperty]
@@ -29,6 +31,12 @@ public partial class DiscoverBookDetailViewModel : ObservableObject
 
     [ObservableProperty]
     private bool isSaved;
+
+    [ObservableProperty]
+    private string? existingReviewId;
+
+    [ObservableProperty]
+    private bool hasExistingReview;
 
     public System.Collections.ObjectModel.ObservableCollection<Models.Review> Reviews { get; } = new();
 
@@ -74,6 +82,15 @@ public partial class DiscoverBookDetailViewModel : ObservableObject
             {
                 Reviews.Add(review);
             }
+
+            var mine = _auth.UserId is null ? null : reviews.FirstOrDefault(r => r.UserId == _auth.UserId);
+            ExistingReviewId = mine?.Id.ToString();
+            HasExistingReview = mine is not null;
+            if (mine is not null)
+            {
+                NewRating = mine.Rating;
+                NewReviewText = mine.ReviewText ?? string.Empty;
+            }
         }
         catch (Exception ex)
         {
@@ -106,7 +123,17 @@ public partial class DiscoverBookDetailViewModel : ObservableObject
         try
         {
             IsSubmitting = true;
-            await _reviews.CreateReviewAsync(Book.Id, NewRating, NewReviewText);
+            Review updated;
+            if (ExistingReviewId is not null)
+            {
+                updated = await _reviews.UpdateReviewAsync(ExistingReviewId, NewRating, NewReviewText);
+            }
+            else
+            {
+                updated = await _reviews.CreateReviewAsync(Book.Id, NewRating, NewReviewText);
+            }
+            ExistingReviewId = updated.Id.ToString();
+            HasExistingReview = true;
             NewReviewText = string.Empty;
             NewRating = 5;
             ReviewStatus = "Review submitted.";
