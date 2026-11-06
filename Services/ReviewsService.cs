@@ -40,7 +40,13 @@ public sealed class ReviewsService
             return Array.Empty<Review>();
         }
 
-        var response = await CreateClient().GetAsync($"api/books/{guid}/reviews?pageSize=50", ct);
+        var client = CreateClient();
+        using var request = new HttpRequestMessage(HttpMethod.Get, $"api/books/{guid}/reviews?pageSize=50");
+        if (_auth.Token is not null)
+        {
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _auth.Token);
+        }
+        var response = await client.SendAsync(request, ct);
         response.EnsureSuccessStatusCode();
         var result = await response.Content.ReadFromJsonAsync<ApiPagedResult<ApiReviewDto>>(ct);
         return (result?.Items ?? new()).Select(Map).ToList();
