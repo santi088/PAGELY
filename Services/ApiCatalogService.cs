@@ -36,10 +36,7 @@ public sealed class ApiCatalogService : IOnlineCatalogService
 {
     private static HttpClient CreateClient()
     {
-        var baseUrl = Preferences.Default.Get("api_base_url", "http://192.168.100.166:5242");
-        var client = new HttpClient { BaseAddress = new Uri(baseUrl.TrimEnd('/') + "/") };
-        client.Timeout = TimeSpan.FromSeconds(15);
-        return client;
+        return ApiConfiguration.CreateClient();
     }
 
     public async Task<IReadOnlyList<DiscoverBook>> GetBooksAsync(string? genre = null, DiscoverSort sort = DiscoverSort.TopRated, CancellationToken cancellationToken = default)
@@ -63,7 +60,7 @@ public sealed class ApiCatalogService : IOnlineCatalogService
         if (!response.IsSuccessStatusCode)
         {
             var body = await response.Content.ReadAsStringAsync(cancellationToken);
-            throw new HttpRequestException($"GET {client.BaseAddress}{url} -> {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
+            throw new ApiException(ApiErrorKind.HttpError, $"GET {client.BaseAddress}{url} -> {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
         }
         var result = await response.Content.ReadFromJsonAsync<ApiPagedResult<ApiBookDto>>(cancellationToken);
         return (result?.Items ?? new()).Select(Map).ToList();
@@ -76,7 +73,7 @@ public sealed class ApiCatalogService : IOnlineCatalogService
         if (!response.IsSuccessStatusCode)
         {
             var body = await response.Content.ReadAsStringAsync(cancellationToken);
-            throw new HttpRequestException($"GET {client.BaseAddress}api/genres -> {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
+            throw new ApiException(ApiErrorKind.HttpError, $"GET {client.BaseAddress}api/genres -> {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
         }
         var genres = await response.Content.ReadFromJsonAsync<List<ApiGenreDto>>(cancellationToken);
         return (genres ?? new()).Select(g => g.Name).Where(n => !string.IsNullOrWhiteSpace(n)).Distinct().OrderBy(n => n).ToList();
@@ -94,7 +91,7 @@ public sealed class ApiCatalogService : IOnlineCatalogService
         if (!response.IsSuccessStatusCode)
         {
             var body = await response.Content.ReadAsStringAsync(cancellationToken);
-            throw new HttpRequestException($"GET {client.BaseAddress}api/books/{guid} -> {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
+            throw new ApiException(ApiErrorKind.HttpError, $"GET {client.BaseAddress}api/books/{guid} -> {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
         }
         var dto = await response.Content.ReadFromJsonAsync<ApiBookDto>(cancellationToken);
         return dto is null ? null : Map(dto);
@@ -113,7 +110,7 @@ public sealed class ApiCatalogService : IOnlineCatalogService
         if (!response.IsSuccessStatusCode)
         {
             var body = await response.Content.ReadAsStringAsync(cancellationToken);
-            throw new HttpRequestException($"GET {client.BaseAddress}{url} -> {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
+            throw new ApiException(ApiErrorKind.HttpError, $"GET {client.BaseAddress}{url} -> {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
         }
         var result = await response.Content.ReadFromJsonAsync<ApiPagedResult<ApiBookDto>>(cancellationToken);
         return (result?.Items ?? new()).Select(Map).ToList();
@@ -127,7 +124,7 @@ public sealed class ApiCatalogService : IOnlineCatalogService
         if (!response.IsSuccessStatusCode)
         {
             var body = await response.Content.ReadAsStringAsync(cancellationToken);
-            throw new HttpRequestException($"GET {client.BaseAddress}{url} -> {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
+            throw new ApiException(ApiErrorKind.HttpError, $"GET {client.BaseAddress}{url} -> {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
         }
         var result = await response.Content.ReadFromJsonAsync<ApiPagedResult<ApiBookDto>>(cancellationToken);
         return (result?.Items ?? new()).Select(Map).ToList();

@@ -30,10 +30,7 @@ public sealed class AuthService
 
     private static HttpClient CreateClient()
     {
-        var baseUrl = Preferences.Default.Get("api_base_url", "http://192.168.100.166:5242");
-        var client = new HttpClient { BaseAddress = new Uri(baseUrl.TrimEnd('/') + "/") };
-        client.Timeout = TimeSpan.FromSeconds(15);
-        return client;
+        return ApiConfiguration.CreateClient();
     }
 
     public string? Token => Preferences.Default.Get(TokenKey, string.Empty) is { Length: > 0 } t ? t : null;

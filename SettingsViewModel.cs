@@ -25,7 +25,7 @@ public partial class SettingsViewModel : ObservableObject
     private string fontFamily = ReaderSettings.FontFamily;
 
     [ObservableProperty]
-    private string apiBaseUrl = Preferences.Default.Get("api_base_url", "http://192.168.100.166:5242");
+    private string apiBaseUrl = ApiConfiguration.BaseUrl;
 
     public string FontSizeLabel => $"{FontSize:0} px";
 
@@ -54,7 +54,7 @@ public partial class SettingsViewModel : ObservableObject
     {
         if (!string.IsNullOrWhiteSpace(value))
         {
-            Preferences.Default.Set("api_base_url", value.Trim());
+            ApiConfiguration.BaseUrl = value;
         }
     }
 
@@ -65,5 +65,6 @@ public partial class SettingsViewModel : ObservableObject
         LineSpacing = 1.85;
         Theme = "Paper";
         FontFamily = "Serif";
+        ApiBaseUrl = "http://192.168.100.166:5242";
     }
 }
