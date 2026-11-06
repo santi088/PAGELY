@@ -173,9 +173,9 @@ public partial class SearchViewModel : ObservableObject
             }
 
             IsCommunityEmpty = CommunityBooks.Count == 0;
-            var url = Preferences.Default.Get("api_base_url", "NONE");
+            var url = ApiConfiguration.BaseUrl;
             CommunityMessage = IsCommunityEmpty
-                ? $"No community results found. ({url})"
+                ? $"No community results found. (url={url}, q={Query})"
                 : (CommunityBooks.Count == 1 ? "1 result" : $"{CommunityBooks.Count} results");
         }
         catch (Exception ex)
