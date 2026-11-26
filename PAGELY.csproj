@@ -49,6 +49,9 @@
 		<PackageReference Include="VersOne.Epub" Version="3.3.6" />
 	</ItemGroup>
 
-
+<ItemGroup>
+    <MauiXaml Remove="@(MauiXaml)" />
+    <MauiXaml Include="**/*.xaml" Exclude="bin/**;obj/**" />
+</ItemGroup>
 </Project>
 

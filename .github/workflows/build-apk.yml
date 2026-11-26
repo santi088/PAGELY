@@ -1,0 +1,29 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - run: dotnet workload install maui-android
+
+      - run: dotnet publish PAGELY.csproj -f net8.0-android -c Release -p:AndroidPackageFormat=apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pagely-apk
+          path: "**/*.apk"
