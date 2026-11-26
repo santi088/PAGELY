@@ -150,7 +150,7 @@
                     <Label Margin="0,2,0,18" Style="{StaticResource PageSubtitle}" Text="Pick up where you left off" />
                     <VerticalStackLayout IsVisible="{Binding IsEmpty, Converter={StaticResource InverseBool}}">
                         <Label Style="{StaticResource SectionCaption}" Text="CONTINUE READING" />
-                        <CollectionView HeightRequest="196" ItemsSource="{Binding ContinueReading}" Margin="0,10,0,0">
+                        <CollectionView HeightRequest="196" ItemsSource="{Binding ContinueReading}" Margin="16,10,16,0" HorizontalScrollBarVisibility="Never">
                             <CollectionView.ItemsLayout>
                                 <LinearItemsLayout ItemSpacing="12" Orientation="Horizontal" />
                             </CollectionView.ItemsLayout>
@@ -235,7 +235,7 @@
                                 <Label Style="{StaticResource CardTitle}" Text="Text size" />
                                 <Label Grid.Column="1" Style="{StaticResource PageSubtitle}" Text="{Binding FontSizeLabel}" />
                             </Grid>
-                            <Slider Minimum="14" Maximum="28" MinimumTrackColor="{DynamicResource Primary}" ThumbColor="{DynamicResource Primary}" Value="{Binding FontSize, Mode=TwoWay}" />
+                            <Slider Minimum="14" Maximum="28" MinimumTrackColor="{DynamicResource Primary}" MaximumTrackColor="{DynamicResource SurfaceAlt}" ThumbColor="{DynamicResource Primary}" Value="{Binding FontSize, Mode=TwoWay}" HeightRequest="{StaticResource HeightButton}" />
                         </VerticalStackLayout>
                     </Border>
                     <Border Style="{StaticResource CardBorder}" Padding="16">
@@ -244,7 +244,7 @@
                                 <Label Style="{StaticResource CardTitle}" Text="Line spacing" />
                                 <Label Grid.Column="1" Style="{StaticResource PageSubtitle}" Text="{Binding LineSpacingLabel}" />
                             </Grid>
-                            <Slider Minimum="1.4" Maximum="2.2" MinimumTrackColor="{DynamicResource Primary}" ThumbColor="{DynamicResource Primary}" Value="{Binding LineSpacing, Mode=TwoWay}" />
+                            <Slider Minimum="1.4" Maximum="2.2" MinimumTrackColor="{DynamicResource Primary}" MaximumTrackColor="{DynamicResource SurfaceAlt}" ThumbColor="{DynamicResource Primary}" Value="{Binding LineSpacing, Mode=TwoWay}" HeightRequest="{StaticResource HeightButton}" />
                         </VerticalStackLayout>
                     </Border>
                     <Border Style="{StaticResource CardBorder}" Padding="16">
@@ -323,6 +323,6 @@
             <BoxView Grid.Column="{Binding SelectedTab}" HeightRequest="3" VerticalOptions="End" Color="{DynamicResource Primary}" HorizontalOptions="Center" WidthRequest="40" />
         </Grid>
 
-        <CarouselView x:Name="TabsCarousel" Grid.Row="1" ItemsSource="{Binding Tabs}" Position="{Binding SelectedTab, Mode=TwoWay}" Loop="False" />
+        <CarouselView x:Name="TabsCarousel" Grid.Row="1" ItemsSource="{Binding Tabs}" Position="{Binding SelectedTab, Mode=TwoWay}" Loop="False" IsSwipeEnabled="False" />
     </Grid>
 </ContentPage>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="PAGELY.Views.Components.BottomSheet"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:components="clr-namespace:PAGELY.Views.Components"
+    x:Name="This"
+    BackgroundColor="Transparent"
+    InputTransparent="{Binding IsVisible, Source={x:Reference This}}">
+
+    <Grid
+        x:Name="RootGrid"
+        BackgroundColor="Transparent"
+        VerticalOptions="End"
+        InputTransparent="False">
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnBackdropTapped" />
+        </Grid.GestureRecognizers>
+
+        <!-- Backdrop -->
+        <BoxView
+            x:Name="Backdrop"
+            Color="#3A2615"
+            Opacity="0"
+            InputTransparent="True" />
+
+        <!-- Sheet -->
+        <Border
+            x:Name="Sheet"
+            BackgroundColor="{DynamicResource Card}"
+            StrokeThickness="0"
+            VerticalOptions="End"
+            TranslationY="{Binding SheetOffset, Source={x:Reference This}}">
+            <Border.StrokeShape>
+                <RoundRectangle>
+                    <RoundRectangle.CornerRadius>
+                        <CornerRadius>28</CornerRadius>
+                    </RoundRectangle.CornerRadius>
+                </RoundRectangle>
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="0" Padding="0,16,0,24">
+
+                <!-- Drag handle -->
+                <BoxView
+                    HeightRequest="4"
+                    WidthRequest="36"
+                    CornerRadius="2"
+                    Color="{DynamicResource Muted}"
+                    HorizontalOptions="Center"
+                    Margin="0,8,0,16" />
+
+                <CollectionView
+                    x:Name="OptionsList"
+                    ItemsSource="{Binding Options, Source={x:Reference This}}"
+                    SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="0" Orientation="Vertical" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="components:BottomSheetOption">
+                            <Button
+                                Text="{Binding Text}"
+                                Style="{Binding IsSelected, Converter={StaticResource BottomSheetRowStyleConverter}}"
+                                Command="{Binding SelectCommand, Source={x:Reference This}}"
+                                CommandParameter="{Binding Text}" />
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+
+</ContentView>

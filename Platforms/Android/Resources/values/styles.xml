@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Native theme colours kept in step with the app's warm paper palette -->
+    <color name="colorPrimary">#6F4E2C</color>
+    <color name="colorPrimaryDark">#523820</color>
+    <color name="colorAccent">#C08A3E</color>
+
+    <!-- App theme with alertDialogTheme for themed native dialogs -->
+    <style name="Maui.SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="alertDialogTheme">@style/AppTheme.AlertDialog</item>
+    </style>
+
+    <!-- Rounded native dialog background -->
+    <style name="AppTheme.AlertDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/dialog_rounded_background</item>
+        <item name="android:textColorPrimary">#3A2615</item>
+        <item name="android:textColorSecondary">#5A4430</item>
+        <item name="colorAccent">#6F4E2C</item>
+        <item name="colorPrimary">#6F4E2C</item>
+    </style>
+</resources>
