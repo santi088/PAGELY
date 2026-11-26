@@ -48,6 +48,8 @@ public partial class SearchViewModel : ObservableObject
     [ObservableProperty]
     private bool isEmpty;
 
+    public bool IsLibraryEmpty => !IsCommunityScope && IsEmpty;
+
     [ObservableProperty]
     private bool isFilterVisible = false;
 
@@ -76,8 +78,14 @@ public partial class SearchViewModel : ObservableObject
     partial void OnSelectedGenreChanged(string value) => Apply();
     partial void OnSelectedSortChanged(string value) => Apply();
 
+    partial void OnIsEmptyChanged(bool value)
+    {
+        OnPropertyChanged(nameof(IsLibraryEmpty));
+    }
+
     partial void OnIsCommunityScopeChanged(bool value)
     {
+        OnPropertyChanged(nameof(IsLibraryEmpty));
         if (value)
         {
             _ = SearchCommunityAsync();

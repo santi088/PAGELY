@@ -65,6 +65,9 @@ public partial class ProfileViewModel : ObservableObject
     [ObservableProperty]
     private string accountEmail = string.Empty;
 
+    [ObservableProperty]
+    private bool isLoginMode = true;
+
     public async Task InitializeAsync()
     {
         if (_auth.IsAuthenticated)
@@ -142,10 +145,9 @@ public partial class ProfileViewModel : ObservableObject
         try
         {
             IsBusy = true;
-            await _auth.RegisterAsync(RegisterEmail, RegisterPassword, FirstName, LastName);
-            await InitializeAsync();
+            var email = await _auth.RegisterAsync(RegisterEmail, RegisterPassword, FirstName, LastName);
             RegisterPassword = string.Empty;
-            await Shell.Current.DisplayAlert("Account", "Account created and signed in.", "OK");
+            await Shell.Current.GoToAsync($"verifyemail?email={Uri.EscapeDataString(email)}");
         }
         catch (Exception ex)
         {
@@ -156,6 +158,13 @@ public partial class ProfileViewModel : ObservableObject
         {
             IsBusy = false;
         }
+    }
+
+    [RelayCommand]
+    private void ToggleAuthMode()
+    {
+        IsLoginMode = !IsLoginMode;
+        StatusMessage = string.Empty;
     }
 
     [RelayCommand]

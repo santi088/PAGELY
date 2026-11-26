@@ -23,17 +23,21 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources/AppIcon/appicon.jpg" />
+		<MauiIcon Include="appicon.jpeg" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources/Splash/splash.jpg" Color="#8B6F47" BaseSize="128,128" />
+		<MauiSplashScreen Include="appicon.jpeg" Color="#8B6F47" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources/Images/*" />
 		<MauiImage Update="Resources/Images/dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
 		<!-- Custom Fonts -->
-		<MauiFont Include="Resources/Fonts/*" />
+		<MauiFont Include="Resources/Fonts/OpenSans-Regular.ttf" Alias="OpenSansRegular" />
+		<MauiFont Include="Resources/Fonts/OpenSans-Semibold.ttf" Alias="OpenSansSemibold" />
+		<MauiFont Include="Resources/Fonts/Newsreader-SemiBold.ttf" Alias="NewsreaderSemibold" />
+		<MauiFont Include="Resources/Fonts/Inter-Regular.ttf" Alias="InterRegular" />
+		<MauiFont Include="Resources/Fonts/Inter-Medium.ttf" Alias="InterMedium" />
 
 		<!-- Raw Assets (also remove the "Resources/Raw" prefix) -->
 		<MauiAsset Include="Resources/Raw/**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />

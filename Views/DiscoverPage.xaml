@@ -13,17 +13,11 @@
     <Grid RowDefinitions="Auto,Auto,*">
 
         <!-- Header -->
-        <Border
-            BackgroundColor="{DynamicResource Surface}"
-            Padding="24,28,20,20"
-            StrokeShape="RoundRectangle 0,0,28,28"
-            StrokeThickness="0">
+        <Border Style="{StaticResource HeaderBorder}">
             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                 <VerticalStackLayout Spacing="4">
-                    <Label FontSize="30" Style="{StaticResource PageTitle}" Text="Discover" />
-                    <Label
-                        Style="{StaticResource PageSubtitle}"
-                        Text="Find your next read. Sample catalog for now." />
+                    <Label Style="{StaticResource HeaderTitle}" Text="Discover" />
+                    <Label Style="{StaticResource HeaderSubtitle}" Text="Find your next read. Sample catalog for now." />
                 </VerticalStackLayout>
                 <Button
                     Grid.Column="1"
@@ -39,11 +33,11 @@
         <!-- Filters: genre buttons and sort order -->
         <VerticalStackLayout
             Grid.Row="1"
-            Padding="0,14,0,6"
+            Padding="{StaticResource Space16}"
             Spacing="10">
             <CollectionView
                 HeightRequest="44"
-                Margin="12,0"
+                Margin="0,0,0,0"
                 ItemsSource="{Binding Genres}"
                 SelectionMode="None">
                 <CollectionView.ItemsLayout>
@@ -51,13 +45,10 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="vm:GenreChip">
-                        <Border
-                            BackgroundColor="{DynamicResource Surface}"
-                            Padding="14,8"
-                            Stroke="{DynamicResource Divider}"
-                            StrokeShape="RoundRectangle 18"
-                            StrokeThickness="1"
-                            VerticalOptions="Center">
+                        <Border Style="{StaticResource ChipBorder}"
+                                Padding="14,8"
+                                HeightRequest="{StaticResource HeightChip}"
+                                VerticalOptions="Center">
                             <Border.Triggers>
                                 <DataTrigger
                                     Binding="{Binding IsSelected}"
@@ -81,7 +72,7 @@
                                         Binding="{Binding IsSelected}"
                                         TargetType="Label"
                                         Value="True">
-                                        <Setter Property="TextColor" Value="White" />
+                                        <Setter Property="TextColor" Value="{DynamicResource OnPrimary}" />
                                     </DataTrigger>
                                 </Label.Triggers>
                             </Label>
@@ -92,8 +83,7 @@
 
             <Grid
                 ColumnDefinitions="Auto,*,Auto"
-                ColumnSpacing="10"
-                Padding="20,0">
+                ColumnSpacing="10">
                 <Label
                     Style="{StaticResource PageSubtitle}"
                     Text="Sort by"
@@ -122,21 +112,18 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="vm:DiscoverItem">
-                        <Grid Padding="20,0">
-                            <Border Padding="12" Style="{StaticResource CardBorder}">
+                        <Grid Padding="16,0,16,0">
+                            <Border Style="{StaticResource CardBorder}">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer
                                         Command="{Binding BindingContext.OpenCommand, Source={x:Reference Discover}}"
                                         CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
                                 <Grid ColumnDefinitions="52,*,Auto" ColumnSpacing="12">
-                                    <Border
-                                        BackgroundColor="{Binding Book.CoverColor}"
-                                        HeightRequest="76"
-                                        StrokeShape="RoundRectangle 10"
-                                        StrokeThickness="0"
-                                        VerticalOptions="Start"
-                                        WidthRequest="52">
+                                    <Border Style="{StaticResource BookCover}"
+                                            HeightRequest="76"
+                                            WidthRequest="52"
+                                            VerticalOptions="Start">
                                         <Grid>
                                             <Image
                                                 Aspect="AspectFill"

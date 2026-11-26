@@ -8,6 +8,8 @@ public partial class SettingsViewModel : ObservableObject
 {
     public IReadOnlyList<string> Themes { get; } = ReaderSettings.Themes;
 
+    public IReadOnlyList<string> AppThemes { get; } = ["System", "Light", "Dark"];
+
     public IReadOnlyList<string> Fonts { get; } = ReaderSettings.Fonts;
 
     [ObservableProperty]
@@ -20,6 +22,9 @@ public partial class SettingsViewModel : ObservableObject
 
     [ObservableProperty]
     private string theme = ReaderSettings.Theme;
+
+    [ObservableProperty]
+    private string appTheme = Preferences.Default.Get("app_theme", "System");
 
     [ObservableProperty]
     private string fontFamily = ReaderSettings.FontFamily;
@@ -45,6 +50,14 @@ public partial class SettingsViewModel : ObservableObject
         ThemeService.Apply(value);
     }
 
+    partial void OnAppThemeChanged(string value)
+    {
+        if (string.IsNullOrEmpty(value)) return;
+
+        Preferences.Default.Set("app_theme", value);
+        ThemeService.ApplyAppTheme(value);
+    }
+
     partial void OnFontFamilyChanged(string value)
     {
         if (!string.IsNullOrEmpty(value)) ReaderSettings.FontFamily = value;
@@ -64,6 +77,7 @@ public partial class SettingsViewModel : ObservableObject
         FontSize = 19;
         LineSpacing = 1.85;
         Theme = "Paper";
+        AppTheme = "System";
         FontFamily = "Serif";
         ApiBaseUrl = "http://192.168.100.166:5242";
     }

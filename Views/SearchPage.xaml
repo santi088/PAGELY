@@ -13,14 +13,12 @@
 
     <Grid RowDefinitions="Auto,Auto,Auto,*">
 
-        <VerticalStackLayout Padding="20,16,20,12" Spacing="2">
+        <VerticalStackLayout Padding="{StaticResource Space16}" Spacing="2">
             <Label Style="{StaticResource PageTitle}" Text="Search" />
-            <Label
-                Style="{StaticResource PageSubtitle}"
-                Text="Find a title, author, genre or status" />
+            <Label Style="{StaticResource PageSubtitle}" Text="Find a title, author, genre or status" />
         </VerticalStackLayout>
 
-        <VerticalStackLayout Grid.Row="1" Padding="20,0,20,12" Spacing="10">
+        <VerticalStackLayout Grid.Row="1" Padding="{StaticResource Space16}" Spacing="10">
             <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
                 <Button
                     Command="{Binding SetLibraryScopeCommand}"
@@ -52,7 +50,7 @@
                         x:Name="SearchBar"
                         CancelButtonColor="{DynamicResource Primary}"
                         FontFamily="OpenSansRegular"
-                        HeightRequest="46"
+                        HeightRequest="{StaticResource HeightField}"
                         Placeholder="Title, author, genre, or status"
                         PlaceholderColor="{DynamicResource Muted}"
                         SearchCommand="{Binding SearchCommunityCommand}"
@@ -63,7 +61,7 @@
                     Grid.Column="1"
                     Clicked="OnFilterToggleClicked"
                     FontSize="14"
-                    HeightRequest="46"
+                    HeightRequest="{StaticResource HeightField}"
                     Padding="16,0"
                     Style="{StaticResource ButtonSecondary}"
                     Text="Filters" />
@@ -71,7 +69,7 @@
 
             <Border
                 IsVisible="{Binding IsFilterVisible}"
-                Padding="14"
+                Padding="{StaticResource Space14}"
                 Style="{StaticResource CardBorder}">
                 <VerticalStackLayout Spacing="10">
                     <Label Margin="2,0,0,0" Style="{StaticResource SectionCaption}" Text="FILTER AND SORT" />
@@ -79,7 +77,7 @@
                         <Border Style="{StaticResource FieldBorder}">
                             <Picker
                                 FontFamily="OpenSansRegular"
-                                HeightRequest="46"
+                                HeightRequest="{StaticResource HeightField}"
                                 ItemsSource="{Binding StatusFilters}"
                                 SelectedItem="{Binding SelectedStatus}"
                                 TextColor="{DynamicResource Ink}"
@@ -89,7 +87,7 @@
                         <Border Grid.Column="1" Style="{StaticResource FieldBorder}">
                             <Picker
                                 FontFamily="OpenSansRegular"
-                                HeightRequest="46"
+                                HeightRequest="{StaticResource HeightField}"
                                 ItemsSource="{Binding Genres}"
                                 SelectedItem="{Binding SelectedGenre}"
                                 TextColor="{DynamicResource Ink}"
@@ -100,7 +98,7 @@
                     <Border Style="{StaticResource FieldBorder}">
                         <Picker
                             FontFamily="OpenSansRegular"
-                            HeightRequest="46"
+                            HeightRequest="{StaticResource HeightField}"
                             ItemsSource="{Binding SortOptions}"
                             SelectedItem="{Binding SelectedSort}"
                             TextColor="{DynamicResource Ink}"
@@ -113,7 +111,7 @@
 
         <Label
             Grid.Row="2"
-            Margin="20,0,20,8"
+            Margin="{StaticResource Space16}"
             Style="{StaticResource PageSubtitle}"
             Text="{Binding CommunityMessage}"
             IsVisible="{Binding IsCommunityScope}" />
@@ -136,13 +134,10 @@
                                         CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
                                 <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
-                                    <Border
-                                        BackgroundColor="{DynamicResource Spine}"
-                                        HeightRequest="76"
-                                        StrokeShape="RoundRectangle 10"
-                                        StrokeThickness="0"
-                                        VerticalOptions="Start"
-                                        WidthRequest="52">
+                                    <Border Style="{StaticResource BookCover}"
+                                            HeightRequest="76"
+                                            WidthRequest="52"
+                                            VerticalOptions="Start">
                                         <Grid>
                                             <Image
                                                 Aspect="AspectFill"
@@ -172,21 +167,12 @@
 
             <VerticalStackLayout
                 HorizontalOptions="Center"
-                IsVisible="{Binding IsCommunityScope, Converter={StaticResource InverseBool}}"
+                IsVisible="{Binding IsLibraryEmpty}"
                 Padding="40,0"
                 Spacing="10"
                 VerticalOptions="Center">
-                <Label
-                    FontFamily="OpenSansSemibold"
-                    FontSize="19"
-                    HorizontalTextAlignment="Center"
-                    Text="No books found"
-                    TextColor="{DynamicResource Ink}" />
-                <Label
-                    HorizontalTextAlignment="Center"
-                    MaximumWidthRequest="290"
-                    Style="{StaticResource PageSubtitle}"
-                    Text="Nothing matches this search yet. Try another title, author, genre or status." />
+                <Label FontFamily="OpenSansSemibold" FontSize="19" HorizontalTextAlignment="Center" Text="No books found" TextColor="{DynamicResource Ink}" />
+                <Label HorizontalTextAlignment="Center" MaximumWidthRequest="290" Style="{StaticResource PageSubtitle}" Text="Nothing matches this search yet. Try another title, author, genre or status." />
             </VerticalStackLayout>
 
             <CollectionView
@@ -206,13 +192,10 @@
                                         CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
                                 <Grid ColumnDefinitions="52,*" ColumnSpacing="12">
-                                    <Border
-                                        BackgroundColor="{Binding CoverColor}"
-                                        HeightRequest="76"
-                                        StrokeShape="RoundRectangle 10"
-                                        StrokeThickness="0"
-                                        VerticalOptions="Start"
-                                        WidthRequest="52">
+                                    <Border Style="{StaticResource BookCover}"
+                                            HeightRequest="76"
+                                            WidthRequest="52"
+                                            VerticalOptions="Start">
                                         <Label
                                             FontFamily="OpenSansSemibold"
                                             FontSize="20"
@@ -239,9 +222,7 @@
                 Padding="40,0"
                 Spacing="8"
                 VerticalOptions="Center">
-                <ActivityIndicator
-                    IsRunning="{Binding IsCommunityBusy}"
-                    IsVisible="{Binding IsCommunityBusy}" />
+                <ActivityIndicator IsRunning="{Binding IsCommunityBusy}" IsVisible="{Binding IsCommunityBusy}" />
             </VerticalStackLayout>
         </Grid>
     </Grid>

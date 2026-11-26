@@ -1,0 +1,85 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <!-- === LIGHT APP THEME (chrome colors) === -->
+    <Color x:Key="Paper">#F2EADB</Color>
+    <Color x:Key="Surface">#FBF5E9</Color>
+    <Color x:Key="Card">#FFFDF8</Color>
+    <Color x:Key="CardRaised">#FFFFFF</Color>
+    <Color x:Key="SurfaceAlt">#EDE3D2</Color>
+    <Color x:Key="Divider">#E3D6C0</Color>
+    <Color x:Key="Ink">#3A2615</Color>
+    <Color x:Key="InkSoft">#5A4430</Color>
+    <Color x:Key="Muted">#6B5B47</Color>
+    <Color x:Key="Primary">#6F4E2C</Color>
+    <Color x:Key="PrimaryDark">#523820</Color>
+    <Color x:Key="PrimaryLight">#B08D57</Color>
+    <Color x:Key="OnPrimary">#FFF8EC</Color>
+    <Color x:Key="Accent">#C08A3E</Color>
+    <Color x:Key="ShadowTint">#3A2615</Color>
+    <Color x:Key="SecondaryAlt">#EBE1D1</Color>
+    <Color x:Key="Success">#5F8461</Color>
+    <Color x:Key="Danger">#A24A3F</Color>
+    <Color x:Key="StatusTbr">#7C93A3</Color>
+    <Color x:Key="StatusReading">#A98654</Color>
+    <Color x:Key="StatusCompleted">#6C8A6E</Color>
+    <Color x:Key="StatusDropped">#A5766A</Color>
+    <Color x:Key="Highlight">#E9D7A4</Color>
+    <Color x:Key="HighlightSoft">#F2E7C9</Color>
+    <Color x:Key="WarmAccent">#C79A5B</Color>
+    <Color x:Key="White">White</Color>
+    <Color x:Key="Black">Black</Color>
+    <Color x:Key="OffBlack">#1B1815</Color>
+    <Color x:Key="Gray100">#F3EEE4</Color>
+    <Color x:Key="Gray200">#E8DDCB</Color>
+    <Color x:Key="Gray300">#D6C9B3</Color>
+    <Color x:Key="Gray400">#A2917A</Color>
+    <Color x:Key="Gray500">#7A6A56</Color>
+    <Color x:Key="Gray600">#5F4732</Color>
+    <Color x:Key="Gray900">#402A18</Color>
+    <Color x:Key="Gray950">#2A1C10</Color>
+    <Color x:Key="MenuBackdrop">#99000000</Color>
+
+    <!-- === Elevation Shadows (Light) === -->
+    <Shadow x:Key="Elev1" Brush="{DynamicResource ShadowTintBrush}" Offset="0,4" Radius="14" Opacity="0.12" x:Shared="False" />
+    <Shadow x:Key="Elev2" Brush="{DynamicResource ShadowTintBrush}" Offset="0,10" Radius="22" Opacity="0.18" x:Shared="False" />
+    <Shadow x:Key="CoverShadow" Brush="{DynamicResource ShadowTintBrush}" Offset="0,5" Radius="8" Opacity="0.28" x:Shared="False" />
+
+    <!-- === Brushes (DynamicResource so they track runtime swaps) === -->
+    <SolidColorBrush x:Key="PaperBrush" Color="{DynamicResource Paper}" />
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{DynamicResource Surface}" />
+    <SolidColorBrush x:Key="CardBrush" Color="{DynamicResource Card}" />
+    <SolidColorBrush x:Key="CardRaisedBrush" Color="{DynamicResource CardRaised}" />
+    <SolidColorBrush x:Key="SurfaceAltBrush" Color="{DynamicResource SurfaceAlt}" />
+    <SolidColorBrush x:Key="DividerBrush" Color="{DynamicResource Divider}" />
+    <SolidColorBrush x:Key="InkBrush" Color="{DynamicResource Ink}" />
+    <SolidColorBrush x:Key="InkSoftBrush" Color="{DynamicResource InkSoft}" />
+    <SolidColorBrush x:Key="MutedBrush" Color="{DynamicResource Muted}" />
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource Primary}" />
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="{DynamicResource PrimaryDark}" />
+    <SolidColorBrush x:Key="PrimaryLightBrush" Color="{DynamicResource PrimaryLight}" />
+    <SolidColorBrush x:Key="OnPrimaryBrush" Color="{DynamicResource OnPrimary}" />
+    <SolidColorBrush x:Key="AccentBrush" Color="{DynamicResource Accent}" />
+    <SolidColorBrush x:Key="ShadowBrush" Color="{DynamicResource ShadowTint}" />
+    <SolidColorBrush x:Key="ShadowTintBrush" Color="{DynamicResource ShadowTint}" />
+    <SolidColorBrush x:Key="SecondaryAltBrush" Color="{DynamicResource SecondaryAlt}" />
+    <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource Success}" />
+    <SolidColorBrush x:Key="DangerBrush" Color="{DynamicResource Danger}" />
+    <SolidColorBrush x:Key="StatusTbrBrush" Color="{DynamicResource StatusTbr}" />
+    <SolidColorBrush x:Key="StatusReadingBrush" Color="{DynamicResource StatusReading}" />
+    <SolidColorBrush x:Key="StatusCompletedBrush" Color="{DynamicResource StatusCompleted}" />
+    <SolidColorBrush x:Key="StatusDroppedBrush" Color="{DynamicResource StatusDropped}" />
+    <SolidColorBrush x:Key="HighlightBrush" Color="{DynamicResource Highlight}" />
+    <SolidColorBrush x:Key="HighlightSoftBrush" Color="{DynamicResource HighlightSoft}" />
+    <SolidColorBrush x:Key="WarmAccentBrush" Color="{DynamicResource WarmAccent}" />
+    <SolidColorBrush x:Key="WhiteBrush" Color="{DynamicResource White}" />
+    <SolidColorBrush x:Key="Gray100Brush" Color="{DynamicResource Gray100}" />
+    <SolidColorBrush x:Key="Gray200Brush" Color="{DynamicResource Gray200}" />
+    <SolidColorBrush x:Key="Gray300Brush" Color="{DynamicResource Gray300}" />
+    <SolidColorBrush x:Key="Gray400Brush" Color="{DynamicResource Gray400}" />
+    <SolidColorBrush x:Key="Gray500Brush" Color="{DynamicResource Gray500}" />
+    <SolidColorBrush x:Key="Gray600Brush" Color="{DynamicResource Gray600}" />
+    <SolidColorBrush x:Key="Gray900Brush" Color="{DynamicResource Gray900}" />
+    <SolidColorBrush x:Key="Gray950Brush" Color="{DynamicResource Gray950}" />
+    <SolidColorBrush x:Key="MenuBackdropBrush" Color="{DynamicResource MenuBackdrop}" />
+</ResourceDictionary>

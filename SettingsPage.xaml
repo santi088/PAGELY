@@ -51,7 +51,7 @@
                             Maximum="28"
                             MinimumTrackColor="{DynamicResource Primary}"
                             ThumbColor="{DynamicResource Primary}"
-                            Value="{Binding FontSize}" />
+                            Value="{Binding FontSize, Mode=TwoWay}" />
                     </VerticalStackLayout>
                 </Border>
 
@@ -69,7 +69,7 @@
                             Maximum="2.2"
                             MinimumTrackColor="{DynamicResource Primary}"
                             ThumbColor="{DynamicResource Primary}"
-                            Value="{Binding LineSpacing}" />
+                            Value="{Binding LineSpacing, Mode=TwoWay}" />
                     </VerticalStackLayout>
                 </Border>
 
@@ -79,6 +79,16 @@
                         <Picker
                             ItemsSource="{Binding Themes}"
                             SelectedItem="{Binding Theme}"
+                            TextColor="{DynamicResource Ink}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource CardBorder}" Padding="16">
+                    <VerticalStackLayout Spacing="4">
+                        <Label Style="{StaticResource CardTitle}" Text="App theme" />
+                        <Picker
+                            ItemsSource="{Binding AppThemes}"
+                            SelectedItem="{Binding AppTheme}"
                             TextColor="{DynamicResource Ink}" />
                     </VerticalStackLayout>
                 </Border>

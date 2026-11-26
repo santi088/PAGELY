@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PAGELY.ViewModels"
+             x:Class="PAGELY.Views.VerifyEmailPage"
+             Title="Verify Your Email"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{DynamicResource Paper}">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+            <Label Text="Verify Your Email" FontSize="30" FontFamily="NewsreaderSemibold" TextColor="{DynamicResource Ink}" />
+            <Label Text="A 6-digit code was sent to your email." Style="{StaticResource PageSubtitle}" />
+            <Label Text="{Binding Email}" Style="{StaticResource CardMeta}" />
+            <Border Style="{StaticResource FieldBorder}" HeightRequest="{StaticResource HeightField}">
+                <Entry Text="{Binding Code}" Keyboard="Numeric" MaxLength="6" Placeholder="123456" TextColor="{DynamicResource Ink}" />
+            </Border>
+            <Button Text="Verify" Command="{Binding VerifyCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBool}}" Style="{StaticResource ButtonPrimary}" />
+            <Button Text="Resend Code" Command="{Binding ResendCommand}" Style="{StaticResource ButtonSecondary}" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" HorizontalOptions="Center" />
+            <Label Text="{Binding StatusMessage}" Style="{StaticResource Caption}" />
+            <Button Text="Back to Login" Clicked="OnBackClicked" Style="{StaticResource ButtonSecondary}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

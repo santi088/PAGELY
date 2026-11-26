@@ -16,5 +16,10 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("saved", typeof(SavedPage));
         Routing.RegisterRoute("readinglist", typeof(ReadingListPage));
         Routing.RegisterRoute("myreviews", typeof(MyReviewsPage));
+        Routing.RegisterRoute("verifyemail", typeof(VerifyEmailPage));
+
+#if DEBUG
+        Routing.RegisterRoute("gallery", typeof(DesignGalleryPage));
+#endif
     }
 }

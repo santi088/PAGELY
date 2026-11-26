@@ -11,47 +11,22 @@
 
     <Grid RowDefinitions="Auto,*">
 
-        <Border
-            BackgroundColor="{DynamicResource Surface}"
-            Stroke="{DynamicResource Divider}"
-            StrokeShape="RoundRectangle 0,0,20,20"
-            StrokeThickness="1">
+        <Border Style="{StaticResource HeaderBorder}">
             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="4" Padding="12,10,16,12">
-                <ImageButton
-                    Aspect="AspectFit"
-                    BackgroundColor="{DynamicResource SurfaceAlt}"
-                    BorderColor="{DynamicResource Divider}"
-                    BorderWidth="1"
-                    Clicked="OnBackClicked"
-                    CornerRadius="21"
-                    HeightRequest="42"
-                    Padding="0"
-                    SemanticProperties.Description="Back"
-                    Source="ic_back.svg"
-                    WidthRequest="42" />
-                <Label
-                    Grid.Column="1"
-                    FontFamily="OpenSansSemibold"
-                    FontSize="17"
-                    Padding="12,0,0,0"
-                    Text="Book Details"
-                    TextColor="{DynamicResource Ink}"
-                    VerticalOptions="Center" />
+                <ImageButton Style="{StaticResource HeaderBackButton}" Clicked="OnBackClicked" />
+                <Label Grid.Column="1" Style="{StaticResource HeaderTitle}" Text="Book Details" VerticalOptions="Center" />
             </Grid>
         </Border>
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="20,16,20,40" Spacing="14">
 
-                <Border Padding="14" Style="{StaticResource CardBorder}">
+                <Border Style="{StaticResource CardBorder}">
                     <Grid ColumnDefinitions="96,*" ColumnSpacing="16">
-                        <Border
-                            BackgroundColor="{DynamicResource Spine}"
-                            HeightRequest="144"
-                            StrokeShape="RoundRectangle 12"
-                            StrokeThickness="0"
-                            VerticalOptions="Start"
-                            WidthRequest="96">
+                        <Border Style="{StaticResource BookCover}"
+                                HeightRequest="144"
+                                WidthRequest="96"
+                                VerticalOptions="Start">
                             <Grid>
                                 <Image
                                     Aspect="AspectFill"
@@ -95,10 +70,7 @@
                 <Border Padding="16" Style="{StaticResource CardBorder}">
                     <VerticalStackLayout Spacing="12">
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                            <Label
-                                Style="{StaticResource SectionCaption}"
-                                Text="READING PROGRESS"
-                                VerticalOptions="Center" />
+                            <Label Style="{StaticResource SectionCaption}" Text="READING PROGRESS" VerticalOptions="Center" />
                             <Label
                                 Grid.Column="1"
                                 FontFamily="OpenSansSemibold"
@@ -119,12 +91,12 @@
                 <VerticalStackLayout Margin="0,6,0,0" Spacing="10">
                     <Button
                         Command="{Binding ReadCommand}"
-                        HeightRequest="52"
+                        HeightRequest="{StaticResource HeightButton}"
                         Style="{StaticResource ButtonPrimary}"
                         Text="Read" />
                     <Button
                         Command="{Binding DeleteCommand}"
-                        HeightRequest="52"
+                        HeightRequest="{StaticResource HeightButton}"
                         Style="{StaticResource ButtonSecondary}"
                         Text="Remove from library"
                         TextColor="{DynamicResource Danger}" />

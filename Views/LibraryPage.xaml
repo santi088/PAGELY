@@ -14,15 +14,11 @@
     <Grid RowDefinitions="Auto,*">
 
         <!-- Header -->
-        <Border
-            BackgroundColor="{DynamicResource Surface}"
-            Padding="24,24,20,16"
-            StrokeShape="RoundRectangle 0,0,28,28"
-            StrokeThickness="0">
+        <Border x:Name="LibraryHeader" Style="{StaticResource HeaderBorder}">
             <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                 <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
-                    <Label Style="{StaticResource PageTitle}" Text="Library" />
-                    <Label Style="{StaticResource PageSubtitle}" Text="{Binding Books.Count, StringFormat='{0} books'}" />
+                    <Label Style="{StaticResource HeaderTitle}" Text="Library" />
+                    <Label Style="{StaticResource HeaderSubtitle}" Text="{Binding Books.Count, StringFormat='{0} books'}" />
                 </VerticalStackLayout>
             </Grid>
         </Border>
@@ -36,10 +32,10 @@
                     <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="12" VerticalItemSpacing="16" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.Header>
-                    <BoxView HeightRequest="12" Color="Transparent" />
+                    <BoxView HeightRequest="{StaticResource Space12}" Color="Transparent" />
                 </CollectionView.Header>
                 <CollectionView.Footer>
-                    <BoxView HeightRequest="88" Color="Transparent" />
+                    <BoxView HeightRequest="{StaticResource Space32}" Color="Transparent" />
                 </CollectionView.Footer>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:Book">
@@ -51,13 +47,10 @@
                             </VerticalStackLayout.GestureRecognizers>
 
                             <!-- Cover -->
-                            <Border
-                                BackgroundColor="{DynamicResource Spine}"
-                                HeightRequest="180"
-                                StrokeShape="RoundRectangle 10"
-                                StrokeThickness="0"
-                                WidthRequest="120"
-                                HorizontalOptions="Center">
+                            <Border Style="{StaticResource BookCover}"
+                                    HeightRequest="180"
+                                    WidthRequest="120"
+                                    HorizontalOptions="Center">
                                 <Grid>
                                     <Image
                                         Aspect="AspectFill"
@@ -108,29 +101,24 @@
                 VerticalOptions="Center">
                 <Border
                     BackgroundColor="{DynamicResource SurfaceAlt}"
-                    HeightRequest="56"
+                    HeightRequest="64"
                     HorizontalOptions="Center"
-                    StrokeShape="RoundRectangle 18"
+                    StrokeShape="RoundRectangle 32"
                     StrokeThickness="0"
-                    WidthRequest="56">
+                    WidthRequest="64">
                     <Label
                         FontFamily="OpenSansSemibold"
-                        FontSize="24"
+                        FontSize="26"
                         HorizontalOptions="Center"
                         Text="P"
                         TextColor="{DynamicResource Primary}"
                         VerticalOptions="Center" />
                 </Border>
                 <Label
-                    FontFamily="OpenSansSemibold"
-                    FontSize="18"
-                    HorizontalTextAlignment="Center"
-                    Text="Your shelves are empty"
-                    TextColor="{DynamicResource Ink}" />
+                    Style="{StaticResource EmptyStateTitle}"
+                    Text="Your shelves are empty" />
                 <Label
-                    HorizontalTextAlignment="Center"
-                    MaximumWidthRequest="290"
-                    Style="{StaticResource PageSubtitle}"
+                    Style="{StaticResource EmptyStateSubtitle}"
                     Text="Import EPUB, PDF or TXT files already on this device." />
             </VerticalStackLayout>
 
@@ -142,13 +130,15 @@
 
             <!-- Floating import button -->
             <Button
+                x:Name="ImportFab"
                 Command="{Binding ImportCommand}"
-                HeightRequest="56"
+                Clicked="OnImportClicked"
+                HeightRequest="{StaticResource HeightFAB}"
                 HorizontalOptions="End"
-                Style="{StaticResource ButtonIconPrimary}"
+                Style="{StaticResource FAB}"
                 Text="+"
                 VerticalOptions="End"
-                WidthRequest="56"
+                WidthRequest="{StaticResource HeightFAB}"
                 Margin="0,0,20,24" />
         </Grid>
     </Grid>

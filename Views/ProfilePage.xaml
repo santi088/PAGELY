@@ -22,20 +22,38 @@
                             <VerticalStackLayout IsVisible="{Binding IsAuthenticated, Converter={StaticResource InverseBool}}" Spacing="12">
                                 <Border Padding="12" Style="{StaticResource CardBorder}">
                                     <VerticalStackLayout Spacing="8">
-                                        <Label Style="{StaticResource CardTitle}" Text="Sign in" />
-                                        <Entry Placeholder="Email" Text="{Binding LoginEmail}" Keyboard="Email" />
-                                        <Entry Placeholder="Password" Text="{Binding LoginPassword}" IsPassword="True" />
-                                        <Button Style="{StaticResource ButtonPrimary}" Text="Sign in" Command="{Binding LoginCommand}" />
-                                    </VerticalStackLayout>
-                                </Border>
-                                <Border Padding="12" Style="{StaticResource CardBorder}">
-                                    <VerticalStackLayout Spacing="8">
-                                        <Label Style="{StaticResource CardTitle}" Text="Create account" />
-                                        <Entry Placeholder="Email" Text="{Binding RegisterEmail}" Keyboard="Email" />
-                                        <Entry Placeholder="Password" Text="{Binding RegisterPassword}" IsPassword="True" />
-                                        <Entry Placeholder="First name" Text="{Binding FirstName}" />
-                                        <Entry Placeholder="Last name" Text="{Binding LastName}" />
-                                        <Button Style="{StaticResource ButtonSecondary}" Text="Register" Command="{Binding RegisterCommand}" />
+                                        <Label Style="{StaticResource CardTitle}" Text="Sign in" IsVisible="{Binding IsLoginMode}" />
+                                        <Label Style="{StaticResource CardTitle}" Text="Create account" IsVisible="{Binding IsLoginMode, Converter={StaticResource InverseBool}}" />
+                                        <Entry Placeholder="Email" Text="{Binding LoginEmail}" Keyboard="Email" IsVisible="{Binding IsLoginMode}" />
+                                        <Entry Placeholder="Email" Text="{Binding RegisterEmail}" Keyboard="Email" IsVisible="{Binding IsLoginMode, Converter={StaticResource InverseBool}}" />
+                                        <Entry Placeholder="Password" Text="{Binding LoginPassword}" IsPassword="True" IsVisible="{Binding IsLoginMode}" />
+                                        <Entry Placeholder="Password" Text="{Binding RegisterPassword}" IsPassword="True" IsVisible="{Binding IsLoginMode, Converter={StaticResource InverseBool}}" />
+                                        <Entry Placeholder="First name" Text="{Binding FirstName}" IsVisible="{Binding IsLoginMode, Converter={StaticResource InverseBool}}" />
+                                        <Entry Placeholder="Last name" Text="{Binding LastName}" IsVisible="{Binding IsLoginMode, Converter={StaticResource InverseBool}}" />
+                                        <Button Style="{StaticResource ButtonPrimary}" Text="Sign in" Command="{Binding LoginCommand}" IsVisible="{Binding IsLoginMode}" />
+                                        <Button Style="{StaticResource ButtonSecondary}" Text="Register" Command="{Binding RegisterCommand}" IsVisible="{Binding IsLoginMode, Converter={StaticResource InverseBool}}" />
+                                        <Label
+                                            FontSize="13"
+                                            TextColor="{DynamicResource Primary}"
+                                            HorizontalTextAlignment="Center"
+                                            TextDecorations="Underline"
+                                            Text="Don't have an account? Create account"
+                                            IsVisible="{Binding IsLoginMode}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding ToggleAuthModeCommand}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <Label
+                                            FontSize="13"
+                                            TextColor="{DynamicResource Primary}"
+                                            HorizontalTextAlignment="Center"
+                                            TextDecorations="Underline"
+                                            Text="Already have an account? Sign in"
+                                            IsVisible="{Binding IsLoginMode, Converter={StaticResource InverseBool}}">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding ToggleAuthModeCommand}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
                                     </VerticalStackLayout>
                                 </Border>
                             </VerticalStackLayout>
@@ -192,6 +210,9 @@
                         </CollectionView>
                     </VerticalStackLayout>
                     <VerticalStackLayout HorizontalOptions="Center" IsVisible="{Binding IsEmpty}" Padding="20,40" Spacing="12">
+                        <Border BackgroundColor="{DynamicResource SurfaceAlt}" HeightRequest="64" HorizontalOptions="Center" StrokeShape="RoundRectangle 20" StrokeThickness="0" WidthRequest="64">
+                            <Label FontFamily="OpenSansSemibold" FontSize="26" HorizontalOptions="Center" Text="P" TextColor="{DynamicResource Primary}" VerticalOptions="Center" />
+                        </Border>
                         <Label FontFamily="OpenSansSemibold" FontSize="19" HorizontalTextAlignment="Center" Text="Nothing here yet" TextColor="{DynamicResource Ink}" />
                         <Label HorizontalTextAlignment="Center" MaximumWidthRequest="290" Style="{StaticResource PageSubtitle}" Text="Open a book from your library and your reading activity will show up here." />
                     </VerticalStackLayout>
@@ -205,7 +226,7 @@
                     <Border Style="{StaticResource CardBorder}" Padding="16">
                         <VerticalStackLayout Spacing="8">
                             <Label Style="{StaticResource CardTitle}" Text="Preview" />
-                            <Label FontSize="{Binding FontSize}" LineHeight="{Binding LineSpacing}" Text="The quick brown fox jumps over the lazy dog." TextColor="{DynamicResource Ink}" />
+                            <Label FontSize="{Binding FontSize}" LineHeight="{Binding LineSpacing}" Text="The quick brown fox jumps over the lazy dog. This is how your book will look while you read." TextColor="{DynamicResource Ink}" />
                         </VerticalStackLayout>
                     </Border>
                     <Border Style="{StaticResource CardBorder}" Padding="16">
@@ -214,7 +235,7 @@
                                 <Label Style="{StaticResource CardTitle}" Text="Text size" />
                                 <Label Grid.Column="1" Style="{StaticResource PageSubtitle}" Text="{Binding FontSizeLabel}" />
                             </Grid>
-                            <Slider Minimum="14" Maximum="28" MinimumTrackColor="{DynamicResource Primary}" ThumbColor="{DynamicResource Primary}" Value="{Binding FontSize}" />
+                            <Slider Minimum="14" Maximum="28" MinimumTrackColor="{DynamicResource Primary}" ThumbColor="{DynamicResource Primary}" Value="{Binding FontSize, Mode=TwoWay}" />
                         </VerticalStackLayout>
                     </Border>
                     <Border Style="{StaticResource CardBorder}" Padding="16">
@@ -223,7 +244,7 @@
                                 <Label Style="{StaticResource CardTitle}" Text="Line spacing" />
                                 <Label Grid.Column="1" Style="{StaticResource PageSubtitle}" Text="{Binding LineSpacingLabel}" />
                             </Grid>
-                            <Slider Minimum="1.4" Maximum="2.2" MinimumTrackColor="{DynamicResource Primary}" ThumbColor="{DynamicResource Primary}" Value="{Binding LineSpacing}" />
+                            <Slider Minimum="1.4" Maximum="2.2" MinimumTrackColor="{DynamicResource Primary}" ThumbColor="{DynamicResource Primary}" Value="{Binding LineSpacing, Mode=TwoWay}" />
                         </VerticalStackLayout>
                     </Border>
                     <Border Style="{StaticResource CardBorder}" Padding="16">
@@ -244,7 +265,13 @@
                             <Entry Text="{Binding ApiBaseUrl}" Placeholder="http://192.168.x.x:5242" />
                         </VerticalStackLayout>
                     </Border>
-                    <Button Command="{Binding ResetCommand}" HeightRequest="48" Margin="0,6,0,0" Style="{StaticResource ButtonPrimary}" Text="Reset to defaults" />
+                    <Border Style="{StaticResource CardBorder}" Padding="16">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Style="{StaticResource CardTitle}" Text="App theme" />
+                            <Picker ItemsSource="{Binding AppThemes}" SelectedItem="{Binding AppTheme}" TextColor="{DynamicResource Ink}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Button Command="{Binding ResetCommand}" HeightRequest="{StaticResource HeightButton}" Margin="0,6,0,0" Style="{StaticResource ButtonPrimary}" Text="Reset to defaults" />
                 </VerticalStackLayout>
             </ScrollView>
         </DataTemplate>

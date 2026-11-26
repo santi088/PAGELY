@@ -175,7 +175,7 @@
 
         <!-- Hamburger menu: slides in from the right with bookmarks, notes and highlights. -->
         <Grid ColumnDefinitions="*,300" IsVisible="{Binding IsMenuOpen}">
-            <BoxView Grid.ColumnSpan="2" Color="#99000000">
+            <BoxView Grid.ColumnSpan="2" Color="{DynamicResource MenuBackdrop}">
                 <BoxView.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding CloseMenuCommand}" />
                 </BoxView.GestureRecognizers>

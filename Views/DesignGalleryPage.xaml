@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PAGELY.Views.DesignGalleryPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Design Gallery"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{DynamicResource Paper}">
+
+    <ScrollView Padding="16">
+
+        <VerticalStackLayout Spacing="24">
+
+            <!-- Theme toggle -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="12" Padding="16">
+                    <Label Style="{StaticResource SectionCaption}" Text="APP THEME" />
+                    <HorizontalStackLayout Spacing="8">
+                        <Button Text="System" Clicked="OnSystemClicked" Style="{StaticResource ButtonSecondary}" />
+                        <Button Text="Light" Clicked="OnLightClicked" Style="{StaticResource ButtonSecondary}" />
+                        <Button Text="Dark" Clicked="OnDarkClicked" Style="{StaticResource ButtonSecondary}" />
+                    </HorizontalStackLayout>
+                    <Label Style="{StaticResource Caption}" Text="Changes the app chrome (Paper, Surface, Card, etc.). Separate from reader theme." />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Buttons -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="12" Padding="16">
+                    <Label Style="{StaticResource SectionCaption}" Text="BUTTONS" />
+                    <HorizontalStackLayout Spacing="12">
+                        <Button Text="Primary" Style="{StaticResource ButtonPrimary}" />
+                        <Button Text="Secondary" Style="{StaticResource ButtonSecondary}" />
+                        <Button Text="Icon" Style="{StaticResource ButtonIcon}" />
+                    </HorizontalStackLayout>
+                    <Button Text="FAB" Style="{StaticResource FAB}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Fields -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="12" Padding="16">
+                    <Label Style="{StaticResource SectionCaption}" Text="FIELDS" />
+                    <Border Style="{StaticResource FieldBorder}" HeightRequest="{StaticResource HeightField}">
+                        <Entry Placeholder="Email" TextColor="{DynamicResource Ink}" />
+                    </Border>
+                    <Border Style="{StaticResource FieldBorder}" HeightRequest="{StaticResource HeightField}">
+                        <Entry Placeholder="Password" IsPassword="True" TextColor="{DynamicResource Ink}" />
+                    </Border>
+                    <Border Style="{StaticResource FieldBorder}" HeightRequest="{StaticResource HeightField}">
+                        <Picker Title="Select..." TextColor="{DynamicResource Ink}" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Cards -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="12" Padding="16">
+                    <Label Style="{StaticResource SectionCaption}" Text="CARDS" />
+                    <Border Style="{StaticResource CardBorder}" HeightRequest="120" />
+                    <Border Style="{StaticResource CardBorder}" Background="{StaticResource CardGradientBrush}" HeightRequest="120" />
+                    <Border Style="{StaticResource StatCard}" HeightRequest="100">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="24" Style="{StaticResource StatValue}" />
+                            <Label Text="Books read" Style="{StaticResource Caption}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Chips -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="12" Padding="16">
+                    <Label Style="{StaticResource SectionCaption}" Text="CHIPS" />
+                    <HorizontalStackLayout Spacing="8">
+                        <Border Style="{StaticResource ChipBorder}" HeightRequest="{StaticResource HeightChip}">
+                            <Label Text="Genre" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Style="{StaticResource CardMeta}" />
+                        </Border>
+                        <Border Style="{StaticResource ChipBorder}" BackgroundColor="{DynamicResource Primary}" HeightRequest="{StaticResource HeightChip}">
+                            <Label Text="Selected" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" TextColor="{DynamicResource OnPrimary}" Style="{StaticResource CardMeta}" />
+                        </Border>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Progress -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="12" Padding="16">
+                    <Label Style="{StaticResource SectionCaption}" Text="PROGRESS PILL" />
+                    <Border Style="{StaticResource ProgressPill}" WidthRequest="200">
+                        <ProgressBar Progress="0.65" ProgressColor="{DynamicResource Primary}" />
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Empty state -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="12" Padding="16" HorizontalOptions="Center">
+                    <Label Style="{StaticResource SectionCaption}" Text="EMPTY STATE" />
+                    <Border BackgroundColor="{DynamicResource SurfaceAlt}" HeightRequest="64" WidthRequest="64" StrokeShape="RoundRectangle 32" HorizontalOptions="Center">
+                        <Label Text="P" FontSize="26" HorizontalOptions="Center" VerticalOptions="Center" TextColor="{DynamicResource Primary}" />
+                    </Border>
+                    <Label Text="No books yet" Style="{StaticResource EmptyStateTitle}" />
+                    <Label Text="Import some books to get started." Style="{StaticResource EmptyStateSubtitle}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Color tokens -->
+            <Border Style="{StaticResource CardBorder}">
+                <VerticalStackLayout Spacing="8" Padding="16">
+                    <Label Style="{StaticResource SectionCaption}" Text="COLOR TOKENS" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8" RowSpacing="6">
+                        <Border BackgroundColor="{DynamicResource Primary}" HeightRequest="24" StrokeShape="RoundRectangle 6" />
+                        <Label Text="Primary" Style="{StaticResource Caption}" />
+                        <Border BackgroundColor="{DynamicResource Ink}" HeightRequest="24" StrokeShape="RoundRectangle 6" />
+                        <Label Text="Ink" Style="{StaticResource Caption}" />
+                        <Border BackgroundColor="{DynamicResource Muted}" HeightRequest="24" StrokeShape="RoundRectangle 6" />
+                        <Label Text="Muted" Style="{StaticResource Caption}" />
+                        <Border BackgroundColor="{DynamicResource Surface}" HeightRequest="24" StrokeShape="RoundRectangle 6" />
+                        <Label Text="Surface" Style="{StaticResource Caption}" />
+                        <Border BackgroundColor="{DynamicResource Card}" HeightRequest="24" StrokeShape="RoundRectangle 6" />
+                        <Label Text="Card" Style="{StaticResource Caption}" />
+                        <Border BackgroundColor="{DynamicResource Divider}" HeightRequest="24" StrokeShape="RoundRectangle 6" />
+                        <Label Text="Divider" Style="{StaticResource Caption}" />
+                        <Border BackgroundColor="{DynamicResource Success}" HeightRequest="24" StrokeShape="RoundRectangle 6" />
+                        <Label Text="Success" Style="{StaticResource Caption}" />
+                        <Border BackgroundColor="{DynamicResource Danger}" HeightRequest="24" StrokeShape="RoundRectangle 6" />
+                        <Label Text="Danger" Style="{StaticResource Caption}" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

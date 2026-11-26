@@ -52,7 +52,7 @@ public sealed class AuthService
         return dto;
     }
 
-    public async Task<AuthResponseDto> RegisterAsync(string email, string password, string firstName, string lastName, CancellationToken ct = default)
+    public async Task<string> RegisterAsync(string email, string password, string firstName, string lastName, CancellationToken ct = default)
     {
         var response = await CreateClient().PostAsJsonAsync("api/auth/register", new { email, password, firstName, lastName }, ct);
         if (!response.IsSuccessStatusCode)
@@ -60,10 +60,27 @@ public sealed class AuthService
             throw new InvalidOperationException(await ReadErrorAsync(response));
         }
 
-        var dto = await response.Content.ReadFromJsonAsync<AuthResponseDto>(ct)
-            ?? throw new InvalidOperationException("Empty register response.");
-        Store(dto);
-        return dto;
+        // Registration no longer returns a JWT; email verification required.
+        using var doc = await response.Content.ReadFromJsonAsync<JsonDocument>(ct);
+        return email;
+    }
+
+    public async Task ResendVerificationAsync(string email, CancellationToken ct = default)
+    {
+        var response = await CreateClient().PostAsJsonAsync("api/auth/resend-verification", new { email }, ct);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException(await ReadErrorAsync(response));
+        }
+    }
+
+    public async Task VerifyEmailAsync(string email, string code, CancellationToken ct = default)
+    {
+        var response = await CreateClient().PostAsJsonAsync("api/auth/verify-email", new { email, code }, ct);
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException(await ReadErrorAsync(response));
+        }
     }
 
     public async Task<UserDto?> GetCurrentUserAsync(CancellationToken ct = default)

@@ -62,6 +62,7 @@ public static class MauiProgram
         builder.Services.AddTransient<DiscoverViewModel>();
         builder.Services.AddTransient<DiscoverBookDetailViewModel>();
         builder.Services.AddTransient<ProfileViewModel>();
+builder.Services.AddTransient<VerifyEmailViewModel>();
         builder.Services.AddTransient<MyReviewsViewModel>();
         builder.Services.AddTransient<ReadingListViewModel>();
 
@@ -76,6 +77,7 @@ public static class MauiProgram
         builder.Services.AddTransient<DiscoverPage>();
         builder.Services.AddTransient<DiscoverBookDetailPage>();
         builder.Services.AddTransient<ProfilePage>();
+builder.Services.AddTransient<VerifyEmailPage>();
         builder.Services.AddTransient<MyReviewsPage>();
         builder.Services.AddTransient<ReadingListPage>();
 

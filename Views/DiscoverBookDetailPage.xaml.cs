@@ -1,3 +1,4 @@
+using Microsoft.Maui.Devices;
 using PAGELY.ViewModels;
 
 namespace PAGELY.Views;
@@ -18,6 +19,17 @@ public partial class DiscoverBookDetailPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+
+        // Entrance animation: fade in header and content
+        var header = this.FindByName<Border>("BookDetailHeader");
+        if (header != null)
+        {
+            header.Opacity = 0;
+            header.TranslationY = 20;
+            await header.FadeTo(1, 220, Easing.CubicOut);
+            await header.TranslateTo(0, 0, 220, Easing.CubicOut);
+        }
+
         if (!string.IsNullOrWhiteSpace(BookId))
         {
             await _viewModel.LoadAsync(BookId);
@@ -28,4 +40,13 @@ public partial class DiscoverBookDetailPage : ContentPage
     {
         await Shell.Current.GoToAsync("..");
     }
+
+    private void OnSaveClicked(object? sender, EventArgs e) =>
+        HapticFeedback.Default.Perform(HapticFeedbackType.Click);
+
+    private void OnSubmitClicked(object? sender, EventArgs e) =>
+        HapticFeedback.Default.Perform(HapticFeedbackType.Click);
+
+    private void OnLikeClicked(object? sender, EventArgs e) =>
+        HapticFeedback.Default.Perform(HapticFeedbackType.Click);
 }

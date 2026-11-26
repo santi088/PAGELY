@@ -27,6 +27,7 @@
                     CornerRadius="21"
                     HeightRequest="42"
                     Padding="0"
+                    SemanticProperties.Description="Back"
                     Source="ic_back.svg"
                     WidthRequest="42" />
                 <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">

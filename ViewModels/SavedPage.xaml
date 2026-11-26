@@ -13,35 +13,10 @@
 
     <Grid RowDefinitions="Auto,*">
 
-        <Border
-            BackgroundColor="{DynamicResource Surface}"
-            Stroke="{DynamicResource Divider}"
-            StrokeShape="RoundRectangle 0,0,28,28"
-            StrokeThickness="1">
-            <Grid
-                ColumnDefinitions="Auto,*"
-                ColumnSpacing="12"
-                Padding="16,16,20,20">
-                <ImageButton
-                    Command="{Binding BackCommand}"
-                    Padding="0"
-                    CornerRadius="21"
-                    BackgroundColor="{DynamicResource SurfaceAlt}"
-                    BorderColor="{DynamicResource Divider}"
-                    BorderWidth="1"
-                    HeightRequest="42"
-                    WidthRequest="42"
-                    Source="ic_back.svg"
-                    Aspect="AspectFit"
-                    SemanticProperties.Description="Back" />
-                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                    <Label Style="{StaticResource PageTitle}" FontSize="24" Text="Bookmarks and notes" />
-                    <Label
-                        LineBreakMode="TailTruncation"
-                        MaxLines="1"
-                        Style="{StaticResource PageSubtitle}"
-                        Text="{Binding BookTitle}" />
-                </VerticalStackLayout>
+        <Border Style="{StaticResource HeaderBorder}">
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="4" Padding="12,10,16,12">
+                <ImageButton Style="{StaticResource HeaderBackButton}" Command="{Binding BackCommand}" />
+                <Label Grid.Column="1" Style="{StaticResource HeaderTitle}" Text="Bookmarks and notes" VerticalOptions="Center" />
             </Grid>
         </Border>
 
@@ -65,7 +40,7 @@
                                 </Border.GestureRecognizers>
                                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                                     <VerticalStackLayout Spacing="3" VerticalOptions="Center">
-                                        <Label FontSize="15" Style="{StaticResource CardTitle}" Text="{Binding Label}" />
+                                        <Label Style="{StaticResource CardTitle}" Text="{Binding Label}" />
                                         <Label Style="{StaticResource CardMeta}" Text="{Binding CreatedLabel}" />
                                     </VerticalStackLayout>
                                     <Button

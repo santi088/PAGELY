@@ -1,11 +1,107 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Maui.Controls;
+
 namespace PAGELY.Services;
 
 /// <summary>
-/// Swaps the app's colors while it is running, so choosing a theme in Settings
-/// restyles every screen at once.
+/// Manages the app chrome theme (System / Light / Dark) separate from the
+/// reader theme (Paper / White / Sepia / Dark).
+///
+/// Colors.Light.xaml is merged by default in App.xaml. This service only
+/// adds or removes Colors.Dark.xaml on top of it.
 /// </summary>
 public static class ThemeService
 {
+    private const string AppThemeKey = "app_theme";
+
+    private static ResourceDictionary? _darkColors;
+    private static bool _initialized;
+
+    public static void Initialize()
+    {
+        if (_initialized) return;
+        _initialized = true;
+
+        var app = Application.Current;
+        if (app is null) return;
+
+        _darkColors = new ResourceDictionary { Source = new Uri("Resources/Styles/Colors.Dark.xaml", UriKind.Relative) };
+
+        var saved = Preferences.Default.Get(AppThemeKey, "System");
+        ApplyAppTheme(saved);
+
+        app.RequestedThemeChanged += OnRequestedThemeChanged;
+    }
+
+    public static void ApplyAppTheme(string theme)
+    {
+        var app = Application.Current;
+        if (app is null) return;
+
+        var merged = app.Resources.MergedDictionaries;
+
+        var effective = theme == "System"
+            ? (app.RequestedTheme == AppTheme.Dark ? "Dark" : "Light")
+            : theme;
+
+        var hasDark = merged.Any(d =>
+            d.Source is not null && d.Source.ToString().EndsWith("Colors.Dark.xaml"));
+
+        if (effective == "Dark" && !hasDark)
+        {
+            _darkColors ??= new ResourceDictionary
+            {
+                Source = new Uri("Resources/Styles/Colors.Dark.xaml", UriKind.Relative)
+            };
+            merged.Add(_darkColors);
+        }
+        else if (effective == "Light" && hasDark)
+        {
+            var toRemove = merged.Where(d =>
+                d.Source is not null && d.Source.ToString().EndsWith("Colors.Dark.xaml")).ToList();
+            foreach (var d in toRemove) merged.Remove(d);
+        }
+
+        Preferences.Default.Set(AppThemeKey, theme);
+    }
+
+    private static void OnRequestedThemeChanged(object? sender, AppThemeChangedEventArgs e)
+    {
+        var saved = Preferences.Default.Get(AppThemeKey, "System");
+        if (saved == "System")
+        {
+            ApplyAppTheme("System");
+        }
+    }
+
+    /// <summary>
+    /// Existing reader-theme override (Paper / White / Sepia / Dark).
+    /// Sets individual color resources on top of the app-chrome base.
+    /// Kept for backward compatibility with SettingsViewModel.
+    /// </summary>
+    public static void Apply(string theme)
+    {
+        var resources = Application.Current?.Resources;
+        if (resources is null) return;
+
+        var palette = theme switch
+        {
+            "White" => WhiteTheme,
+            "Sepia" => SepiaTheme,
+            "Dark" => DarkTheme,
+            _ => PaperTheme
+        };
+
+        foreach (var (key, hex) in palette)
+        {
+            var color = Color.FromArgb(hex);
+            resources[key] = color;
+            resources[key + "Brush"] = new SolidColorBrush(color);
+        }
+    }
+
     private static readonly Dictionary<string, string> PaperTheme = new()
     {
         ["Primary"] = "#7A6244",
@@ -44,7 +140,6 @@ public static class ThemeService
         ["Gray950"] = "#2A1C10"
     };
 
-    // White backgrounds, with the same brown buttons and cream accents as the other themes.
     private static readonly Dictionary<string, string> WhiteTheme = new()
     {
         ["Primary"] = "#7A6244",
@@ -158,28 +253,4 @@ public static class ThemeService
         ["Gray900"] = "#E8DFD0",
         ["Gray950"] = "#F3EBDD"
     };
-
-    public static void Apply(string theme)
-    {
-        var resources = Application.Current?.Resources;
-        if (resources is null)
-        {
-            return;
-        }
-
-        var palette = theme switch
-        {
-            "White" => WhiteTheme,
-            "Sepia" => SepiaTheme,
-            "Dark" => DarkTheme,
-            _ => PaperTheme
-        };
-
-        foreach (var (key, hex) in palette)
-        {
-            var color = Color.FromArgb(hex);
-            resources[key] = color;
-            resources[key + "Brush"] = new SolidColorBrush(color);
-        }
-    }
 }
