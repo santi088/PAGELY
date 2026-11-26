@@ -210,7 +210,7 @@
         <Setter Property="StrokeShape" Value="RoundRectangle 20" />
         <Setter Property="Padding" Value="16" />
         <Setter Property="Shadow">
-            <Shadow Brush="{DynamicResource ShadowTintBrush}" Offset="0,4" Radius="14" Opacity="0.12" />
+            <Shadow Brush="#3A2615" Offset="0,4" Radius="14" Opacity="0.12" />
         </Setter>
     </Style>
 
@@ -415,13 +415,6 @@
         <Setter Property="FontSize" Value="14" />
     </Style>
 
-    <Style TargetType="Shadow">
-        <Setter Property="Radius" Value="18" />
-        <Setter Property="Opacity" Value="0.07" />
-        <Setter Property="Brush" Value="{DynamicResource ShadowBrush}" />
-        <Setter Property="Offset" Value="0,3" />
-    </Style>
-
     <Style TargetType="Slider">
         <Setter Property="MinimumTrackColor" Value="{DynamicResource Primary}" />
         <Setter Property="MaximumTrackColor" Value="{DynamicResource Gray300}" />
@@ -570,7 +563,7 @@
             </LinearGradientBrush>
         </Setter>
         <Setter Property="Shadow">
-            <Shadow Brush="{DynamicResource ShadowTintBrush}" Offset="0,10" Radius="22" Opacity="0.18" />
+            <Shadow Brush="#3A2615" Offset="0,10" Radius="22" Opacity="0.18" />
         </Setter>
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
@@ -631,7 +624,7 @@
         <Setter Property="StrokeThickness" Value="0" />
         <Setter Property="StrokeShape" Value="RoundRectangle 10" />
         <Setter Property="Shadow">
-            <Shadow Brush="{DynamicResource ShadowTintBrush}" Offset="0,5" Radius="8" Opacity="0.28" />
+            <Shadow Brush="#3A2615" Offset="0,5" Radius="8" Opacity="0.28" />
         </Setter>
     </Style>
 

@@ -40,11 +40,6 @@
     <Color x:Key="Gray950">#2A1C10</Color>
     <Color x:Key="MenuBackdrop">#99000000</Color>
 
-    <!-- === Elevation Shadows (Light) === -->
-    <Shadow x:Key="Elev1" Brush="{DynamicResource ShadowTintBrush}" Offset="0,4" Radius="14" Opacity="0.12" x:Shared="False" />
-    <Shadow x:Key="Elev2" Brush="{DynamicResource ShadowTintBrush}" Offset="0,10" Radius="22" Opacity="0.18" x:Shared="False" />
-    <Shadow x:Key="CoverShadow" Brush="{DynamicResource ShadowTintBrush}" Offset="0,5" Radius="8" Opacity="0.28" x:Shared="False" />
-
     <!-- === Brushes (DynamicResource so they track runtime swaps) === -->
     <SolidColorBrush x:Key="PaperBrush" Color="{DynamicResource Paper}" />
     <SolidColorBrush x:Key="SurfaceBrush" Color="{DynamicResource Surface}" />
