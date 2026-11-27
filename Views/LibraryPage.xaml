@@ -14,9 +14,8 @@
     <Grid RowDefinitions="Auto,*">
 
         <VerticalStackLayout
-            Grid.Row="0"
             HorizontalOptions="Fill"
-            Padding="{StaticResource Space16}"
+            Padding="16"
             Spacing="2">
             <Label Style="{StaticResource PageTitle}" Text="Library" />
             <Label Style="{StaticResource PageSubtitle}" Text="{Binding Books.Count, StringFormat='{0} books'}" />
