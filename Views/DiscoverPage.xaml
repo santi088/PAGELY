@@ -11,10 +11,11 @@
     Shell.NavBarIsVisible="False"
     BackgroundColor="{DynamicResource Paper}">
 
-    <VerticalStackLayout>
+    <Grid RowDefinitions="Auto,Auto,*">
 
         <!-- Header -->
         <VerticalStackLayout
+            Grid.Row="0"
             HorizontalOptions="Fill"
             Padding="16"
             Spacing="2">
@@ -28,6 +29,7 @@
 
         <!-- Filters: genre buttons and sort order -->
         <VerticalStackLayout
+            Grid.Row="1"
             Padding="16,4,16,0"
             Spacing="12">
             <CollectionView
@@ -96,8 +98,7 @@
         </VerticalStackLayout>
 
         <!-- Book list -->
-        <Grid
-            RowDefinitions="*">
+        <Grid Grid.Row="2">
             <CollectionView
                 IsVisible="{Binding IsEmpty, Converter={StaticResource InverseBool}}"
                 ItemsSource="{Binding Books}"
@@ -179,6 +180,6 @@
             IsOpen="{Binding IsBottomSheetOpen}"
             SelectCommand="{Binding BottomSheetSelectCommand}" />
 
-    </VerticalStackLayout>
+    </Grid>
 
 </ContentPage>
