@@ -11,26 +11,27 @@
     Shell.NavBarIsVisible="False"
     BackgroundColor="{DynamicResource Paper}">
 
-    <Grid RowDefinitions="Auto,Auto,*">
+    <VerticalStackLayout>
 
         <!-- Header -->
         <VerticalStackLayout
-            Grid.Row="0"
             HorizontalOptions="Fill"
-            Padding="{StaticResource Space16}"
+            Padding="16"
             Spacing="2">
-            <Label Style="{StaticResource PageTitle}" Text="Discover" />
-            <Label Style="{StaticResource PageSubtitle}" Text="Find your next read. Sample catalog for now." />
+            <Label
+                Style="{StaticResource PageTitle}"
+                Text="Discover" />
+            <Label
+                Style="{StaticResource PageSubtitle}"
+                Text="Find your next read. Sample catalog for now." />
         </VerticalStackLayout>
 
         <!-- Filters: genre buttons and sort order -->
         <VerticalStackLayout
-            Grid.Row="1"
             Padding="16,4,16,0"
             Spacing="12">
             <CollectionView
                 HeightRequest="44"
-                Margin="0,0,0,0"
                 ItemsSource="{Binding Genres}"
                 SelectionMode="None">
                 <CollectionView.ItemsLayout>
@@ -95,7 +96,8 @@
         </VerticalStackLayout>
 
         <!-- Book list -->
-        <Grid Grid.Row="2">
+        <Grid
+            RowDefinitions="*">
             <CollectionView
                 IsVisible="{Binding IsEmpty, Converter={StaticResource InverseBool}}"
                 ItemsSource="{Binding Books}"
@@ -177,5 +179,6 @@
             IsOpen="{Binding IsBottomSheetOpen}"
             SelectCommand="{Binding BottomSheetSelectCommand}" />
 
-    </Grid>
+    </VerticalStackLayout>
+
 </ContentPage>
