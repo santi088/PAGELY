@@ -14,22 +14,10 @@
     <Grid RowDefinitions="Auto,Auto,*">
 
         <!-- Header -->
-        <Border Style="{StaticResource HeaderBorder}">
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                <VerticalStackLayout Spacing="4">
-                    <Label Style="{StaticResource HeaderTitle}" Text="Discover" />
-                    <Label Style="{StaticResource HeaderSubtitle}" Text="Find your next read. Sample catalog for now." />
-                </VerticalStackLayout>
-                <Button
-                    Grid.Column="1"
-                    Command="{Binding OpenSearchCommand}"
-                    HeightRequest="40"
-                    Padding="14,0"
-                    Style="{StaticResource ButtonSecondary}"
-                    Text="Search"
-                    VerticalOptions="Center" />
-            </Grid>
-        </Border>
+        <VerticalStackLayout Padding="{StaticResource Space16}" Spacing="2">
+            <Label Style="{StaticResource PageTitle}" Text="Discover" />
+            <Label Style="{StaticResource PageSubtitle}" Text="Find your next read. Sample catalog for now." />
+        </VerticalStackLayout>
 
         <!-- Filters: genre buttons and sort order -->
         <VerticalStackLayout
@@ -180,7 +168,6 @@
 
         <!-- Bottom sheet for Sort / Filter -->
         <components:BottomSheet
-            Grid.RowSpan="3"
             x:Name="DiscoverBottomSheet"
             Options="{Binding BottomSheetOptions}"
             IsOpen="{Binding IsBottomSheetOpen}"

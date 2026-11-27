@@ -13,15 +13,10 @@
 
     <Grid RowDefinitions="Auto,*">
 
-        <!-- Header -->
-        <Border x:Name="LibraryHeader" Style="{StaticResource HeaderBorder}">
-            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
-                    <Label Style="{StaticResource HeaderTitle}" Text="Library" />
-                    <Label Style="{StaticResource HeaderSubtitle}" Text="{Binding Books.Count, StringFormat='{0} books'}" />
-                </VerticalStackLayout>
-            </Grid>
-        </Border>
+        <VerticalStackLayout Padding="{StaticResource Space16}" Spacing="2">
+            <Label Style="{StaticResource PageTitle}" Text="Library" />
+            <Label Style="{StaticResource PageSubtitle}" Text="{Binding Books.Count, StringFormat='{0} books'}" />
+        </VerticalStackLayout>
 
         <Grid Grid.Row="1">
             <CollectionView
