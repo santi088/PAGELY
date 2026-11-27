@@ -4,7 +4,6 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:PAGELY.ViewModels"
-    xmlns:components="clr-namespace:PAGELY.Views.Components"
     x:Name="Discover"
     x:DataType="vm:DiscoverViewModel"
     Title="Discover"
@@ -14,26 +13,19 @@
     <Grid RowDefinitions="Auto,Auto,*">
 
         <!-- Header -->
-        <VerticalStackLayout
-            Grid.Row="0"
-            HorizontalOptions="Fill"
-            Padding="16"
-            Spacing="2">
-            <Label
-                Style="{StaticResource PageTitle}"
-                Text="Discover" />
-            <Label
-                Style="{StaticResource PageSubtitle}"
-                Text="Find your next read. Sample catalog for now." />
+        <VerticalStackLayout Spacing="2">
+            <Label Style="{StaticResource PageTitle}" Text="Discover" />
+            <Label Style="{StaticResource PageSubtitle}" Text="Find your next read. Sample catalog for now." />
         </VerticalStackLayout>
 
         <!-- Filters: genre buttons and sort order -->
         <VerticalStackLayout
             Grid.Row="1"
-            Padding="16,4,16,0"
-            Spacing="12">
+            Padding="{StaticResource Space16}"
+            Spacing="10">
             <CollectionView
                 HeightRequest="44"
+                Margin="0,0,0,0"
                 ItemsSource="{Binding Genres}"
                 SelectionMode="None">
                 <CollectionView.ItemsLayout>
@@ -78,17 +70,17 @@
             </CollectionView>
 
             <Grid
-                ColumnDefinitions="*,*,Auto"
+                ColumnDefinitions="Auto,*,Auto"
                 ColumnSpacing="10">
-                <Button
-                    Command="{Binding OpenSortBottomSheetCommand}"
-                    Style="{StaticResource ButtonSecondary}"
-                    Text="Sort" />
+                <Label
+                    Style="{StaticResource PageSubtitle}"
+                    Text="Sort by"
+                    VerticalOptions="Center" />
                 <Button
                     Grid.Column="1"
-                    Command="{Binding OpenFilterBottomSheetCommand}"
+                    Command="{Binding OpenSortCommand}"
                     Style="{StaticResource ButtonSecondary}"
-                    Text="Filter" />
+                    Text="{Binding SelectedSort}" />
                 <Label
                     Grid.Column="2"
                     Style="{StaticResource CardMeta}"
@@ -116,20 +108,24 @@
                                         CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
                                 <Grid ColumnDefinitions="52,*,Auto" ColumnSpacing="12">
-                                    <Border
-                                        BackgroundColor="{Binding Book.CoverColor}"
-                                        HeightRequest="76"
-                                        WidthRequest="52"
-                                        StrokeShape="RoundRectangle 10"
-                                        StrokeThickness="0"
-                                        VerticalOptions="Start">
-                                        <Label
-                                            FontFamily="OpenSansSemibold"
-                                            FontSize="20"
-                                            HorizontalOptions="Center"
-                                            Text="{Binding Book.Initial}"
-                                            TextColor="{DynamicResource Surface}"
-                                            VerticalOptions="Center" />
+                                    <Border Style="{StaticResource BookCover}"
+                                            HeightRequest="76"
+                                            WidthRequest="52"
+                                            VerticalOptions="Start">
+                                        <Grid>
+                                            <Image
+                                                Aspect="AspectFill"
+                                                IsVisible="{Binding Book.CoverUrl, Converter={StaticResource HasText}}"
+                                                Source="{Binding Book.CoverUrl}" />
+                                            <Label
+                                                FontFamily="OpenSansSemibold"
+                                                FontSize="20"
+                                                HorizontalOptions="Center"
+                                                IsVisible="{Binding Book.CoverUrl, Converter={StaticResource InverseHasText}}"
+                                                Text="{Binding Book.Initial}"
+                                                TextColor="{DynamicResource Surface}"
+                                                VerticalOptions="Center" />
+                                        </Grid>
                                     </Border>
                                     <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                         <Label FontSize="15" Style="{StaticResource CardTitle}" Text="{Binding Book.Title}" />
@@ -167,14 +163,5 @@
                 IsVisible="{Binding IsBusy}"
                 VerticalOptions="Center" />
         </Grid>
-
-        <!-- Bottom sheet for Sort / Filter -->
-        <components:BottomSheet
-            x:Name="DiscoverBottomSheet"
-            Options="{Binding BottomSheetOptions}"
-            IsOpen="{Binding IsBottomSheetOpen}"
-            SelectCommand="{Binding BottomSheetSelectCommand}" />
-
     </Grid>
-
 </ContentPage>

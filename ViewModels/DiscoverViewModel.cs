@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PAGELY.Models;
 using PAGELY.Services;
-using PAGELY.Views.Components;
 
 namespace PAGELY.ViewModels;
 
@@ -63,8 +62,6 @@ public partial class DiscoverViewModel : ObservableObject
     public ObservableCollection<DiscoverItem> RecentBooks { get; } = [];
 
     public IReadOnlyList<string> SortOptions { get; } = ["Top rated", "Newest", "A to Z"];
-
-    public ObservableCollection<BottomSheetOption> BottomSheetOptions { get; } = new();
 
     [ObservableProperty]
     private string selectedSort = "Top rated";
@@ -196,52 +193,13 @@ public partial class DiscoverViewModel : ObservableObject
         }
     }
 
-    [ObservableProperty]
-    private bool _isBottomSheetOpen;
-
-    [ObservableProperty]
-    private string _bottomSheetTitle = string.Empty;
-
     [RelayCommand]
-    private async Task OpenSortBottomSheetAsync()
+    private async Task OpenSortAsync()
     {
-        BottomSheetOptions.Clear();
-        BottomSheetOptions.Add(new BottomSheetOption { Text = "Top rated", IsSelected = SelectedSort == "Top rated" });
-        BottomSheetOptions.Add(new BottomSheetOption { Text = "Newest", IsSelected = SelectedSort == "Newest" });
-        BottomSheetOptions.Add(new BottomSheetOption { Text = "A to Z", IsSelected = SelectedSort == "A to Z" });
-
-        BottomSheetTitle = "Sort by";
-        IsBottomSheetOpen = true;
-    }
-
-    [RelayCommand]
-    private async Task OpenFilterBottomSheetAsync()
-    {
-        BottomSheetOptions.Clear();
-        BottomSheetOptions.Add(new BottomSheetOption { Text = "All", IsSelected = true });
-        foreach (var g in Genres)
-            BottomSheetOptions.Add(new BottomSheetOption { Text = g.Name, IsSelected = g.IsSelected });
-
-        BottomSheetTitle = "Filter by genre";
-        IsBottomSheetOpen = true;
-    }
-
-    [RelayCommand]
-    private async Task BottomSheetSelectAsync(string? choice)
-    {
-        IsBottomSheetOpen = false;
-
-        if (string.IsNullOrWhiteSpace(choice)) return;
-
-        if (BottomSheetTitle == "Sort by" && SortOptions.Contains(choice))
+        var choice = await Shell.Current.DisplayActionSheet("Sort by", "Cancel", null, SortOptions.ToArray());
+        if (!string.IsNullOrWhiteSpace(choice) && choice != "Cancel" && SortOptions.Contains(choice))
         {
             SelectedSort = choice;
-        }
-        else if (BottomSheetTitle == "Filter by genre")
-        {
-            foreach (var g in Genres)
-                g.IsSelected = g.Name == choice;
-            await RefreshAsync();
         }
     }
 
