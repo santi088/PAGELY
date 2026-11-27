@@ -14,7 +14,11 @@
     <Grid RowDefinitions="Auto,Auto,*">
 
         <!-- Header -->
-        <VerticalStackLayout Padding="{StaticResource Space16}" Spacing="2">
+        <VerticalStackLayout
+            Grid.Row="0"
+            HorizontalOptions="Fill"
+            Padding="{StaticResource Space16}"
+            Spacing="2">
             <Label Style="{StaticResource PageTitle}" Text="Discover" />
             <Label Style="{StaticResource PageSubtitle}" Text="Find your next read. Sample catalog for now." />
         </VerticalStackLayout>
