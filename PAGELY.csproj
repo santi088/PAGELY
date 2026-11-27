@@ -26,7 +26,7 @@
 		<MauiIcon Include="appicon.jpg" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="appicon.jpg" Color="#8B6F47" BaseSize="128,128" />
+		<MauiSplashScreen Include="splash.png" Color="#8B6F47" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources/Images/*" />
