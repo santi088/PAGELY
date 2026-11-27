@@ -116,29 +116,24 @@
                                         CommandParameter="{Binding .}" />
                                 </Border.GestureRecognizers>
                                 <Grid ColumnDefinitions="52,*,Auto" ColumnSpacing="12">
-                                    <Border Style="{StaticResource BookCover}"
-                                            HeightRequest="76"
-                                            WidthRequest="52"
-                                            VerticalOptions="Start">
-                                        <Grid>
-                                            <Image
-                                                Aspect="AspectFill"
-                                                IsVisible="{Binding Book.CoverUrl, Converter={StaticResource HasText}}"
-                                                Source="{Binding Book.CoverUrl}" />
-                                            <Label
-                                                FontFamily="OpenSansSemibold"
-                                                FontSize="20"
-                                                HorizontalOptions="Center"
-                                                IsVisible="{Binding Book.CoverUrl, Converter={StaticResource InverseHasText}}"
-                                                Text="{Binding Book.Initial}"
-                                                TextColor="{DynamicResource Surface}"
-                                                VerticalOptions="Center" />
-                                        </Grid>
+                                    <Border
+                                        BackgroundColor="{Binding Book.CoverColor}"
+                                        HeightRequest="76"
+                                        WidthRequest="52"
+                                        StrokeShape="RoundRectangle 10"
+                                        StrokeThickness="0"
+                                        VerticalOptions="Start">
+                                        <Label
+                                            FontFamily="OpenSansSemibold"
+                                            FontSize="20"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Book.Initial}"
+                                            TextColor="{DynamicResource Surface}"
+                                            VerticalOptions="Center" />
                                     </Border>
                                     <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
                                         <Label FontSize="15" Style="{StaticResource CardTitle}" Text="{Binding Book.Title}" />
                                         <Label FontSize="12" Style="{StaticResource CardMeta}" Text="{Binding Book.Author}" />
-                                        <Label FontSize="12" Style="{StaticResource Caption}" Text="{Binding Book.RatingLabel}" />
                                     </VerticalStackLayout>
                                     <Button
                                         Grid.Column="2"
