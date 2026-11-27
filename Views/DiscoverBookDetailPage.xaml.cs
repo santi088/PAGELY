@@ -42,11 +42,32 @@ public partial class DiscoverBookDetailPage : ContentPage
     }
 
     private void OnSaveClicked(object? sender, EventArgs e) =>
-        HapticFeedback.Default.Perform(HapticFeedbackType.Click);
+        SafeHaptic();
 
     private void OnSubmitClicked(object? sender, EventArgs e) =>
-        HapticFeedback.Default.Perform(HapticFeedbackType.Click);
+        SafeHaptic();
 
-    private void OnLikeClicked(object? sender, EventArgs e) =>
-        HapticFeedback.Default.Perform(HapticFeedbackType.Click);
+    private static void SafeHaptic()
+    {
+        try
+        {
+            HapticFeedback.Default.Perform(HapticFeedbackType.Click);
+        }
+        catch
+        {
+            // Haptics not supported on this device; ignore
+        }
+    }
+
+    private void OnLikeClicked(object? sender, EventArgs e)
+    {
+        try
+        {
+            HapticFeedback.Default.Perform(HapticFeedbackType.Click);
+        }
+        catch
+        {
+            // Haptics not supported on this device; ignore
+        }
+    }
 }

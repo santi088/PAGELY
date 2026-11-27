@@ -180,6 +180,7 @@
 
         <!-- Bottom sheet for Sort / Filter -->
         <components:BottomSheet
+            Grid.RowSpan="3"
             x:Name="DiscoverBottomSheet"
             Options="{Binding BottomSheetOptions}"
             IsOpen="{Binding IsBottomSheetOpen}"
