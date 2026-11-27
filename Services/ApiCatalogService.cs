@@ -81,17 +81,17 @@ public sealed class ApiCatalogService : IOnlineCatalogService
 
     public async Task<DiscoverBook?> GetBookAsync(string id, CancellationToken cancellationToken = default)
     {
-        if (!Guid.TryParse(id, out var guid))
+        if (string.IsNullOrWhiteSpace(id))
         {
             return null;
         }
 
         var client = CreateClient();
-        var response = await client.GetAsync($"api/books/{guid}", cancellationToken);
+        var response = await client.GetAsync($"api/books/{Uri.EscapeDataString(id)}", cancellationToken);
         if (!response.IsSuccessStatusCode)
         {
             var body = await response.Content.ReadAsStringAsync(cancellationToken);
-            throw new ApiException(ApiErrorKind.HttpError, $"GET {client.BaseAddress}api/books/{guid} -> {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
+            throw new ApiException(ApiErrorKind.HttpError, $"GET {client.BaseAddress}api/books/{id} -> {(int)response.StatusCode} {response.ReasonPhrase}: {body}");
         }
         var dto = await response.Content.ReadFromJsonAsync<ApiBookDto>(cancellationToken);
         return dto is null ? null : Map(dto);

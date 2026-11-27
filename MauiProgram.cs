@@ -38,7 +38,7 @@ public static class MauiProgram
 
         // Online features. These two lines are the only places that need to change
         // when the real online database is ready.
-        builder.Services.AddSingleton<IOnlineCatalogService, MockCatalogService>();
+        builder.Services.AddSingleton<IOnlineCatalogService, ApiCatalogService>();
         builder.Services.AddSingleton<AuthService>();
         builder.Services.AddSingleton<ReviewsService>();
         builder.Services.AddSingleton<IReadingListService, ApiReadingListService>();

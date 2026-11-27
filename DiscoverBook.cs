@@ -34,11 +34,10 @@ public class DiscoverBook
         string.IsNullOrWhiteSpace(Title) ? "P" : Title.Trim()[..1].ToUpperInvariant();
 
     [JsonIgnore]
-    public string RatingLabel => $"★ {Rating:0.0}";
+    public string RatingLabel => RatingCount == 0 ? "No reviews yet" : $"★ {Rating:0.0}";
 
     [JsonIgnore]
-    public string RatingCountLabel =>
-        RatingCount == 1 ? "1 rating" : $"{RatingCount:N0} ratings";
+    public string RatingCountLabel => RatingCount == 0 ? "No reviews yet" : (RatingCount == 1 ? "1 rating" : $"{RatingCount:N0} ratings");
 
     /// <summary>A steady color per genre, shown behind the book's first letter.</summary>
     [JsonIgnore]

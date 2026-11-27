@@ -59,24 +59,24 @@ public sealed class ApiReadingListService : IReadingListService
 
     public async Task<bool> ContainsAsync(string bookId)
     {
-        if (!_auth.IsAuthenticated || !Guid.TryParse(bookId, out _))
+        if (!_auth.IsAuthenticated || string.IsNullOrWhiteSpace(bookId))
         {
             return false;
         }
 
         var items = await GetAsync();
-        return items.Any(b => b.Id == bookId);
+        return items.Any(b => string.Equals(b.Id, bookId, StringComparison.OrdinalIgnoreCase));
     }
 
     public async Task AddAsync(DiscoverBook book)
     {
         EnsureAuthenticated();
-        if (!Guid.TryParse(book.Id, out var guid))
+        if (string.IsNullOrWhiteSpace(book.Id))
         {
             throw new InvalidOperationException("Invalid book id.");
         }
 
-        using var request = NewRequest(HttpMethod.Put, $"api/books/{guid}/reading-list");
+        using var request = NewRequest(HttpMethod.Put, $"api/books/{Uri.EscapeDataString(book.Id)}/reading-list");
         request.Content = JsonContent.Create(new { status = 0 });
         var response = await CreateClient().SendAsync(request);
         response.EnsureSuccessStatusCode();
@@ -86,12 +86,12 @@ public sealed class ApiReadingListService : IReadingListService
     public async Task RemoveAsync(string bookId)
     {
         EnsureAuthenticated();
-        if (!Guid.TryParse(bookId, out var guid))
+        if (string.IsNullOrWhiteSpace(bookId))
         {
             return;
         }
 
-        using var request = NewRequest(HttpMethod.Delete, $"api/books/{guid}/reading-list");
+        using var request = NewRequest(HttpMethod.Delete, $"api/books/{Uri.EscapeDataString(bookId)}/reading-list");
         var response = await CreateClient().SendAsync(request);
         if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
         {

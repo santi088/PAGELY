@@ -39,6 +39,7 @@ public class BlockParentSwipe : Behavior<View>
 #if ANDROID
     private void AttachPlatform(View bindable)
     {
+        if (bindable.Handler is null) return;
         var platformView = bindable.Handler.PlatformView as AView;
         if (platformView is not null)
             platformView.Touch += OnTouch;
@@ -46,6 +47,7 @@ public class BlockParentSwipe : Behavior<View>
 
     private void DetachPlatform(View bindable)
     {
+        if (bindable.Handler is null) return;
         var platformView = bindable.Handler.PlatformView as AView;
         if (platformView is not null)
             platformView.Touch -= OnTouch;
@@ -55,7 +57,7 @@ public class BlockParentSwipe : Behavior<View>
     {
         if (sender is not AView view) return;
 
-        var action = e.Event.Action;
+        var action = e.Event?.Action;
         var parent = view.Parent;
 
         if (action is MotionEventActions.Down or MotionEventActions.Move)

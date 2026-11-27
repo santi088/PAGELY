@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<MauiVersion>8.0.100</MauiVersion>
 		<TargetFramework>net8.0-android</TargetFramework>
+		<CheckEolWorkloads>false</CheckEolWorkloads>
 		<!-- iOS target: uncomment on macOS with 'dotnet workload install maui-ios'
 		<TargetFrameworks>net8.0-android;net8.0-ios</TargetFrameworks>
 		-->
@@ -17,7 +18,7 @@
 		<ApplicationId>com.pagely.reader</ApplicationId>
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">26.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<AndroidTargetSdkVersion>34</AndroidTargetSdkVersion>
 	</PropertyGroup>
 
