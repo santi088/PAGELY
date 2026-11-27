@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:PAGELY.Models"
     xmlns:vm="clr-namespace:PAGELY.ViewModels"
+    xmlns:behaviors="clr-namespace:PAGELY.Behaviors"
     x:Name="Profile"
     Title="Profile"
     Shell.NavBarIsVisible="False"
@@ -151,6 +152,9 @@
                     <VerticalStackLayout IsVisible="{Binding IsEmpty, Converter={StaticResource InverseBool}}">
                         <Label Style="{StaticResource SectionCaption}" Text="CONTINUE READING" />
                         <CollectionView HeightRequest="196" ItemsSource="{Binding ContinueReading}" Margin="16,10,16,0" HorizontalScrollBarVisibility="Never">
+                            <CollectionView.Behaviors>
+                                <behaviors:BlockParentSwipe />
+                            </CollectionView.Behaviors>
                             <CollectionView.ItemsLayout>
                                 <LinearItemsLayout ItemSpacing="12" Orientation="Horizontal" />
                             </CollectionView.ItemsLayout>
@@ -235,7 +239,11 @@
                                 <Label Style="{StaticResource CardTitle}" Text="Text size" />
                                 <Label Grid.Column="1" Style="{StaticResource PageSubtitle}" Text="{Binding FontSizeLabel}" />
                             </Grid>
-                            <Slider Minimum="14" Maximum="28" MinimumTrackColor="{DynamicResource Primary}" MaximumTrackColor="{DynamicResource SurfaceAlt}" ThumbColor="{DynamicResource Primary}" Value="{Binding FontSize, Mode=TwoWay}" HeightRequest="{StaticResource HeightButton}" />
+                            <Slider Minimum="14" Maximum="28" MinimumTrackColor="{DynamicResource Primary}" MaximumTrackColor="{DynamicResource SurfaceAlt}" ThumbColor="{DynamicResource Primary}" Value="{Binding FontSize, Mode=TwoWay}" HeightRequest="{StaticResource HeightButton}">
+                                <Slider.Behaviors>
+                                    <behaviors:BlockParentSwipe />
+                                </Slider.Behaviors>
+                            </Slider>
                         </VerticalStackLayout>
                     </Border>
                     <Border Style="{StaticResource CardBorder}" Padding="16">
@@ -244,7 +252,11 @@
                                 <Label Style="{StaticResource CardTitle}" Text="Line spacing" />
                                 <Label Grid.Column="1" Style="{StaticResource PageSubtitle}" Text="{Binding LineSpacingLabel}" />
                             </Grid>
-                            <Slider Minimum="1.4" Maximum="2.2" MinimumTrackColor="{DynamicResource Primary}" MaximumTrackColor="{DynamicResource SurfaceAlt}" ThumbColor="{DynamicResource Primary}" Value="{Binding LineSpacing, Mode=TwoWay}" HeightRequest="{StaticResource HeightButton}" />
+                            <Slider Minimum="1.4" Maximum="2.2" MinimumTrackColor="{DynamicResource Primary}" MaximumTrackColor="{DynamicResource SurfaceAlt}" ThumbColor="{DynamicResource Primary}" Value="{Binding LineSpacing, Mode=TwoWay}" HeightRequest="{StaticResource HeightButton}">
+                                <Slider.Behaviors>
+                                    <behaviors:BlockParentSwipe />
+                                </Slider.Behaviors>
+                            </Slider>
                         </VerticalStackLayout>
                     </Border>
                     <Border Style="{StaticResource CardBorder}" Padding="16">
@@ -323,6 +335,6 @@
             <BoxView Grid.Column="{Binding SelectedTab}" HeightRequest="3" VerticalOptions="End" Color="{DynamicResource Primary}" HorizontalOptions="Center" WidthRequest="40" />
         </Grid>
 
-        <CarouselView x:Name="TabsCarousel" Grid.Row="1" ItemsSource="{Binding Tabs}" Position="{Binding SelectedTab, Mode=TwoWay}" Loop="False" IsSwipeEnabled="False" />
+        <CarouselView x:Name="TabsCarousel" Grid.Row="1" ItemsSource="{Binding Tabs}" Position="{Binding SelectedTab, Mode=TwoWay}" Loop="False" IsSwipeEnabled="True" />
     </Grid>
 </ContentPage>
